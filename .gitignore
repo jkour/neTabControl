@@ -1,0 +1,14 @@
+/Win32/*
+/Win64/*
+/OSX32/*
+*.dcu
+*.drc
+*.dres
+*.entitlements
+*.identcache
+*.info.plist
+*.local
+*.tvsconfig
+*.vlb
+*.dsk
+*.~dsk
