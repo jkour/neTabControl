@@ -19,6 +19,10 @@ There are two ways to use the component:
 2. Open the Project Group and run the Demo to see how to use the component in run-time mode
 <b>Note:</b> The actual components of each tab need to be embedded in a Frame and then attached to the tabControl
 
+#FMX Style
+There is a style file (neTabControlStyle) which is used in demo to style the tab item and the hint layer.
+
+
 #Features
 
 * Tab items are linked to tags instead of indices. For example you can write: SetActiveTab("Welcome Screen") or DeleteTab('Report Summary')
