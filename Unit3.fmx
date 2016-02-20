@@ -1,0 +1,24 @@
+object Frame3: TFrame3
+  Size.Width = 320.000000000000000000
+  Size.Height = 240.000000000000000000
+  Size.PlatformDefault = False
+  object Label1: TLabel
+    AutoSize = True
+    StyledSettings = [Family, Style, FontColor]
+    Position.X = 16.000000000000000000
+    Position.Y = 24.000000000000000000
+    Size.Width = 152.000000000000000000
+    Size.Height = 64.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 48.000000000000000000
+    TextSettings.WordWrap = False
+    Text = 'Label1'
+  end
+  object Rectangle1: TRectangle
+    Position.X = 24.000000000000000000
+    Position.Y = 96.000000000000000000
+    Size.Width = 233.000000000000000000
+    Size.Height = 97.000000000000000000
+    Size.PlatformDefault = False
+  end
+end

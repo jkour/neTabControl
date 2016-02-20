@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{4F672AA5-2FF0-49C0-A859-4A06ED8E4723}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="NETabControlPackage.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="neTabControlDemo.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="NETabControlPackage">
+        <MSBuild Projects="NETabControlPackage.dproj"/>
+    </Target>
+    <Target Name="NETabControlPackage:Clean">
+        <MSBuild Projects="NETabControlPackage.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="NETabControlPackage:Make">
+        <MSBuild Projects="NETabControlPackage.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="neTabControlDemo">
+        <MSBuild Projects="neTabControlDemo.dproj"/>
+    </Target>
+    <Target Name="neTabControlDemo:Clean">
+        <MSBuild Projects="neTabControlDemo.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="neTabControlDemo:Make">
+        <MSBuild Projects="neTabControlDemo.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="NETabControlPackage;neTabControlDemo"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="NETabControlPackage:Clean;neTabControlDemo:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="NETabControlPackage:Make;neTabControlDemo:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
