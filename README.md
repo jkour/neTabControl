@@ -17,5 +17,23 @@ There are two ways to use the component:
 1. Build and install the package: Open the Package file and install the component. Then you can drag and drop it in any forms
 
 2. Open the Project Group and run the Demo to see how to use the component in run-time mode
-Note: The actual components of each tab need to be embedded in a Frame and then attached to the tabControl
+<b>Note:</b> The actual components of each tab need to be embedded in a Frame and then attached to the tabControl
+
+#Features
+
+* Tab items are linked to tags instead of indices. For example you can write: SetActiveTab("Welcome Screen") or DeleteTab('Report Summary')
+* TabItems have close icon
+* TabItems have additional icon
+* Customisable Pop-up menu
+* Hint can show the title of the tab item
+* Hint can show a preview of the whole tab item
+
+#Documentation
+There is documentation describing the methods and properties. Please check the "Documentations" folder.
+
+#Bugs, Suggestions, Comments and General Contact
+I hope you find the component useful. If you have any comments, spotted bug or changes to the code use the repository or drop me an email at j_kour@hotmail.com
+
+Thanks!
+ 
 
