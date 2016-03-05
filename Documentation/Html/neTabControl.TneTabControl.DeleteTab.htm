@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<title>TneTabControl.DeleteTab(string) Method</title>
+<title>TneTabControl.DeleteTab(string,Boolean) Method</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <meta name="generator" content="Documentation Insight" />
@@ -38,7 +38,7 @@ if(!top.location.href.match(regex)) {
 }}
 else if (top && top.navigationFrame && top.navigationFrame.selectTocItem)
 {
-top.navigationFrame.selectTocItem("neTabControl.TneTabControl.DeleteTab(string)");
+top.navigationFrame.selectTocItem("neTabControl.TneTabControl.DeleteTab(string,Boolean)");
 };
 </script>
 </head>
@@ -47,10 +47,10 @@ top.navigationFrame.selectTocItem("neTabControl.TneTabControl.DeleteTab(string)"
 <input type="hidden" id="userDataCache" class="userDataStyle" />
 <input type="hidden" id="hiddenScrollOffset" />
 <input type="hidden" id="moduleName" value="neTabControl" />
-<input type="hidden" id="elementId" value="neTabControl.TneTabControl.DeleteTab(string)" />
+<input type="hidden" id="elementId" value="neTabControl.TneTabControl.DeleteTab(string,Boolean)" />
 <div id="content">
 <div class="topic">
-<h1 class="title">TneTabControl.DeleteTab(string) Method</h1>
+<h1 class="title">TneTabControl.DeleteTab(string,Boolean) Method</h1>
 <div id="mainSection">
 <div id="mainBody">
 <div id="summarySection" class="section">
@@ -66,7 +66,9 @@ top.navigationFrame.selectTocItem("neTabControl.TneTabControl.DeleteTab(string)"
 </div>
 </div>
 <div id="summaryContent" class="sectionContent" contentEditable="false">
-<p>Represents method <code class="inline">DeleteTab(string)</code>.</p>
+<p>
+  Deletes a tab using the tag.
+</p>
 </div>
 </div>
 <strong>Namespace</strong>:  <a href="neTabControl.htm" title="neTabControl">neTabControl</a><br />
@@ -83,9 +85,14 @@ top.navigationFrame.selectTocItem("neTabControl.TneTabControl.DeleteTab(string)"
 </div>
 <div id="syntaxContent" class="sectionContent" contentEditable="false">
 <div class="codeSnippet" contentEditable="false"><input class="code" type="hidden" value="" /><div class="codeSnippetTabs"><div class="codeSnippetTabActive"><a>Delphi</a></div></div><div class="codeSnippetCodeContainer"><div class="codeSnippetCode"><pre class="delphi" contentEditable="false">public
- procedure DeleteTab(const tag: string);
+ procedure DeleteTab(const tag: string; const forceDelete: Boolean = false);
 </pre></div></div></div><div class="subSection"><h4 class="subHeading">Parameters</h4><dl id="parameters"><dt><span class="parameter">tag</span></dt><dd>Type:  string
-        <br /><p /></dd></dl></div>
+        <br /><p /></dd><dt><span class="parameter">forceDelete</span></dt><dd>Type:  Boolean
+        <br /><p>
+  By default it is False. The CanClose property defines whether a tag
+  can be deleted. If true value is passed, the tab is deleted
+  regardless the CanClose value
+</p></dd></dl></div>
 </div>
 </div>
 <div id="seealsoSection" class="section">

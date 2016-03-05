@@ -1,20 +1,38 @@
-//***************************************************************
-// This source is written by John Kouraklis.
-// © 2016, John Kouraklis
-// Email : j_kour@hotmail.com
-//
-// The source code is given as is and distributed under
-// GNU GPL v.3.0. The author is not responsible for any
-// possible damage done due to the use of this code.
-// You may use the code as you wish as long as you provide
-// a notice of contribution and you make available any changes or
-// developments.
-//
-// Unit Name: neTabControl
-//
-//
-//
-//***************************************************************
+{***************************************************************}
+{ This source is written by John Kouraklis.			}
+{ © 2016, John Kouraklis           				}
+{ Email : j_kour@hotmail.com                           		}
+{                                                      		}
+{The MIT License (MIT)                                          }
+{                                                               }
+{ Copyright (c) 2016 John Kouraklis                             }
+{                                                               }
+{ Permission is hereby granted, free of charge, to any person   }
+{ obtaining a copy of this software and associated documentation}
+{ files (the "Software"), to deal in the Software without       }
+{ restriction, including without limitation the rights to use,  }
+{ copy, modify, merge, publish, distribute, sublicense, and/or  }
+{ sell copies of the Software, and to permit persons to whom the}
+{ Software is furnished to do so, subject to the following      }
+{ conditions:                                                   }
+{                                                               }
+{ The above copyright notice and this permission notice shall be}
+{ included in all copies or substantial portions of the Software}
+{                                                               }
+{ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY     }
+{ KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE    }
+{ WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR       }
+{ PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR }
+{ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER   }
+{ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR          }
+{ OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE     }
+{ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.        }
+{								}
+{ Unit Name: neTabControl					}
+{                                                               }
+{                                                               }
+{                                                               }
+{***************************************************************}
 unit neTabControl;
 
 interface
@@ -31,11 +49,32 @@ uses
 
 const
   MajorVersion = '0';
-  MinorVersion = '1';
+  MinorVersion = '2';
   BugVersion = '0';
 
 {***************************************************************}
 { Version History:                                              }
+{                                                               }
+{ 0.2.0 - 05/03/2016                                            }
+{                                                               }
+{** Changes                                                     }
+{    * Change license to MIT                                    }
+{    * ShowHint disabled                                        }
+{    * Check for duplicate Tag name added                       }
+{    * Adjust Width improvement                                 }
+{                                                               }
+{** Bug                                                         }
+{    * Access Violation on MouseOverTabItem when the control is }
+{      host in other control (eg. a Frame)                      }
+{    * AdjustWidth returns 0 when the control is within two     }
+{      frames                                                   }
+{                                                               }
+{** New Feature                                                 }
+{    * Option to disable right-click menu added                 }
+{    * MinWidth property added                                  }
+{    * Normal TTabItem can be added                             }
+{    * Add "Close all the rest" option in popup menu            }
+{                                                               }
 {                                                               }
 { 0.1.0 - Initial Version (20/02/2016)                          }
 {***************************************************************}
@@ -52,8 +91,10 @@ type
     fCloseImagePressed: TBitmap;
     fIcon: TBitmap;
     fShowIcon: boolean;
+
     fIsMouseOver: boolean;
     fDeleted: Boolean;
+    fIsMousePressed: Boolean;
 
     fVersion: string;
     procedure SetCloseImageNormal(const newImage: TBitmap);
@@ -63,7 +104,7 @@ type
     procedure SetCanClose(const can: Boolean);
     procedure SetIconImage(const newImage: TBitmap);
     procedure SetShowIcon(const can: Boolean);
-    procedure AdjustTabWidth(const maxW: Single);
+    procedure AdjustTabWidth(const minW: single; const maxW: Single);
 
     function GetVersion: string;
 
@@ -81,6 +122,8 @@ type
       Button: TMouseButton; Shift: TShiftState; X, Y: Single);
   protected
     procedure MouseClick(Button: TMouseButton; Shift: TShiftState; X, Y: Single); override;
+    procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Single); override;
+    procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Single); override;
     procedure ApplyStyle; override;
     property Deleted: boolean read fDeleted write fDeleted;
   published
@@ -154,6 +197,7 @@ type
     fCloseImageHover,
     fCloseImagePressed: TBitmap;
     fVersion: string;
+
     //Events
     fOnBeforeDelete: TOnBeforeDelete;
     fOnAfterDelete: TOnAfterDelete;
@@ -163,6 +207,9 @@ type
     fPopupAfterDefaultMenu: TPopupMenu;
     fCloseTabLabel: string;
     fMaxTabWidth: single;
+    fMinTabWidth: single;
+    fDisablePopupMenu: boolean;
+    fCloseAllOtherTabsLabel: string;
 
     //Holds the history of the clicked tags
     fHistoryTags: TList<string>;
@@ -174,11 +221,13 @@ type
     //Popup Events
     procedure OnPopUpMenuClose(ASender: TObject);
     procedure OnPopUpChangeTab(ASender: TObject);
+    procedure OnPopUpMenuCloseAllOtherTabs (ASender: TObject);
 
     //Procedures
     procedure ShowPopUpMenu(const ASender:TNETabItem; const X, Y: Single);
     procedure SetHintSTyle(const showH: THintStyle);
     procedure SetMaxTabWidth (const newW: Single);
+    procedure SetMinTabWidth (const newW: Single);
     {$REGION 'This method shows the hint on the tabitem.'}
     /// <summary>
     ///   This method shows the hint on the tabitem.
@@ -197,7 +246,21 @@ type
     procedure AddTab(const tag: string; var newFrame: TFrame); overload;
     procedure AddTab(const tag: string; var newItem: TneTabItem;
       var newFrame: TFrame); overload;
-    procedure DeleteTab(const tag: string);
+    procedure AddTab(const tag: string; var newItem: TTabItem;
+      var newFrame: TFrame); overload;
+
+    {$REGION 'Deletes a tab using the tag.'}
+    /// <summary>
+    ///   Deletes a tab using the tag.
+    /// </summary>
+    /// <param name="forceDelete">
+    ///   By default it is False. The CanClose property defines whether a tag
+    ///   can be deleted. If true value is passed, the tab is deleted
+    ///   regardless the CanClose value
+    /// </param>
+    {$ENDREGION}
+    procedure DeleteTab(const tag: string; const forceDelete: Boolean = false);
+
     procedure InsertTab(const tag: string; const index: Integer;
                                               var newFrame: TFrame);overload;
     procedure InsertTab(const tag: string; const index: Integer;
@@ -246,6 +309,12 @@ type
     /// </summary>
     {$ENDREGION}
     property CloseTabLabel: string read fCloseTabLabel write fCloseTabLabel;
+    {$REGION 'Defines the minimum tab width.'}
+    /// <summary>
+    ///   Defines the minimum tab width.
+    /// </summary>
+    {$ENDREGION}
+    property MixTabWidth: Single read fMinTabWidth write SetMinTabWidth;
     {$REGION 'Defines the maximum tab width.'}
     /// <summary>
     ///   Defines the maximum tab width.
@@ -263,7 +332,19 @@ type
     property CloseImageNormal: TBitmap read fCloseImageNormal write fCloseImageNormal;
     property CloseImageHover: TBitmap read fCloseImageHover write fCloseImageHover;
     property CloseImagePressed: TBitmap read fCloseImagePressed write fCloseImagePressed;
-
+    {$REGION 'Disables the popup menu when the user right-clicks on a tab.'}
+    /// <summary>
+    ///   Disables the popup menu when the user right-clicks on a tab.
+    /// </summary>
+    {$ENDREGION}
+    property DisablePopupMenu: boolean read fDisablePopupMenu write fDisablePopupMenu;
+    {$REGION 'The label for the "Close All Other Tabs" option in the popup menu.'}
+    /// <summary>
+    ///   The label for the "Close All Other Tabs" option in the popup menu.
+    /// </summary>
+    {$ENDREGION}
+    property CloseAllOtherTabsLabel: string read fCloseAllOtherTabsLabel
+             write fCloseAllOtherTabsLabel;
     property Version: string read GetVersion;
   end;
 
@@ -287,6 +368,17 @@ begin
   finally
     Result.Canvas.EndScene;
   end;
+end;
+
+function FindParentForm(const checkComponent: TFmxObject):TForm;
+begin
+  if not Assigned(checkComponent.Parent) then
+    result:=checkComponent as TForm
+  else
+    if checkComponent.Parent Is TForm then
+      result:=checkComponent.Parent as TForm
+    else
+      result:=FindParentForm(checkComponent.Parent.Parent);
 end;
 
 { Register}
@@ -318,6 +410,9 @@ begin
   if not Assigned(newitem) then Exit;
 
   try
+    if fDictionaryTabs.ContainsKey(tag) then Exit;
+    if fDictionaryFrames.ContainsKey(tag) then Exit;
+
     fdictionaryTabs.Add(trim(tag), newItem);
     fDictionaryFrames.Add(trim(tag), newFrame);
 
@@ -340,7 +435,8 @@ begin
       fHistoryTags.Add(newItem.TagString);
 
     self.AddObject(newItem);
-    newItem.AdjustTabWidth(fMaxTabWidth);
+
+    newItem.AdjustTabWidth(fMinTabWidth, fMaxTabWidth);
 
     //this is to fix the empty entry in the very beggining (no tabs)
     if trim(fHistoryTags.Items[0])='' then
@@ -348,6 +444,51 @@ begin
   except
     raise ;
   end;
+
+end;
+
+procedure TneTabControl.AddTab(const tag: string; var newItem: TTabItem;
+  var newFrame: TFrame);
+var
+  tmpneItem: TneTabItem;
+
+begin
+
+  if trim(tag)='' then Exit;
+  if not Assigned(newitem) then Exit;
+  if not Assigned(fDictionaryTabs) then Exit;
+  if not Assigned(fDictionaryFrames) then Exit;
+
+  if fDictionaryTabs.ContainsKey(tag) then Exit;
+  if fDictionaryFrames.ContainsKey(tag) then Exit;
+
+  tmpneItem:=TneTabItem.Create(newItem.Owner);
+  tmpneItem.Text:=newItem.Text;
+  tmpneItem.TagString:=trim(tag);
+  tmpneItem.Parent:=self;
+  tmpneItem.Deleted:=false;
+  tmpneItem.CanClose:=False;
+  tmpneItem.ShowIcon:=False;
+  tmpneItem.AutoSize:=True;
+
+  if Assigned(newFrame) then
+  begin
+    newFrame.Parent:=tmpneItem;
+    newFrame.TagString:=trim(tag);
+    tmpneItem.AddObject(newFrame);
+  end;
+
+  fdictionaryTabs.Add(trim(tag), tmpneItem);
+  fDictionaryFrames.Add(trim(tag), newFrame);
+
+  if fDictionaryTabs.Count=1 then
+    fHistoryTags.Add(newItem.TagString);
+
+  self.AddObject(tmpneItem);
+
+  //this is to fix the empty entry in the very beggining (no tabs)
+  if (fHistoryTags.Count>0) and (fHistoryTags.Items[0]='') then
+    fHistoryTags.Delete(0);
 
 end;
 
@@ -363,16 +504,21 @@ begin
 
   fCloseTabLabel:='Close Tab';
 
+  fDisablePopupMenu:=False;
+
   fPopupBeforeDefaultMenu:=nil;
   fPopupAfterDefaultMenu:=nil;
 
   fMaxTabWidth:=120;
+  fMinTabWidth:=80;
+
+  fCloseAllOtherTabsLabel:='Close All Other Tabs';
 
   self.StyleLookup:='netabcontrolstyle';
 
 end;
 
-procedure TneTabControl.DeleteTab(const tag: string);
+procedure TneTabControl.DeleteTab(const tag: string; const forceDelete: Boolean = false);
 var
   tag2,
   lastvisitedTag: string;
@@ -386,7 +532,9 @@ begin
 
   if not Assigned(fDictionaryTabs) then Exit;
   if not fDictionaryTabs.ContainsKey(tag2) then Exit;
-  if not fDictionaryTabs.Items[tag2].CanClose then Exit;
+  if (not fDictionaryTabs.Items[tag2].CanClose)
+     and (not forceDelete) then
+       Exit;
 
   if not Assigned(fDictionaryFrames) then Exit;
   if not fDictionaryFrames.ContainsKey(tag2) then Exit;
@@ -435,8 +583,10 @@ begin
   end;
 
   if Assigned(fOnAfterDelete) then
-    fOnAfterDelete(deletedItem, deletedFrame);
-
+    fOnAfterDelete(deletedItem, deletedFrame)
+  else
+    if Assigned(deletedItem) then
+       deletedItem.Free;
 end;
 
 destructor TneTabControl.Destroy;
@@ -493,7 +643,7 @@ begin
           fHistoryTags.Delete(fHistoryTags.Count-1);
           if fHistoryTags.Count>0 then
           begin
-            if (not fDictionaryTabs.ContainsKey(fHistoryTags.Items[fHistoryTags.Count-1]))
+            if (fDictionaryTabs.ContainsKey(fHistoryTags.Items[fHistoryTags.Count-1]))
                   and (not fDictionaryTabs.Items[fHistoryTags.Items[fHistoryTags.count-1]].Deleted) then
               result:=GetLastVisitedTag
             else
@@ -561,8 +711,8 @@ begin
     Exit;
 
 //InsertObject has a bug as it doesn't insert tabs in the index-location
-//We first add the tab and then rearrange it by changing the index property
 //self.InsertObject(index, newItem);
+//We first add the tab and then rearrange it by changing the index property
 
   self.AddTab(tag, newItem, newFrame);
   newItem.Index:=index;
@@ -576,6 +726,7 @@ end;
 
 procedure TneTabControl.MouseOverTabItem(const tag: string; const X,
   Y: Single);
+//X, Y are local to the tabItem
 var
   tmpForm: TForm;
   tmpFMX: TFmxObject;
@@ -583,13 +734,24 @@ var
   tmpItem: TneTabItem;
   tmpText: TLabel;
   tmpBitmap: TBitmap;
+  FP: TPointF;
+
 begin
+  inherited;
+
+  //Disable showHint
+  fHintStyle:=THintStyle.None;
+
   if fHintStyle=THintStyle.None then
     Exit;
 
   if not Assigned(self.parent) then
         Exit;
-  tmpForm:=self.Parent as TForm;
+
+  tmpForm:=FindParentForm(self);
+
+  if not Assigned(tmpForm) then
+    Exit;
 
   if Assigned(fHintContainer) then
       fHintContainer.Free;
@@ -640,13 +802,20 @@ begin
     end;
   end;
 
-  tmpForm:=(self.Parent as TForm);
   if Assigned(tmpForm) then
   begin
-    fHintContainer.Position.X:=
-      self.Position.x+tmpItem.Position.X+X-fHintContainer.Width/2;
-    fHintContainer.Position.Y:=Y+tmpItem.Position.Y+tmpItem.Height;
-    fHintContainer.Visible:=true;
+//Disabled. Need to work out the correct coordinates.
+//Becomes complex when the tab is within frames, grids, etc.
+//    FP:=TPointF.Create(X,Y);
+//    FP:=self.LocalToAbsolute(FP);
+////
+////    fHintContainer.Position.X:=fp.X-fHintContainer.Width/2;
+////    fHintContainer.Position.Y:=FP.Y;
+//
+//    fHintContainer.Position.X:=FP.X;//+self.Position.X;
+//    fHintContainer.Position.Y:=Y+self.Position.Y;
+//
+//    fHintContainer.Visible:=true;
   end;
 
 end;
@@ -673,6 +842,19 @@ procedure TneTabControl.OnPopUpMenuClose(ASender: TObject);
 begin
   if ASender is TMenuItem then
     DeleteTab((ASender as TMenuItem).TagString);
+end;
+
+procedure TneTabControl.OnPopUpMenuCloseAllOtherTabs(ASender: TObject);
+var
+  key: string;
+begin
+  if ASender is TMenuItem then
+  begin
+     for key in fDictionaryTabs.Keys do
+       if trim(key)<>trim((ASender as TMenuItem).TagString) then
+          DeleteTab(key);
+     SetActiveTab((ASender as TMenuItem).TagString);
+  end;
 end;
 
 procedure TneTabControl.OnTabChangeInternal(Sender: TObject);
@@ -725,6 +907,14 @@ begin
     fMaxTabWidth:=newW;
 end;
 
+procedure TneTabControl.SetMinTabWidth(const newW: Single);
+begin
+  if newW=0 then
+    fMinTabWidth:=80
+  else
+    fMinTabWidth:=newW;
+end;
+
 procedure TneTabControl.SetHintStyle(const showH: THintStyle);
 var
   tmpItem: TneTabItem;
@@ -747,8 +937,13 @@ var
   tmpForm: TForm;
   i: Integer;
   tmpItem: TNETabItem;
+  AtLeastOneTabCanClose: boolean;
+  key: string;
 begin
   if not Assigned(ASender) then Exit;
+
+  if fDisablePopupMenu then
+     Exit;
 
   tmpPopMenu:=TPopupMenu.Create(Self);
   tmpPopMenu.Parent:=self;
@@ -770,8 +965,27 @@ begin
     tmpMenuItem.OnClick:=OnPopUpMenuClose;
 
     tmpPopMenu.AddObject(tmpMenuItem);
-
   end;
+
+  //Close All Other Tabs item
+  AtLeastOneTabCanClose:=false;
+  for key in fDictionaryTabs.Keys do
+  begin
+    tmpItem:=fDictionaryTabs.Items[key];
+    if Assigned(tmpItem) then
+       if tmpItem.CanClose and (tmpItem<>ASender) then
+          AtLeastOneTabCanClose:=true;
+       end;
+
+  if AtLeastOneTabCanClose then
+  begin
+    tmpMenuItem:=TMenuItem.Create(tmpPopMenu);
+    tmpMenuItem.Text:=fCloseAllOtherTabsLabel;
+    tmpMenuItem.TagString:=ASender.TagString;
+    tmpMenuItem.OnClick:=OnPopUpMenuCloseAllOtherTabs;
+    tmpPopMenu.AddObject(tmpMenuItem);
+  end;
+
 
   if tmpPopMenu.ItemsCount>0 then
   begin
@@ -807,17 +1021,18 @@ begin
   FP := TPointF.Create(X, Y);
   FP := ASender.LocalToAbsolute(FP);
 
-  tmpForm:=(self.Parent as TForm);
+  tmpForm:=FindParentForm(self);
   if Assigned(tmpForm) then
   begin
     FP:=tmpForm.ClientToScreen(FP);
     tmpPopMenu.Popup(FP.X, FP.Y);
   end;
+
 end;
 
 { TneTabItem }
 
-procedure TneTabItem.AdjustTabWidth(const maxW: Single);
+procedure TneTabItem.AdjustTabWidth(const minW: single; const maxW: Single);
 var
   tmpItem: TneTabItem;
   tmpWidth,
@@ -830,8 +1045,9 @@ begin
   tmpheight:=self.Height;
 
   tmpItem.AutoSize:=true;
-  tmpWidth:=tmpItem.Width;
+  tmpWidth:=self.Width;
   tmpWidth:=Min(maxW, tmpWidth);
+  tmpWidth:=Max(minW, tmpWidth);
 
   tmpFMX:=self.FindStyleResource('closeimage');
   if tmpFMX is TImage then
@@ -862,8 +1078,9 @@ begin
   end;
 
   self.AutoSize:=false;
-  self.Width:=tmpWidth;
-  Self.Height:=tmpHeight;
+  self.Width:=round(tmpWidth);
+  Self.Height:=round(tmpHeight);
+
 end;
 
 
@@ -955,6 +1172,20 @@ begin
 
   if Button=TMouseButton.mbRight then
     tmp.ShowPopUpMenu(self,X,Y);
+end;
+
+procedure TneTabItem.MouseDown(Button: TMouseButton; Shift: TShiftState; X,
+  Y: Single);
+begin
+  inherited;
+  fIsMousePressed:=true;
+end;
+
+procedure TneTabItem.MouseUp(Button: TMouseButton; Shift: TShiftState; X,
+  Y: Single);
+begin
+  inherited;
+  fIsMousePressed:=false;
 end;
 
 procedure TneTabItem.OnCloseImageClick(ASender: TObject);

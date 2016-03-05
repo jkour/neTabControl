@@ -10,6 +10,7 @@ uses
 
 type
   TForm2 = class(TForm)
+    TabControl1: TTabControl;
     StyleBook1: TStyleBook;
     Button1: TButton;
     Edit1: TEdit;
@@ -21,10 +22,22 @@ type
     Button5: TButton;
     Edit2: TEdit;
     Button6: TButton;
+    Button7: TButton;
+    TabItem1: TTabItem;
+    ListBox2: TListBox;
+    CheckBox2: TCheckBox;
+    Edit3: TEdit;
+    Button8: TButton;
     Label1: TLabel;
     GroupBox1: TGroupBox;
     RadioButton1: TRadioButton;
     RadioButton2: TRadioButton;
+    Image1: TImage;
+    Button9: TButton;
+    Button10: TButton;
+    Button11: TButton;
+    Button12: TButton;
+    CheckBox3: TCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
@@ -33,15 +46,27 @@ type
     procedure CheckBox1Change(Sender: TObject);
     procedure Button5Click(Sender: TObject);
     procedure Button6Click(Sender: TObject);
+    procedure Button7Click(Sender: TObject);
+    procedure CheckBox2Change(Sender: TObject);
+    procedure Button8Click(Sender: TObject);
     procedure FormMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Single);
     procedure RadioButton1Change(Sender: TObject);
     procedure RadioButton2Change(Sender: TObject);
+    procedure Button9Click(Sender: TObject);
+    procedure Button10Click(Sender: TObject);
+    procedure Button11Click(Sender: TObject);
+    procedure Button12Click(Sender: TObject);
   private
     procedure UpdateTagList;
     function TestOnBeforeDelete(const AItem: TneTabItem): boolean;
     procedure TestOnAfterDelete(ADeletedItem: TneTabItem; ADeletedFrame: TFrame);
+    procedure UpdateListBox2;
   public
     customNETabContol: TNETabControl;
+  end;
+
+  TMyTab=class(TTabItem)
+
   end;
 
 var
@@ -71,6 +96,38 @@ begin
   end;
 end;
 
+
+procedure TForm2.Button10Click(Sender: TObject);
+begin
+  if customNETabContol.TabCount>0 then
+    customNETabContol.Next;
+end;
+
+procedure TForm2.Button11Click(Sender: TObject);
+begin
+  if customNETabContol.TabCount>0 then
+    customNETabContol.Previous;
+end;
+
+procedure TForm2.Button12Click(Sender: TObject);
+var
+  tmpItem: TTabItem;
+  tmpFrame: TFrame3;
+begin
+  if Trim(Edit1.Text)='' then
+    ShowMessage('Empty tag')
+  else
+  begin
+    tmpItem:=TTabItem.Create(customNETabContol);
+    tmpItem.Text:=Trim(Edit1.Text);
+
+    tmpFrame:=TFrame3.Create(tmpItem);
+    tmpFrame.Label1.Text:=Random(10000).ToString;
+
+    customNETabContol.AddTab(Trim(Edit1.Text), tmpItem, TFrame(tmpFrame));
+    UpdateTagList;
+  end;
+end;
 
 procedure TForm2.Button1Click(Sender: TObject);
 var
@@ -146,7 +203,10 @@ end;
 procedure TForm2.Button4Click(Sender: TObject);
 begin
   if (ListBox1.Count=0) or (ListBox1.ItemIndex=-1) then Exit;
-  customNETabContol.DeleteTab(ListBox1.Selected.TagString);
+  if checkBox3.IsChecked then
+    customNETabContol.DeleteTab(ListBox1.Selected.TagString, true)
+  else
+    customNETabContol.DeleteTab(ListBox1.Selected.TagString);
   UpdateTagList;
 end;
 
@@ -196,12 +256,45 @@ begin
   end;
 end;
 
+procedure TForm2.Button7Click(Sender: TObject);
+var
+  tmp: TMyTab;
+  s: string;
+begin
+  tmp:=TabControl1.Insert(1, TMyTab) as TMyTab;
+  s:=TabControl1.TabCount.ToString;
+  tmp.Text:='inserted '+s;
+  UpdateListBox2;
+end;
+
+procedure TForm2.Button8Click(Sender: TObject);
+begin
+  if TabControl1.TabCount>1 then
+  begin
+    TabControl1.Tabs[TabControl1.TabCount-1].Index:=0;
+  end;
+end;
+
+procedure TForm2.Button9Click(Sender: TObject);
+var
+  tmpImage: TBitmap;
+begin
+  tmpImage:=customNETabContol.GetFrame(Edit1.Text).MakeScreenshot;
+  Image1.Bitmap:=tmpImage;
+  tmpImage.Free;
+end;
 
 procedure TForm2.CheckBox1Change(Sender: TObject);
 begin
   if (ListBox1.Count=0) or (ListBox1.ItemIndex=-1) then Exit;
   customNETabContol.GetTab(ListBox1.Selected.TagString).ShowIcon:=
     CheckBox1.IsChecked;
+end;
+
+procedure TForm2.CheckBox2Change(Sender: TObject);
+begin
+  TabControl1.Tabs[Edit3.Text.ToInteger].Visible:=CheckBox2.IsChecked;
+  UpdateListBox2;
 end;
 
 procedure TForm2.FormCreate(Sender: TObject);
@@ -286,6 +379,20 @@ begin
 
     if Assigned(ADeletedFrame) then
       ShowMessage('Label: '+TFrame3(ADeletedFrame).Label1.Text);
+  end;
+end;
+
+procedure TForm2.UpdateListBox2;
+var
+  i: Integer;
+  tmpItem: TListBoxItem;
+begin
+  ListBox2.Clear;
+  for i := 0 to TabControl1.TabCount - 1 do
+  begin
+    tmpitem := TListBoxItem.Create(ListBox2);
+    tmpitem.Text := TabControl1.Tabs[i].Text+': '+tabcontrol1.Tabs[i].Index.ToString;
+    ListBox2.AddObject(tmpitem);
   end;
 end;
 

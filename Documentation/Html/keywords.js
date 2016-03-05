@@ -1,4 +1,5 @@
 ﻿[{"title":"BugVersion","href":"neTabControl.BugVersion.htm"}
+,{"title":"FindParentForm(TFmxObject)","href":"neTabControl.FindParentForm.htm"}
 ,{"title":"MajorVersion","href":"neTabControl.MajorVersion.htm"}
 ,{"title":"MinorVersion","href":"neTabControl.MinorVersion.htm"}
 ,{"title":"neTabControl","href":"neTabControl.htm"}
@@ -17,13 +18,16 @@
 ,{"title":"TneTabControl","href":"neTabControl.TneTabControl.htm"}
 ,{"title":"TneTabControl.AddTab(string,TFrame)","href":"neTabControl.TneTabControl.AddTab(string%2CTFrame).htm"}
 ,{"title":"TneTabControl.AddTab(string,TneTabItem,TFrame)","href":"neTabControl.TneTabControl.AddTab(string%2CTneTabItem%2CTFrame).htm"}
+,{"title":"TneTabControl.AddTab(string,TTabItem,TFrame)","href":"neTabControl.TneTabControl.AddTab(string%2CTTabItem%2CTFrame).htm"}
+,{"title":"TneTabControl.CloseAllOtherTabsLabel","href":"neTabControl.TneTabControl.CloseAllOtherTabsLabel.htm"}
 ,{"title":"TneTabControl.CloseImageHover","href":"neTabControl.TneTabControl.CloseImageHover.htm"}
 ,{"title":"TneTabControl.CloseImageNormal","href":"neTabControl.TneTabControl.CloseImageNormal.htm"}
 ,{"title":"TneTabControl.CloseImagePressed","href":"neTabControl.TneTabControl.CloseImagePressed.htm"}
 ,{"title":"TneTabControl.CloseTabLabel","href":"neTabControl.TneTabControl.CloseTabLabel.htm"}
 ,{"title":"TneTabControl.Create(TComponent)","href":"neTabControl.TneTabControl.Create.htm"}
-,{"title":"TneTabControl.DeleteTab(string)","href":"neTabControl.TneTabControl.DeleteTab.htm"}
+,{"title":"TneTabControl.DeleteTab(string,Boolean)","href":"neTabControl.TneTabControl.DeleteTab.htm"}
 ,{"title":"TneTabControl.Destroy","href":"neTabControl.TneTabControl.Destroy.htm"}
+,{"title":"TneTabControl.DisablePopupMenu","href":"neTabControl.TneTabControl.DisablePopupMenu.htm"}
 ,{"title":"TneTabControl.FindTabOrderFromTag(string)","href":"neTabControl.TneTabControl.FindTabOrderFromTag.htm"}
 ,{"title":"TneTabControl.GetFrame(string)","href":"neTabControl.TneTabControl.GetFrame.htm"}
 ,{"title":"TneTabControl.GetTab(string)","href":"neTabControl.TneTabControl.GetTab.htm"}
@@ -33,6 +37,7 @@
 ,{"title":"TneTabControl.InsertTab(string,Integer,TFrame)","href":"neTabControl.TneTabControl.InsertTab(string%2CInteger%2CTFrame).htm"}
 ,{"title":"TneTabControl.InsertTab(string,Integer,TneTabItem,TFrame)","href":"neTabControl.TneTabControl.InsertTab(string%2CInteger%2CTneTabItem%2CTFrame).htm"}
 ,{"title":"TneTabControl.MaxTabWidth","href":"neTabControl.TneTabControl.MaxTabWidth.htm"}
+,{"title":"TneTabControl.MixTabWidth","href":"neTabControl.TneTabControl.MixTabWidth.htm"}
 ,{"title":"TneTabControl.OnAfterDelete","href":"neTabControl.TneTabControl.OnAfterDelete.htm"}
 ,{"title":"TneTabControl.OnBeforeDelete","href":"neTabControl.TneTabControl.OnBeforeDelete.htm"}
 ,{"title":"TneTabControl.PopupAfterDefault","href":"neTabControl.TneTabControl.PopupAfterDefault.htm"}
@@ -49,6 +54,8 @@
 ,{"title":"TneTabItem.Deleted","href":"neTabControl.TneTabItem.Deleted.htm"}
 ,{"title":"TneTabItem.Icon","href":"neTabControl.TneTabItem.Icon.htm"}
 ,{"title":"TneTabItem.MouseClick(TMouseButton,TShiftState,Single,Single)","href":"neTabControl.TneTabItem.MouseClick.htm"}
+,{"title":"TneTabItem.MouseDown(TMouseButton,TShiftState,Single,Single)","href":"neTabControl.TneTabItem.MouseDown.htm"}
+,{"title":"TneTabItem.MouseUp(TMouseButton,TShiftState,Single,Single)","href":"neTabControl.TneTabItem.MouseUp.htm"}
 ,{"title":"TneTabItem.ShowIcon","href":"neTabControl.TneTabItem.ShowIcon.htm"}
 ,{"title":"TneTabItem.Version","href":"neTabControl.TneTabItem.Version.htm"}
 ,{"title":"TOnAfterDelete","href":"neTabControl.TOnAfterDelete.htm"}

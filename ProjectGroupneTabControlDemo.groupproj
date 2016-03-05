@@ -9,6 +9,9 @@
         <Projects Include="neTabControlDemo.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="Demos\WithinFrames\neTabControlWithinFrames.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -35,14 +38,23 @@
     <Target Name="neTabControlDemo:Make">
         <MSBuild Projects="neTabControlDemo.dproj" Targets="Make"/>
     </Target>
+    <Target Name="neTabControlWithinFrames">
+        <MSBuild Projects="Demos\WithinFrames\neTabControlWithinFrames.dproj"/>
+    </Target>
+    <Target Name="neTabControlWithinFrames:Clean">
+        <MSBuild Projects="Demos\WithinFrames\neTabControlWithinFrames.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="neTabControlWithinFrames:Make">
+        <MSBuild Projects="Demos\WithinFrames\neTabControlWithinFrames.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="NETabControlPackage;neTabControlDemo"/>
+        <CallTarget Targets="NETabControlPackage;neTabControlDemo;neTabControlWithinFrames"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="NETabControlPackage:Clean;neTabControlDemo:Clean"/>
+        <CallTarget Targets="NETabControlPackage:Clean;neTabControlDemo:Clean;neTabControlWithinFrames:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="NETabControlPackage:Make;neTabControlDemo:Make"/>
+        <CallTarget Targets="NETabControlPackage:Make;neTabControlDemo:Make;neTabControlWithinFrames:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
