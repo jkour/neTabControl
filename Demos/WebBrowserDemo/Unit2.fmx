@@ -1,0 +1,41 @@
+object FrameBrowser: TFrameBrowser
+  Size.Width = 701.000000000000000000
+  Size.Height = 530.000000000000000000
+  Size.PlatformDefault = False
+  object Label1: TLabel
+    Position.X = 16.000000000000000000
+    Position.Y = 16.000000000000000000
+    Size.Width = 73.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Address:'
+  end
+  object Edit1: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 1
+    Text = 'http://www.google.com'
+    Position.X = 88.000000000000000000
+    Position.Y = 16.000000000000000000
+    Size.Width = 433.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object ButtonLoadPage: TButton
+    Position.X = 528.000000000000000000
+    Position.Y = 16.000000000000000000
+    TabOrder = 2
+    Text = 'Load Page'
+    OnClick = ButtonLoadPageClick
+  end
+  object Label2: TLabel
+    Align = MostBottom
+    StyledSettings = [Family, Style, FontColor]
+    Position.Y = 80.000000000000000000
+    Size.Width = 701.000000000000000000
+    Size.Height = 450.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 22.000000000000000000
+    TextSettings.VertAlign = Leading
+    Text = 'Enter a web address and click "Load Page"'
+  end
+end

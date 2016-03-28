@@ -1,6 +1,6 @@
 Microsoft HTML Help Compiler 4.74.8702
 
-Compiling z:\NusEnvision\Components\Delphi\neTabControl\Documentation\CHM\ProjectGroupneTabControlDemo.chm
+Compiling z:\NusEnvision\Components\Delphi\neTabControl\Development\Documentation\CHM\ProjectGroupneTabControlDemo.chm
 
 images\alert_caution.gif
 images\alert_note.gif
@@ -185,18 +185,22 @@ neTabControl.TneTabControl_Constructors.htm
 neTabControl.TneTabControl.Create.htm
 neTabControl.TneTabControl.Destroy.htm
 neTabControl.TneTabControl_Properties.htm
+neTabControl.TneTabControl.CloseAllOtherTabsLabel.htm
 neTabControl.TneTabControl.CloseImageHover.htm
 neTabControl.TneTabControl.CloseImageNormal.htm
 neTabControl.TneTabControl.CloseImagePressed.htm
 neTabControl.TneTabControl.CloseTabLabel.htm
+neTabControl.TneTabControl.DisablePopupMenu.htm
 neTabControl.TneTabControl.HintStyle.htm
 neTabControl.TneTabControl.MaxTabWidth.htm
+neTabControl.TneTabControl.MixTabWidth.htm
 neTabControl.TneTabControl.PopupAfterDefault.htm
 neTabControl.TneTabControl.PopupBeforeDefault.htm
 neTabControl.TneTabControl.Version.htm
 neTabControl.TneTabControl_Methods.htm
 neTabControl.TneTabControl.AddTab(string,TFrame).htm
 neTabControl.TneTabControl.AddTab(string,TneTabItem,TFrame).htm
+neTabControl.TneTabControl.AddTab(string,TTabItem,TFrame).htm
 neTabControl.TneTabControl.DeleteTab.htm
 neTabControl.TneTabControl.FindTabOrderFromTag.htm
 neTabControl.TneTabControl.GetFrame.htm
@@ -224,6 +228,8 @@ neTabControl.TneTabItem.Version.htm
 neTabControl.TneTabItem_Methods.htm
 neTabControl.TneTabItem.ApplyStyle.htm
 neTabControl.TneTabItem.MouseClick.htm
+neTabControl.TneTabItem.MouseDown.htm
+neTabControl.TneTabItem.MouseUp.htm
 neTabControl_Enumerations.htm
 neTabControl.THintStyle.htm
 neTabControl_Delegates.htm
@@ -234,10 +240,12 @@ neTabControl.BugVersion.htm
 neTabControl.MajorVersion.htm
 neTabControl.MinorVersion.htm
 neTabControl_Routines.htm
+neTabControl.FindParentForm.htm
 neTabControl.Register.htm
 neTabControl.ResizeBitmap.htm
 HHC5013: Error: URL reference in the TOC cannot be resolved: "neTabControl.TneTabControl.AddTab(string%2CTFrame).htm".
 HHC5013: Error: URL reference in the TOC cannot be resolved: "neTabControl.TneTabControl.AddTab(string%2CTneTabItem%2CTFrame).htm".
+HHC5013: Error: URL reference in the TOC cannot be resolved: "neTabControl.TneTabControl.AddTab(string%2CTTabItem%2CTFrame).htm".
 HHC5013: Error: URL reference in the TOC cannot be resolved: "neTabControl.TneTabControl.InsertTab(string%2CInteger%2CTFrame).htm".
 HHC5013: Error: URL reference in the TOC cannot be resolved: "neTabControl.TneTabControl.InsertTab(string%2CInteger%2CTneTabItem%2CTFrame).htm".
 

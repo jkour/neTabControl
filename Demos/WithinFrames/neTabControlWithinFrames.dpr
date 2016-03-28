@@ -15,9 +15,9 @@ uses
   System.StartUpCopy,
   FMX.Forms,
   Unit4 in 'Unit4.pas' {Form4},
-  Unit3 in '..\..\Unit3.pas' {Frame3: TFrame},
-  Unit5 in 'Unit5.pas' {BasicFrame: TFrame},
-  neTabControl in '..\..\neTabControl.pas';
+  Unit3 in 'Unit3.pas' {Frame3: TFrame},
+  neTabControl in '..\..\neTabControl.pas',
+  Unit5 in 'Unit5.pas' {BasicFrame: TFrame};
 
 {$R *.res}
 

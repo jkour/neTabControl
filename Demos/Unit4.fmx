@@ -1,0 +1,18 @@
+object Frame4: TFrame4
+  Size.Width = 712.000000000000000000
+  Size.Height = 545.000000000000000000
+  Size.PlatformDefault = False
+  object neTabControl1: TneTabControl
+    Position.X = 48.000000000000000000
+    Position.Y = 56.000000000000000000
+    Size.Width = 577.000000000000000000
+    Size.Height = 401.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'netabcontrolstyle'
+    TabOrder = 0
+    TabPosition = PlatformDefault
+    HintStyle = None
+    CloseTabLabel = 'Close Tab'
+    MaxTabWidth = 120.000000000000000000
+  end
+end

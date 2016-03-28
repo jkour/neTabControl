@@ -1,0 +1,46 @@
+object Frame5: TFrame5
+  Align = Client
+  Size.Width = 798.000000000000000000
+  Size.Height = 665.000000000000000000
+  Size.PlatformDefault = False
+  OnMouseEnter = FrameMouseEnter
+  object neTabControl1: TneTabControl
+    Position.X = 88.000000000000000000
+    Position.Y = 120.000000000000000000
+    Size.Width = 614.000000000000000000
+    Size.Height = 393.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'netabcontrolstyle'
+    TabOrder = 0
+    TabPosition = PlatformDefault
+    HintStyle = ShowTitle
+    CloseTabLabel = 'Close Tab'
+    MaxTabWidth = 120.000000000000000000
+    DisablePopupMenu = False
+    CloseAllOtherTabsLabel = 'Close All Other Tabs'
+  end
+  object Label1: TLabel
+    Position.X = 40.000000000000000000
+    Position.Y = 520.000000000000000000
+    Size.Width = 281.000000000000000000
+    Size.Height = 41.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Label1'
+  end
+  object CheckBox1: TCheckBox
+    IsChecked = True
+    Position.X = 280.000000000000000000
+    Position.Y = 536.000000000000000000
+    TabOrder = 1
+    Text = 'CheckBox1'
+    OnChange = CheckBox1Change
+  end
+  object Label2: TLabel
+    Position.X = 288.000000000000000000
+    Position.Y = 584.000000000000000000
+    Size.Width = 385.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Label2'
+  end
+end

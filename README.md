@@ -35,8 +35,8 @@ There is a style file (neTabControlStyle) which is used in demo to style the tab
 
 #Screenshots
 
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
-
+![alt text](https://github.com/jkour/ adam-p/markdown-here/raw/master/src/common/images/icon48.png "Tab Bar")
+https://github.com/jkour/neTabControl.git
 
 
 #Documentation

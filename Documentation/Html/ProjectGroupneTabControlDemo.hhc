@@ -67,6 +67,12 @@
 
 <UL>
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="CloseAllOtherTabsLabel">
+ <param name="Local" value="neTabControl.TneTabControl.CloseAllOtherTabsLabel.htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="CloseImageHover">
  <param name="Local" value="neTabControl.TneTabControl.CloseImageHover.htm">
  <param name="ImageNumber" value="2">
@@ -91,6 +97,12 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="DisablePopupMenu">
+ <param name="Local" value="neTabControl.TneTabControl.DisablePopupMenu.htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="HintStyle">
  <param name="Local" value="neTabControl.TneTabControl.HintStyle.htm">
  <param name="ImageNumber" value="2">
@@ -99,6 +111,12 @@
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="MaxTabWidth">
  <param name="Local" value="neTabControl.TneTabControl.MaxTabWidth.htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="MixTabWidth">
+ <param name="Local" value="neTabControl.TneTabControl.MixTabWidth.htm">
  <param name="ImageNumber" value="2">
 </OBJECT>
 
@@ -141,7 +159,13 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
- <param name="Name" value="DeleteTab(string)">
+ <param name="Name" value="AddTab(string,TTabItem,TFrame)">
+ <param name="Local" value="neTabControl.TneTabControl.AddTab(string%2CTTabItem%2CTFrame).htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="DeleteTab(string,Boolean)">
  <param name="Local" value="neTabControl.TneTabControl.DeleteTab.htm">
  <param name="ImageNumber" value="2">
 </OBJECT>
@@ -312,6 +336,18 @@
  <param name="ImageNumber" value="2">
 </OBJECT>
 
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="MouseDown(TMouseButton,TShiftState,Single,Single)">
+ <param name="Local" value="neTabControl.TneTabItem.MouseDown.htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="MouseUp(TMouseButton,TShiftState,Single,Single)">
+ <param name="Local" value="neTabControl.TneTabItem.MouseUp.htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
 </UL>
 </UL>
 </UL>
@@ -382,6 +418,12 @@
 </OBJECT>
 
 <UL>
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="FindParentForm(TFmxObject)">
+ <param name="Local" value="neTabControl.FindParentForm.htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="Register">
  <param name="Local" value="neTabControl.Register.htm">

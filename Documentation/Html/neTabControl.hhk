@@ -22,6 +22,11 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="FindParentNeTabItem(TFMXObject)">
+ <param name="Local" value="neTabControl.FindParentNeTabItem.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="MajorVersion">
  <param name="Local" value="neTabControl.MajorVersion.htm">
 </OBJECT>
@@ -34,6 +39,21 @@
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="neTabControl">
  <param name="Local" value="neTabControl.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="neTabControl.TExportElements">
+ <param name="Local" value="neTabControl.TExportElements.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="neTabControl.TExportElementsSet">
+ <param name="Local" value="neTabControl.TExportElementsSet.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="neTabControl.THintPanel">
+ <param name="Local" value="neTabControl.THintPanel.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
@@ -62,8 +82,13 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
- <param name="Name" value="NETabControlPackage">
- <param name="Local" value="NETabControlPackage.htm">
+ <param name="Name" value="neTabControl.TSetOfString">
+ <param name="Local" value="neTabControl.TSetOfString.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="neTabControlPackage">
+ <param name="Local" value="neTabControlPackage.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
@@ -74,6 +99,71 @@
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="ResizeBitmap(TBitmap,Integer,Integer)">
  <param name="Local" value="neTabControl.ResizeBitmap.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TExportElements">
+ <param name="Local" value="neTabControl.TExportElements.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TExportElements.ExportIdentifier">
+ <param name="Local" value="neTabControl.TExportElements.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TExportElements.ExportTagInt">
+ <param name="Local" value="neTabControl.TExportElements.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TExportElements.ExportTagVariant">
+ <param name="Local" value="neTabControl.TExportElements.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TExportElementsSet">
+ <param name="Local" value="neTabControl.TExportElementsSet.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="THintPanel">
+ <param name="Local" value="neTabControl.THintPanel.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="THintPanel.ApplyStyle">
+ <param name="Local" value="neTabControl.THintPanel.ApplyStyle.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="THintPanel.fHintStyle">
+ <param name="Local" value="neTabControl.THintPanel.fHintStyle.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="THintPanel.fHintText">
+ <param name="Local" value="neTabControl.THintPanel.fHintText.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="THintPanel.HintStyle">
+ <param name="Local" value="neTabControl.THintPanel.HintStyle.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="THintPanel.HintText">
+ <param name="Local" value="neTabControl.THintPanel.HintText.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="THintPanel.SetHintStyle(THintStyle)">
+ <param name="Local" value="neTabControl.THintPanel.SetHintStyle.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="THintPanel.SetHintText(string)">
+ <param name="Local" value="neTabControl.THintPanel.SetHintText.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
@@ -102,6 +192,11 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.ActiveTag">
+ <param name="Local" value="neTabControl.TneTabControl.ActiveTag.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="TneTabControl.AddTab(string,TFrame)">
  <param name="Local" value="neTabControl.TneTabControl.AddTab(string%2CTFrame).htm">
 </OBJECT>
@@ -114,6 +209,11 @@
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="TneTabControl.AddTab(string,TTabItem,TFrame)">
  <param name="Local" value="neTabControl.TneTabControl.AddTab(string%2CTTabItem%2CTFrame).htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.CleanUpTabs">
+ <param name="Local" value="neTabControl.TneTabControl.CleanUpTabs.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
@@ -142,8 +242,23 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.CloseTabOnDoubleClick">
+ <param name="Local" value="neTabControl.TneTabControl.CloseTabOnDoubleClick.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="TneTabControl.Create(TComponent)">
  <param name="Local" value="neTabControl.TneTabControl.Create.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.DblClick">
+ <param name="Local" value="neTabControl.TneTabControl.DblClick.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.DeleteAllTabs(boolean)">
+ <param name="Local" value="neTabControl.TneTabControl.DeleteAllTabs.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
@@ -162,13 +277,148 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.DoChange">
+ <param name="Local" value="neTabControl.TneTabControl.DoChange.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.fCloseAllOtherTabsLabel">
+ <param name="Local" value="neTabControl.TneTabControl.fCloseAllOtherTabsLabel.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.fCloseImageHover">
+ <param name="Local" value="neTabControl.TneTabControl.fCloseImageHover.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.fCloseImageNormal">
+ <param name="Local" value="neTabControl.TneTabControl.fCloseImageNormal.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.fCloseImagePressed">
+ <param name="Local" value="neTabControl.TneTabControl.fCloseImagePressed.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.fCloseTabLabel">
+ <param name="Local" value="neTabControl.TneTabControl.fCloseTabLabel.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.fCloseTabOnDoubleClick">
+ <param name="Local" value="neTabControl.TneTabControl.fCloseTabOnDoubleClick.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.fCurrentNETabItem">
+ <param name="Local" value="neTabControl.TneTabControl.fCurrentNETabItem.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.fDictionaryFrames">
+ <param name="Local" value="neTabControl.TneTabControl.fDictionaryFrames.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.fDictionaryTabs">
+ <param name="Local" value="neTabControl.TneTabControl.fDictionaryTabs.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.fDisablePopupMenu">
+ <param name="Local" value="neTabControl.TneTabControl.fDisablePopupMenu.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.fHintPanel">
+ <param name="Local" value="neTabControl.TneTabControl.fHintPanel.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.fHintPopup">
+ <param name="Local" value="neTabControl.TneTabControl.fHintPopup.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.fHintShowDelay">
+ <param name="Local" value="neTabControl.TneTabControl.fHintShowDelay.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.fHintStyle">
+ <param name="Local" value="neTabControl.TneTabControl.fHintStyle.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.fHintTimer">
+ <param name="Local" value="neTabControl.TneTabControl.fHintTimer.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.fHistoryTags">
+ <param name="Local" value="neTabControl.TneTabControl.fHistoryTags.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="TneTabControl.FindTabOrderFromTag(string)">
  <param name="Local" value="neTabControl.TneTabControl.FindTabOrderFromTag.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.FindTagFromTabOrder(integer)">
+ <param name="Local" value="neTabControl.TneTabControl.FindTagFromTabOrder.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.fMaxTabWidth">
+ <param name="Local" value="neTabControl.TneTabControl.fMaxTabWidth.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.fMinTabWidth">
+ <param name="Local" value="neTabControl.TneTabControl.fMinTabWidth.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.fOnAfterDelete">
+ <param name="Local" value="neTabControl.TneTabControl.fOnAfterDelete.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.fOnBeforeDelete">
+ <param name="Local" value="neTabControl.TneTabControl.fOnBeforeDelete.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.fPopupAfterDefaultMenu">
+ <param name="Local" value="neTabControl.TneTabControl.fPopupAfterDefaultMenu.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.fPopupBeforeDefaultMenu">
+ <param name="Local" value="neTabControl.TneTabControl.fPopupBeforeDefaultMenu.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.fVersion">
+ <param name="Local" value="neTabControl.TneTabControl.fVersion.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.GetActiveTag">
+ <param name="Local" value="neTabControl.TneTabControl.GetActiveTag.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="TneTabControl.GetFrame(string)">
  <param name="Local" value="neTabControl.TneTabControl.GetFrame.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.GetLastVisitedTag">
+ <param name="Local" value="neTabControl.TneTabControl.GetLastVisitedTag.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
@@ -184,6 +434,16 @@
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="TneTabControl.GetTabsText">
  <param name="Local" value="neTabControl.TneTabControl.GetTabsText.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.GetVersion">
+ <param name="Local" value="neTabControl.TneTabControl.GetVersion.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.HintShowDelay">
+ <param name="Local" value="neTabControl.TneTabControl.HintShowDelay.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
@@ -207,8 +467,23 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
- <param name="Name" value="TneTabControl.MixTabWidth">
- <param name="Local" value="neTabControl.TneTabControl.MixTabWidth.htm">
+ <param name="Name" value="TneTabControl.MinTabWidth">
+ <param name="Local" value="neTabControl.TneTabControl.MinTabWidth.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.MouseEnterTabItem(TObject)">
+ <param name="Local" value="neTabControl.TneTabControl.MouseEnterTabItem.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.MouseExitTabItem">
+ <param name="Local" value="neTabControl.TneTabControl.MouseExitTabItem.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.MouseMoveOverTabItem(string,Single,Single)">
+ <param name="Local" value="neTabControl.TneTabControl.MouseMoveOverTabItem.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
@@ -222,6 +497,26 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.OnHintTimer(TObject)">
+ <param name="Local" value="neTabControl.TneTabControl.OnHintTimer.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.OnPopUpChangeTab(TObject)">
+ <param name="Local" value="neTabControl.TneTabControl.OnPopUpChangeTab.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.OnPopUpMenuClose(TObject)">
+ <param name="Local" value="neTabControl.TneTabControl.OnPopUpMenuClose.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.OnPopUpMenuCloseAllOtherTabs(TObject)">
+ <param name="Local" value="neTabControl.TneTabControl.OnPopUpMenuCloseAllOtherTabs.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="TneTabControl.PopupAfterDefault">
  <param name="Local" value="neTabControl.TneTabControl.PopupAfterDefault.htm">
 </OBJECT>
@@ -232,8 +527,38 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.SaveTabs(TExportElementsSet,TSetOfString,TStringList)">
+ <param name="Local" value="neTabControl.TneTabControl.SaveTabs.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="TneTabControl.SetActiveTab(string)">
  <param name="Local" value="neTabControl.TneTabControl.SetActiveTab.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.SetHintShowDelay(integer)">
+ <param name="Local" value="neTabControl.TneTabControl.SetHintShowDelay.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.SetHintSTyle(THintStyle)">
+ <param name="Local" value="neTabControl.TneTabControl.SetHintSTyle.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.SetMaxTabWidth(Single)">
+ <param name="Local" value="neTabControl.TneTabControl.SetMaxTabWidth.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.SetMinTabWidth(Single)">
+ <param name="Local" value="neTabControl.TneTabControl.SetMinTabWidth.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.ShowPopUpMenu(TneTabItem,Single,Single)">
+ <param name="Local" value="neTabControl.TneTabControl.ShowPopUpMenu.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
@@ -244,6 +569,11 @@
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="TneTabItem">
  <param name="Local" value="neTabControl.TneTabItem.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.AdjustTabWidth(single,Single)">
+ <param name="Local" value="neTabControl.TneTabItem.AdjustTabWidth.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
@@ -277,13 +607,88 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.DblClick">
+ <param name="Local" value="neTabControl.TneTabItem.DblClick.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="TneTabItem.Deleted">
  <param name="Local" value="neTabControl.TneTabItem.Deleted.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.fCanClose">
+ <param name="Local" value="neTabControl.TneTabItem.fCanClose.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.fCloseImageHover">
+ <param name="Local" value="neTabControl.TneTabItem.fCloseImageHover.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.fCloseImageNormal">
+ <param name="Local" value="neTabControl.TneTabItem.fCloseImageNormal.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.fCloseImagePressed">
+ <param name="Local" value="neTabControl.TneTabItem.fCloseImagePressed.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.fDeleted">
+ <param name="Local" value="neTabControl.TneTabItem.fDeleted.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.fIcon">
+ <param name="Local" value="neTabControl.TneTabItem.fIcon.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.fIdentifier">
+ <param name="Local" value="neTabControl.TneTabItem.fIdentifier.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.fIsMousePressed">
+ <param name="Local" value="neTabControl.TneTabItem.fIsMousePressed.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.fShowIcon">
+ <param name="Local" value="neTabControl.TneTabItem.fShowIcon.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.fTabControlParent">
+ <param name="Local" value="neTabControl.TneTabItem.fTabControlParent.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.fTagVariant">
+ <param name="Local" value="neTabControl.TneTabItem.fTagVariant.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.fVersion">
+ <param name="Local" value="neTabControl.TneTabItem.fVersion.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.GetVersion">
+ <param name="Local" value="neTabControl.TneTabItem.GetVersion.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="TneTabItem.Icon">
  <param name="Local" value="neTabControl.TneTabItem.Icon.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.Identifier">
+ <param name="Local" value="neTabControl.TneTabItem.Identifier.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
@@ -302,8 +707,88 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.NewOnMouseEnter(TObject)">
+ <param name="Local" value="neTabControl.TneTabItem.NewOnMouseEnter.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.NewOnMouseLeave(TObject)">
+ <param name="Local" value="neTabControl.TneTabItem.NewOnMouseLeave.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.NewOnMouseMove(TObject,TShiftState,Single,Single)">
+ <param name="Local" value="neTabControl.TneTabItem.NewOnMouseMove.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.OnCloseImageClick(TObject)">
+ <param name="Local" value="neTabControl.TneTabItem.OnCloseImageClick.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.OnCloseImageHoverClick(TObject)">
+ <param name="Local" value="neTabControl.TneTabItem.OnCloseImageHoverClick.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.OnCloseImageLeave(TObject)">
+ <param name="Local" value="neTabControl.TneTabItem.OnCloseImageLeave.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.OnCloseImageMouseDown(TObject,TMouseButton,TShiftState,Single,Single)">
+ <param name="Local" value="neTabControl.TneTabItem.OnCloseImageMouseDown.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.OnCloseImageMouseUp(TObject,TMouseButton,TShiftState,Single,Single)">
+ <param name="Local" value="neTabControl.TneTabItem.OnCloseImageMouseUp.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.SetCanClose(Boolean)">
+ <param name="Local" value="neTabControl.TneTabItem.SetCanClose.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.SetCloseImageHover(TBitmap)">
+ <param name="Local" value="neTabControl.TneTabItem.SetCloseImageHover.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.SetCloseImageNormal(TBitmap)">
+ <param name="Local" value="neTabControl.TneTabItem.SetCloseImageNormal.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.SetCloseImagePressed(TBitMap)">
+ <param name="Local" value="neTabControl.TneTabItem.SetCloseImagePressed.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.SetIcon(TBitmap)">
+ <param name="Local" value="neTabControl.TneTabItem.SetIcon.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.SetShowIcon(Boolean)">
+ <param name="Local" value="neTabControl.TneTabItem.SetShowIcon.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="TneTabItem.ShowIcon">
  <param name="Local" value="neTabControl.TneTabItem.ShowIcon.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.TabControlParent">
+ <param name="Local" value="neTabControl.TneTabItem.TabControlParent.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.TagVariant">
+ <param name="Local" value="neTabControl.TneTabItem.TagVariant.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
@@ -319,6 +804,11 @@
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="TOnBeforeDelete">
  <param name="Local" value="neTabControl.TOnBeforeDelete.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TSetOfString">
+ <param name="Local" value="neTabControl.TSetOfString.htm">
 </OBJECT>
 
   </UL>
