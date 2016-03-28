@@ -31,6 +31,13 @@ There is a style file (neTabControlStyle) which is used in demo to style the tab
 * Customisable Pop-up menu
 * Hint can show the title of the tab item
 * Hint can show a preview of the whole tab item
+* Procedure to export the list of open tabs in order to implement load/save workspace feature
+
+#Screenshots
+
+![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+
+
 
 #Documentation
 There is documentation describing the methods and properties. Please check the "Documentations" folder.

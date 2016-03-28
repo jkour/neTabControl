@@ -3,7 +3,7 @@
 { © 2016, John Kouraklis           				}
 { Email : j_kour@hotmail.com                           		}
 {                                                      		}
-{The MIT License (MIT)                                          }
+{ The MIT License (MIT)                                         }
 {                                                               }
 { Copyright (c) 2016 John Kouraklis                             }
 {                                                               }
@@ -44,12 +44,12 @@ uses
   FMX.Graphics, FMX.Forms, FMX.Menus,
   FMX.Styles.Objects,
   System.Classes,
-  System.UITypes, FMX.Objects, FMX.StdCtrls;
+  System.UITypes, FMX.Objects, FMX.StdCtrls, System.Rtti;
 
 
 const
   MajorVersion = '0';
-  MinorVersion = '2';
+  MinorVersion = '3';
   BugVersion = '0';
 
 {***************************************************************}
@@ -82,6 +82,35 @@ const
 type
   THintStyle = (ShowTitle, ShowPreview, None);
 
+  {$REGION 'Used to define which properties will be exported when the tabs are  Saved.'}
+  /// <summary>
+  ///   Used to define which properties will be exported when the tabs are
+  ///   Saved.
+  /// </summary>
+  {$ENDREGION}
+  TExportElements = (ExportTagInt, ExportIdentifier, ExportTagVariant);
+  TExportElementsSet = set of TExportElements;
+
+
+  {$REGION 'This panel is used to present the hint. It is predominantly used to display the correct style.'}
+  /// <summary>
+  ///   This panel is used to present the hint. It is predominantly used to
+  ///   display the correct style.
+  /// </summary>
+  {$ENDREGION}
+  THintPanel = class(TPanel)
+  private
+    fHintStyle: THintStyle;
+    fHintText: string;
+    procedure SetHintStyle (const newHintStyle: THintStyle);
+    procedure SetHintText (const newHintText: string);
+  protected
+    procedure ApplyStyle; override;
+  public
+    property HintStyle: THintStyle read fHintStyle write SetHintStyle;
+    property HintText: string read fHintText write SetHintText;
+  end;
+
   TneTabItem = class(TTabItem)
   private
     fCanClose: Boolean;
@@ -91,8 +120,9 @@ type
     fCloseImagePressed: TBitmap;
     fIcon: TBitmap;
     fShowIcon: boolean;
+    fIdentifier: string;
+    fTagVariant: Variant;
 
-    fIsMouseOver: boolean;
     fDeleted: Boolean;
     fIsMousePressed: Boolean;
 
@@ -102,7 +132,7 @@ type
     procedure SetCloseImagePressed (const newImage: TBitMap);
 
     procedure SetCanClose(const can: Boolean);
-    procedure SetIconImage(const newImage: TBitmap);
+    procedure SetIcon(const newImage: TBitmap);
     procedure SetShowIcon(const can: Boolean);
     procedure AdjustTabWidth(const minW: single; const maxW: Single);
 
@@ -122,10 +152,12 @@ type
       Button: TMouseButton; Shift: TShiftState; X, Y: Single);
   protected
     procedure MouseClick(Button: TMouseButton; Shift: TShiftState; X, Y: Single); override;
+    procedure DblClick; override;
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Single); override;
     procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Single); override;
     procedure ApplyStyle; override;
     property Deleted: boolean read fDeleted write fDeleted;
+    property TabControlParent: TTabControl read fTabControlParent;
   published
     {$REGION 'Defines whether the tab can close.'}
     /// <summary>
@@ -139,38 +171,51 @@ type
     /// </summary>
     {$ENDREGION}
     property CloseImageNormal: TBitmap read fCloseImageNormal write SetCloseImageNormal;
-    {$REGION 'Sets the image for the close button (hover).'}
+    {$REGION 'Sets the image for the close button (normal).'}
     /// <summary>
     ///   Sets the image for the close button (normal).
     /// </summary>
     {$ENDREGION}
     property CloseImageHover: TBitmap read fCloseImageHover write SetCloseImageHover;
-    {$REGION 'Sets the image for the close button (pressed).'}
+    {$REGION 'Sets the image for the close button (normal).'}
     /// <summary>
     ///   Sets the image for the close button (normal).
     /// </summary>
     {$ENDREGION}
     property CloseImagePressed: TBitmap read fCloseImagePressed write SetCloseImagePressed;
-    {$REGION 'Sets the image for the icon which appears at the left side of the tab.'}
+    {$REGION 'Sets the image for the icon which appears at the left side of the  tab.'}
     /// <summary>
     ///   Sets the image for the icon which appears at the left side of the
     ///   tab.
     /// </summary>
     {$ENDREGION}
-    property Icon:TBitmap read fIcon write SetIconImage;
+    property Icon:TBitmap read fIcon write SetIcon;
     {$REGION 'Controls whether the icon at the left is visible.'}
     /// <summary>
     ///   Controls whether the icon at the left is visible.
     /// </summary>
     {$ENDREGION}
     property ShowIcon: boolean read fShowIcon write SetShowIcon default true;
+    {$REGION 'Field used to store a TValue field. Can be used as it fits to the  developer.'}
+    /// <summary>
+    ///   Field used to store a sting field. Can be used as it fits to the
+    ///   developer.
+    /// </summary>
+    {$ENDREGION}
+    property Identifier: string read fIdentifier write fIdentifier;
+    {$REGION 'Field to store TValue. Can be used as suits the developer.'}
+    /// <summary>
+    ///   Field to store TValue. Can be used as suits the developer.
+    /// </summary>
+    {$ENDREGION}
+    property TagVariant: Variant read fTagVariant write fTagVariant;
 
     property Version: string read GetVersion;
 
     constructor Create(AOwner: TComponent); override;
   end;
 
-  {$REGION 'This event is called before the deletion of a tab. If it is false, the deletion is aborted. By default it returns true.'}
+  {$REGION 'This event is called before the deletion of a tab. If it is false, the  deletion is aborted. By default it returns true.'}
   /// <summary>
   ///   This event is called before the deletion of a tab. If it is false, the
   ///   deletion is aborted. By default it returns true.
@@ -187,16 +232,22 @@ type
   {$ENDREGION}
   TOnAfterDelete = procedure (ADeletedItem: TneTabItem; ADeletedFrame: TFrame) of object;
 
+  TSetOfString = array of string;
+
   TneTabControl = class(TTabControl)
   private
     fDictionaryTabs: TDictionary<string, TneTabItem>;
     fDictionaryFrames: TDictionary<string, TFrame>;
     fHintStyle: THintStyle;
-    fHintContainer: TPanel;
+    fHintShowDelay: integer;
+    fHintTimer: TTimer;
+    fHintPopup: TPopup;
+    fHintPanel: THintPanel;
     fCloseImageNormal,
     fCloseImageHover,
     fCloseImagePressed: TBitmap;
     fVersion: string;
+    fCurrentNETabItem: TneTabItem;
 
     //Events
     fOnBeforeDelete: TOnBeforeDelete;
@@ -210,22 +261,24 @@ type
     fMinTabWidth: single;
     fDisablePopupMenu: boolean;
     fCloseAllOtherTabsLabel: string;
+    fCloseTabOnDoubleClick: boolean;
 
     //Holds the history of the clicked tags
     fHistoryTags: TList<string>;
     function GetLastVisitedTag: string;
 
     //Events
-    procedure OnTabChangeInternal(Sender: TObject);
+    procedure OnHintTimer(Sender:TObject);
 
     //Popup Events
     procedure OnPopUpMenuClose(ASender: TObject);
     procedure OnPopUpChangeTab(ASender: TObject);
     procedure OnPopUpMenuCloseAllOtherTabs (ASender: TObject);
 
-    //Procedures
+    //Procedures-Functions
     procedure ShowPopUpMenu(const ASender:TNETabItem; const X, Y: Single);
     procedure SetHintSTyle(const showH: THintStyle);
+    procedure SetHintShowDelay(const delay: integer);
     procedure SetMaxTabWidth (const newW: Single);
     procedure SetMinTabWidth (const newW: Single);
     {$REGION 'This method shows the hint on the tabitem.'}
@@ -233,12 +286,17 @@ type
     ///   This method shows the hint on the tabitem.
     /// </summary>
     {$ENDREGION}
-    procedure MouseOverTabItem(const tag: string; const X, Y: Single);
+    procedure MouseEnterTabItem (ASender: TObject);
+    procedure MouseMoveOverTabItem(const tag: string; const X, Y: Single);
     procedure MouseExitTabItem;
 
+    function GetActiveTag: string;
+
     function GetVersion: string;
+    procedure CleanUpTabs;
   protected
-    { Protected declarations }
+    procedure DoChange; override;
+    procedure DblClick; override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -260,6 +318,7 @@ type
     /// </param>
     {$ENDREGION}
     procedure DeleteTab(const tag: string; const forceDelete: Boolean = false);
+    procedure DeleteAllTabs (const forceDelete: boolean = false);
 
     procedure InsertTab(const tag: string; const index: Integer;
                                               var newFrame: TFrame);overload;
@@ -268,16 +327,55 @@ type
 
     procedure SetActiveTab(const tag: string);
 
+    {$REGION 'Saves the open tabs to a list of strings.'}
+    /// <summary>
+    ///   Saves the open tabs to a list of strings.
+    /// </summary>
+    /// <param name="exportElements">
+    ///   Defines which elements will be used in the export data. See <see cref="neTabControl|TExportElementsSet" />
+    /// </param>
+    /// <param name="excludeTabs">
+    ///   Defines which tabs (by tag) will be excluded from the save list
+    /// </param>
+    /// <param name="savedTabs">
+    ///   The list of saved tabs
+    /// </param>
+    /// <remarks>
+    ///   Export Structure (tabs are exported as they appear in the tab)
+    ///   <list type="bullet">
+    ///     <item>
+    ///       [tag] = the tag of the netabitem <br /><br />
+    ///     </item>
+    ///     <item>
+    ///       [tagIdentifier] = the Identifier property of the neTabItem if
+    ///       selected in exportElements <br /><br />
+    ///     </item>
+    ///     <item>
+    ///       [tagInt] = the tag property of the neTabitem if selected in
+    ///       exportElements <br /><br />
+    ///     </item>
+    ///     <item>
+    ///       [tagVariant] = the tagVariant property of the neTabitem if
+    ///       selected in exportElements <br />
+    ///     </item>
+    ///   </list>
+    /// </remarks>
+    {$ENDREGION}
+    procedure SaveTabs(const exportElements: TExportElementsSet;
+     const excludeTabs: TSetOfString; var savedTabs: TStringList);
     function GetTab(const tag: string): TneTabItem;
     function GetFrame(const tag: string): TFrame;
     function GetTabsTags: TStringList;
     function GetTabsText: TStringList;
     function FindTabOrderFromTag(const Tag: string): Integer;
+    function FindTagFromTabOrder(const index: integer): string;
+
+    property ActiveTag: string read GetActiveTag;
   published
     //Events
     property OnBeforeDelete: TOnBeforeDelete read fOnBeforeDelete write fOnBeforeDelete;
     property OnAfterDelete: TOnAfterDelete read fOnAfterDelete write fOnAfterDelete;
-    {$REGION 'This method is called before the construction of the default menu items. Use this method to add menu items in the beginning of the popup menu.'}
+    {$REGION 'This method is called before the construction of the default menu  items. Use this method to add menu items in the beginning of the  popup menu.'}
     /// <summary>
     ///   This method is called before the construction of the default menu
     ///   items. Use this method to add menu items in the beginning of the
@@ -286,7 +384,7 @@ type
     {$ENDREGION}
     property PopupBeforeDefault:TPopupMenu read fPopupBeforeDefaultMenu
       write fPopupBeforeDefaultMenu;
-    {$REGION 'This method is called after the construction of the default menu items. Use this method to add menu items at the end of the popup menu.'}
+    {$REGION 'This method is called after the construction of the default menu  items. Use this method to add menu items at the end of the popup  menu.'}
     /// <summary>
     ///   This method is called after the construction of the default menu
     ///   items. Use this method to add menu items at the end of the popup
@@ -314,7 +412,7 @@ type
     ///   Defines the minimum tab width.
     /// </summary>
     {$ENDREGION}
-    property MixTabWidth: Single read fMinTabWidth write SetMinTabWidth;
+    property MinTabWidth: Single read fMinTabWidth write SetMinTabWidth;
     {$REGION 'Defines the maximum tab width.'}
     /// <summary>
     ///   Defines the maximum tab width.
@@ -345,16 +443,38 @@ type
     {$ENDREGION}
     property CloseAllOtherTabsLabel: string read fCloseAllOtherTabsLabel
              write fCloseAllOtherTabsLabel;
+    {$REGION 'Sets the delay before the hint is shown.'}
+    /// <summary>
+    ///   Sets the delay before the hint is shown.
+    /// </summary>
+    /// <value>
+    ///   Value in ms.
+    /// </value>
+    /// <remarks>
+    ///   Default Value: 500ms
+    /// </remarks>
+    {$ENDREGION}
+    property HintShowDelay: integer read fHintShowDelay write SetHintShowDelay default 500;
+    property CloseTabOnDoubleClick: boolean read fCloseTabOnDoubleClick
+             write fCloseTabOnDoubleClick default false;
+
     property Version: string read GetVersion;
   end;
 
 procedure Register;
 
+
+{$REGION 'Global function to be used by frames. Returns the parent neTabItem.'}
+/// <summary>
+///   Global function to be used by frames. Returns the parent neTabItem.
+/// </summary>
+{$ENDREGION}
+function FindParentNeTabItem(const checkComponent: TFMXObject):TneTabItem;
+
 implementation
 
 uses
-  System.Math, FMX.Dialogs, System.Types;
-
+  System.Math, FMX.Dialogs, System.Types, System.Generics.Defaults;
 
 {General Utils}
 
@@ -439,8 +559,14 @@ begin
     newItem.AdjustTabWidth(fMinTabWidth, fMaxTabWidth);
 
     //this is to fix the empty entry in the very beggining (no tabs)
-    if trim(fHistoryTags.Items[0])='' then
-      fHistoryTags.Delete(0);
+    if fHistoryTags.Count>0 then
+    begin
+      if trim(fHistoryTags.Items[0])='' then
+        fHistoryTags.Delete(0);
+    end
+    else
+      if (self.tabcount>0) and (self.tabindex>-1) then
+        fHistoryTags.Add(self.activeTab.tagstring);
   except
     raise ;
   end;
@@ -500,8 +626,6 @@ begin
 
   fHistoryTags:=TList<string>.Create;
 
-  self.OnChange:=OnTabChangeInternal;
-
   fCloseTabLabel:='Close Tab';
 
   fDisablePopupMenu:=False;
@@ -516,6 +640,31 @@ begin
 
   self.StyleLookup:='netabcontrolstyle';
 
+  fHintShowDelay:=500;
+  fHintTimer:=TTimer.Create(self);
+  fHintTimer.Interval:=fHintShowDelay;
+  fHintTimer.OnTimer:=OnHintTimer;
+  fHintTimer.Enabled:=false;
+
+  fHintPopup:=TPopup.Create(self);
+end;
+
+procedure TneTabControl.DblClick;
+begin
+  inherited;
+  if fCloseTabOnDoubleClick then
+    Self.DeleteTab(GetActiveTag);
+end;
+
+procedure TneTabControl.DeleteAllTabs (const forceDelete: boolean = false);
+var
+  tmpList: TStringList;
+  str: string;
+begin
+  tmpList:=self.GetTabsTags;
+  for str in tmpList do
+    self.DeleteTab(str, forceDelete);
+  tmpList.Free;
 end;
 
 procedure TneTabControl.DeleteTab(const tag: string; const forceDelete: Boolean = false);
@@ -526,9 +675,13 @@ var
   deleteindex: Integer;
   deletedItem,
   tmpItem: TneTabItem;
-  deletedFrame: TFrame;
+  deletedFrame,
+  leftFrame: TFrame;
+
 begin
   tag2:=Trim(tag);
+
+  if self.TabCount=0 then exit;
 
   if not Assigned(fDictionaryTabs) then Exit;
   if not fDictionaryTabs.ContainsKey(tag2) then Exit;
@@ -543,50 +696,40 @@ begin
     if not fOnBeforeDelete(fDictionaryTabs.Items[tag2]) then
       Exit;
 
-  deleteindex:=FindTabOrderFromTag(fDictionaryTabs.Items[tag2].TagString);
-  currentindex:=FindTabOrderFromTag(self.ActiveTab.TagString);
+  self.GetTab(tag2).Visible:=false;
+  fDictionaryTabs.Items[tag2].Deleted:=true;
 
-  tmpItem:=fDictionaryTabs.Items[tag2];
-  deletedItem:=nil;
-  if Assigned(tmpItem) then
+  lastvisitedTag:=GetLastVisitedTag;
+  if lastvisitedTag='' then
   begin
-    deletedItem:=TneTabItem.Create(nil);
-    deletedItem.Text:=tmpItem.Text;
-    deletedItem.CanClose:=tmpItem.CanClose;
-    deletedItem.TagString:=tmpItem.TagString;
+    if self.TabCount>0 then
+      self.SetActiveTab(FindTagFromTabOrder(0));
+  end
+  else
+    self.SetActiveTab(lastvisitedTag);
+
+  deletedItem:=nil;
+  if fDictionaryTabs.ContainsKey(tag2) then
+  begin
+    tmpItem:=fDictionaryTabs.Items[tag2];
+    if Assigned(tmpItem) then
+    begin
+      deletedItem:=TneTabItem.Create(nil);
+      deletedItem.Text:=tmpItem.Text;
+      deletedItem.CanClose:=tmpItem.CanClose;
+      deletedItem.TagString:=tmpItem.TagString;
+    end;
   end;
 
   deletedFrame:=nil;
- //dletedFrame:=fDictionaryFrames.Items[tag2].Clone
-   //                   (fDictionaryFrames.Items[tag2]);
-
-
-//When Delete is called directly from the CloseIcon it generates an access
-//violation error because the OnClick event deleted the TImage and returns to nil
-//In order to avoid this, we hide the tabItem and don't delete
-//So, instead of this: self.Delete(FindTabOrderFromTag(tag2));
-//we do this:
-
-  Self.GetTab(tag2).Visible:=false;
-  if fDictionaryTabs.ContainsKey(tag2) then
-    fDictionaryTabs.Items[tag2].Deleted:=true;
-
-  if deleteindex=currentIndex then
-  begin
-    lastvisitedTag:=GetLastVisitedTag;
-    if Trim(lastvisitedTag)<>'' then
-        self.ActiveTab:=self.Tabs[
-            FindTabOrderFromTag(lastvisitedTag)]
-    else
-      if self.TabCount>0 then
-        self.ActiveTab:=self.Tabs[0];
-  end;
+//  if fdictionaryFrames.ContainsKey(tag2) then
+//    deletedFrame:=TFrame(fDictionaryFrames.Items[tag2].
+//       Clone(fdictionaryFrames.Items[tag2]));
 
   if Assigned(fOnAfterDelete) then
-    fOnAfterDelete(deletedItem, deletedFrame)
-  else
-    if Assigned(deletedItem) then
-       deletedItem.Free;
+    fOnAfterDelete(deletedItem, deletedFrame);
+
+  CleanUpTabs;
 end;
 
 destructor TneTabControl.Destroy;
@@ -594,16 +737,18 @@ var
   tmpItem: TneTabItem;
 begin
   for tmpItem in fDictionaryTabs.Values do
+  begin
+    tmpItem.Icon.Free;
     tmpItem.Free;
-  if Assigned(fCloseImageNormal) then
-    fCloseImageNormal.Free;
-  if Assigned(fCloseImageHover) then
-    fCloseImageHover.Free;
-  if Assigned(fCloseImagePressed) then
-    fCloseImagePressed.Free;
+  end;
+  fCloseImageNormal.Free;
+  fCloseImageHover.Free;
+  fCloseImagePressed.Free;
   fDictionaryTabs.Free;
   fDictionaryFrames.Free;
   fHistoryTags.Free;
+  fHintTimer.Free;
+  fHintPopup.Free;
   inherited;
 end;
 
@@ -615,9 +760,65 @@ begin
   for I := 0 to Self.TabCount-1 do
     if (trim(Tag)=Trim(self.tabs[i].TagString))
       and (self.Tabs[i].Visible) then
+    begin
       result:=i;
+      exit;
+    end;
 end;
 
+function TneTabControl.FindTagFromTabOrder(const index: integer): string;
+var
+  tmpList: TList<TneTabItem>;
+  tmpItem: TneTabItem;
+  tmpComparison: TComparison<TneTabItem>;
+begin
+  if (not index>=0) and (index<=self.TabCount-1) then exit;
+  if (not Assigned(fDictionaryTabs)) or (fDictionaryTabs.Count=0) then Exit;
+
+  tmpComparison:=
+    function (const Left, Right: TneTabItem): integer
+    begin
+      result:=TComparer<integer>.Default.Compare(left.Index, right.Index);
+    end;
+
+  tmpList:=TList<TneTabItem>.Create;
+  for tmpItem in fDictionaryTabs.Values do
+    tmpList.Add(tmpItem);
+  tmpList.Sort(TComparer<TneTabItem>.Construct(tmpComparison));
+
+  result:=tmpList.Items[0].TagString;
+  tmpList.Free;
+end;
+
+procedure TneTabControl.CleanUpTabs;
+var
+  key: string;
+  i: Integer;
+begin
+  //Tidy up the dictionaries
+  //Delete the invisible tabs
+  for key in fDictionaryTabs.Keys do
+    if fDictionaryTabs.Items[key].Deleted then
+    begin
+      fDictionaryTabs.Remove(key);
+      if fdictionaryFrames.containsKey(key) then
+        fDictionaryFrames.Remove(key);
+      i := FindTabOrderFromTag(key);
+      self.delete(i);
+    end;
+end;
+
+
+function TneTabControl.GetActiveTag: string;
+begin
+  if Assigned(self.ActiveTab) then
+    result:=self.ActiveTab.TagString
+  else
+  begin
+    self.SetActiveTab(GetLastVisitedTag);
+    result:=GetLastVisitedTag;
+  end;
+end;
 
 function TneTabControl.GetFrame(const tag: string): TFrame;
 begin
@@ -718,106 +919,34 @@ begin
   newItem.Index:=index;
 end;
 
-procedure TneTabControl.MouseExitTabItem;
+procedure TneTabControl.MouseEnterTabItem(ASender: TObject);
 begin
-  if Assigned(fHintContainer) then
-    fHintContainer.Visible:=False;
-end;
-
-procedure TneTabControl.MouseOverTabItem(const tag: string; const X,
-  Y: Single);
-//X, Y are local to the tabItem
-var
-  tmpForm: TForm;
-  tmpFMX: TFmxObject;
-  tmpImage: TImage;
-  tmpItem: TneTabItem;
-  tmpText: TLabel;
-  tmpBitmap: TBitmap;
-  FP: TPointF;
-
-begin
-  inherited;
-
-  //Disable showHint
-  fHintStyle:=THintStyle.None;
-
   if fHintStyle=THintStyle.None then
-    Exit;
-
-  if not Assigned(self.parent) then
-        Exit;
-
-  tmpForm:=FindParentForm(self);
-
-  if not Assigned(tmpForm) then
-    Exit;
-
-  if Assigned(fHintContainer) then
-      fHintContainer.Free;
-
-  if fDictionaryTabs.containskey(tag) then
-    tmpItem:=fDictionaryTabs.Items[Tag]
+    Exit
   else
-    Exit;
-
-  fHintContainer:=TPanel.Create(nil);
-  fHintContainer.Parent:=tmpForm;
-
-  fHintContainer.StyleLookup:='nehintstyle';
-
-  tmpFMX:=fHintContainer.FindStyleResource('image');
-  if (tmpFMX is TImage) then
-    tmpImage:=TImage(tmpFMX)
-  else
-    tmpImage:=nil;
-
-  tmpFMX:=fHintContainer.FindStyleResource('text');
-  if (tmpFMX is TLabel) then
-    tmpText:=TLabel(tmpFMX)
-  else
-    tmpText:=nil;
-
-  if (not Assigned(tmpImage)) or (not Assigned(tmpText)) then
-    Exit;
-
-  if fHintStyle=THintStyle.ShowTitle then
   begin
-      fHintContainer.width:=tmpImage.Width;
-      fHintContainer.Height:=tmpImage.Height;
-
-       tmpText.Text:=tmpItem.Text;
-   end
-  else
-  if fHintStyle=THintStyle.ShowPreview then
-  begin
-    tmpBitmap:=GetFrame(tag).MakeScreenshot;
-    if Assigned(tmpBitmap) then
+    if (ASender is TneTabItem) then
     begin
-      fHintContainer.Height:=200;
-      fHintContainer.Width:=100;
-      tmpImage.Bitmap:=tmpBitmap;
-      tmpText.Visible:=false;
-      tmpBitmap.Free;
+      fCurrentNETabItem:=ASender as TneTabItem;
+      fHintTimer.Enabled:=true;
     end;
   end;
+end;
 
-  if Assigned(tmpForm) then
-  begin
-//Disabled. Need to work out the correct coordinates.
-//Becomes complex when the tab is within frames, grids, etc.
-//    FP:=TPointF.Create(X,Y);
-//    FP:=self.LocalToAbsolute(FP);
-////
-////    fHintContainer.Position.X:=fp.X-fHintContainer.Width/2;
-////    fHintContainer.Position.Y:=FP.Y;
-//
-//    fHintContainer.Position.X:=FP.X;//+self.Position.X;
-//    fHintContainer.Position.Y:=Y+self.Position.Y;
-//
-//    fHintContainer.Visible:=true;
-  end;
+procedure TneTabControl.MouseExitTabItem;
+begin
+  fHintTimer.Enabled:=false;
+  if Assigned(fHintPopup) then
+    fHintPopup.IsOpen:=false;
+end;
 
+procedure TneTabControl.MouseMoveOverTabItem(const tag: string; const X,
+  Y: Single);
+begin
+  if fHintStyle=THintStyle.None then
+    Exit;
+  fHintTimer.Enabled:=False;
+  fHintTimer.Enabled:=true;
 end;
 
 procedure TneTabControl.InsertTab(const tag: string; const index: Integer;
@@ -830,6 +959,65 @@ begin
   str:='Tab '+self.TabCount.ToString;
   tmpItem.Text:=str;
   InsertTab(tag, index, tmpItem, newFrame);
+end;
+
+procedure TneTabControl.OnHintTimer(Sender: TObject);
+var
+  tag: string;
+  tmpBitImage,
+  tmpImage2: TBitmap;
+  tmpImageControl: TImageControl;
+  tmpFrame: TFrame;
+
+begin
+  if not Assigned(fCurrentNETabItem) then Exit;
+  if fHintStyle=THintStyle.None then Exit;
+
+  tag:=fCurrentNETabItem.TagString;
+  if ActiveTag=tag then Exit;
+
+  if not fDictionaryTabs.ContainsKey(tag) then Exit;
+
+  fHintPopup.Placement:=TPlacement.BottomCenter;
+  fHintPopup.PlacementTarget:=fCurrentNETabItem;
+
+  fHintPanel:=THintPanel.Create(self);
+  fHintPanel.Align:=TAlignLayout.Client;
+  fHintPanel.HintStyle:=fHintStyle;
+
+  case fHintStyle of
+    ShowTitle: begin
+                 fHintPanel.HintText:=fCurrentNETabItem.Text;
+                 fHintPopup.Width:=300;
+                 fHintPopup.Height:=100;
+               end;
+    ShowPreview: begin
+                   fHintPanel.HintText:='';
+                   if not fdictionaryFrames.containsKey(tag) then Exit;
+                   tmpFrame:=GetFrame(tag);
+                   if not Assigned(tmpFrame) then Exit;
+                   tmpBitImage:=tmpFrame.MakeScreenshot;
+                   fHintPopup.Width:=200;
+                   fHintPopup.Height:=200;
+                   if Assigned(tmpBitImage) then
+                   begin
+                     tmpImage2:=ResizeBitmap(tmpBitImage, round(fHintPopup.Width)
+                                                  , round(fHintPopup.Height));
+                     tmpImageControl:=TImageControl.Create(fHintPanel);
+                     tmpImageControl.Align:=TAlignLayout.Client;
+                     tmpImageControl.Bitmap.Assign(tmpimage2);
+                     fHintPanel.AddObject(tmpImageControl);
+                     tmpImage2.free;
+                     tmpBitImage.Free;
+                   end;
+                 end;
+  end;
+
+  fHintPopup.HorizontalOffset:=fCurrentNETabItem.Width/3;
+  fHintPopup.VerticalOffset:=-5;
+  fHintPopup.AddObject(fHintPanel);
+
+  fHintPopup.IsOpen:=true;
 end;
 
 procedure TneTabControl.OnPopUpChangeTab(ASender: TObject);
@@ -850,37 +1038,93 @@ var
 begin
   if ASender is TMenuItem then
   begin
-     for key in fDictionaryTabs.Keys do
-       if trim(key)<>trim((ASender as TMenuItem).TagString) then
+    CleanUpTabs;
+    SetActiveTab((ASender as TMenuItem).TagString);
+    for key in fDictionaryTabs.Keys do
+      if trim(key)<>trim((ASender as TMenuItem).TagString) then
           DeleteTab(key);
-     SetActiveTab((ASender as TMenuItem).TagString);
   end;
 end;
 
-procedure TneTabControl.OnTabChangeInternal(Sender: TObject);
-var
-  key: string;
-  i: Integer;
+procedure TneTabControl.DoChange;
 begin
-inherited;
   if Self.HasActiveTab then
     fHistoryTags.Add(self.ActiveTab.TagString);
-
-  //Tide up the dictionaries
-  //Delete the invisible tabs
-  for key in fDictionaryTabs.Keys do
-    if fDictionaryTabs.Items[key].Deleted then
-    begin
-      fDictionaryTabs.Remove(key);
-      if fdictionaryFrames.containsKey(key) then
-        fDictionaryFrames.Remove(key);
-
-      i:=FindTabOrderFromTag(key);
-      if i<>-1 then
-        self.Delete(i);
-    end;
-
+  CleanUpTabs;
   inherited;
+end;
+
+procedure TneTabControl.SaveTabs(const exportElements: TExportElementsSet;
+     const excludeTabs: TSetOfString; var savedTabs: TStringList);
+var
+  tmpString,
+  tmpTag, str: string;
+  i: Integer;
+  tmpneTabItem: TneTabItem;
+
+  function IsTagInExludeTabs(const tag: string): boolean;
+  var
+    i: Integer;
+  begin
+    result:=false;
+    for I := 0 to Length(excludeTabs)-1 do
+     if trim(tag)=trim(excludeTabs[i]) then
+     begin
+       result:=true;
+       exit;
+     end;
+  end;
+
+
+begin
+  ///  Export Structure (tabs are exported as they appear in the tab)
+  ///  The order of the exported tags is important.
+  ///  [tag] = the tag of the netabitem
+  ///  [tagIdentifier] = the Identifier property of the neTabItem if selected in exportElements
+  ///  [tagInt] = the tag property of the neTabitem if selected in exportElements
+  ///  [tagVariant] = the tagVariant property of the neTabitem if selected in exportElements
+  savedTabs.Clear;
+  CleanUpTabs;
+  for i := 0 to self.TabCount-1 do
+  begin
+    tmpString:='';
+    tmpTag:=self.Tabs[i].TagString;
+    if not IsTagInExludeTabs(tmpTag) then
+    begin
+      if fDictionaryTabs.ContainsKey(tmpTag) then
+      begin
+        tmpString:=tmpString+tmpTag;
+        if ExportIdentifier in exportElements then
+        begin
+          tmpneTabItem:=fDictionaryTabs.Items[tmpTag];
+          if Assigned(tmpneTabItem) then
+            tmpString:=tmpString+','+tmpneTabItem.Identifier;
+        end;
+
+        if ExportTagInt in exportElements then
+        begin
+          tmpneTabItem:=fDictionaryTabs.Items[tmpTag];
+          if Assigned(tmpneTabItem) then
+          begin
+            tmpString:=tmpString+','+tmpneTabItem.Tag.ToString;
+          end;
+        end;
+
+        if ExportTagVariant in exportElements then
+        begin
+          tmpneTabItem:=fDictionaryTabs.Items[tmpTag];
+          if Assigned(tmpneTabItem) then
+          begin
+            if tmpneTabItem.TagVariant<>'' then
+              str:=trim(string(tmpneTabItem.TagVariant));
+            if str<>'' then
+              tmpString:=tmpString+','+str;
+          end;
+        end;
+        savedTabs.Add(tmpString);
+      end;
+    end;
+  end;
 end;
 
 procedure TneTabControl.SetActiveTab(const tag: string);
@@ -915,17 +1159,15 @@ begin
     fMinTabWidth:=newW;
 end;
 
+procedure TneTabControl.SetHintShowDelay(const delay: integer);
+begin
+  fHintShowDelay:=delay;
+  fHintTimer.Interval:=fHintShowDelay;
+end;
+
 procedure TneTabControl.SetHintStyle(const showH: THintStyle);
-var
-  tmpItem: TneTabItem;
 begin
   fHintStyle:=showH;
-  if fHintStyle=THintStyle.ShowTitle then
-   for tmpItem in fDictionaryTabs.Values do
-   begin
-      tmpItem.ShowHint:=true;
-      tmpItem.Hint:=tmpItem.Text;
-   end;
 end;
 
 procedure TneTabControl.ShowPopUpMenu(const ASender: TNETabItem; const X,
@@ -949,11 +1191,16 @@ begin
   tmpPopMenu.Parent:=self;
 
   if Assigned(fPopupBeforeDefaultMenu) then
-  for i := 0 to fPopupBeforeDefaultMenu.ItemsCount-1 do
   begin
-    tmpMenuItem:=TMenuItem(fpopupBeforeDefaultMenu.Items[i].Clone(
-                                  fPopupBeforeDefaultMenu.Items[i]));
-    tmpPopMenu.AddObject(tmpMenuItem);
+    for i:=0 to fPopupBeforeDefaultMenu.ItemsCount-1 do
+    begin
+      tmpMenuItem:=fPopupBeforeDefaultMenu.Items[i];
+      tmpMenuItem:=tmpMenuItem.Clone(tmpMenuItem) as TMenuItem;
+      tmpMenuItem.Parent:=tmpMenuItem.Parent;
+      tmpMenuItem.TagString:=ASender.TagString;
+      tmpMenuItem.OnClick:=fPopupBeforeDefaultMenu.Items[i].OnClick;
+      tmpPopMenu.AddObject(tmpMenuItem);
+    end;
   end;
 
   //Close menu item
@@ -1011,11 +1258,16 @@ begin
   end;
 
   if Assigned(fPopupAfterDefaultMenu) then
-  for i := 0 to fPopupAfterDefaultMenu.ItemsCount-1 do
   begin
-    tmpMenuItem:=TMenuItem(fPopupAfterDefaultMenu.Items[i].Clone(
-                                  fPopupAfterDefaultMenu.Items[i]));
-    tmpPopMenu.AddObject(tmpMenuItem);
+    for i:=0 to fpopupAfterDefaultMenu.ItemsCount-1 do
+    begin
+      tmpMenuItem:=fpopupAfterDefaultMenu.Items[i];
+      tmpMenuItem:=tmpMenuItem.Clone(tmpMenuItem) as TMenuItem;
+      tmpMenuItem.Parent:=fPopupAfterDefaultMenu.Items[i].Parent;
+      tmpMenuItem.OnClick:=fpopupAfterDefaultMenu.Items[i].OnClick;
+      tmpMenuItem.TagString:=ASender.TagString;
+      tmpPopMenu.AddObject(tmpMenuItem);
+    end;
   end;
 
   FP := TPointF.Create(X, Y);
@@ -1107,8 +1359,7 @@ begin
      begin
       Image2:=ResizeBitmap(fCloseImageNormal, 16, 16);
       tmpImage.Bitmap:=Image2;
-      if Assigned(Image2) then
-        Image2.free;
+      Image2.free;
      end;
     end
     else
@@ -1149,6 +1400,13 @@ begin
 
 end;
 
+
+procedure TneTabItem.DblClick;
+begin
+  inherited;
+  if Assigned(fTabControlParent) and (fTabControlParent is TneTabControl) then
+    (fTabControlParent as TneTabControl).DblClick;
+end;
 
 function TneTabItem.GetVersion: string;
 begin
@@ -1212,8 +1470,7 @@ begin
      begin
       Image2:=ResizeBitmap(fCloseImageHover, 16, 16);
       tmpImage.Bitmap:=Image2;
-      if Assigned(Image2) then
-        Image2.Free;
+      Image2.Free;
      end;
     end
 end;
@@ -1244,8 +1501,7 @@ begin
      begin
       Image2:=ResizeBitmap(fCloseImagePressed, 16, 16);
       tmpImage.Bitmap:=Image2;
-      if Assigned(Image2) then
-        Image2.Free;
+      Image2.Free;
      end;
     end
 end;
@@ -1261,13 +1517,13 @@ end;
 procedure TneTabItem.NewOnMouseEnter(ASender: TObject);
 begin
   inherited;
-  fIsMouseOver:=true;
+  if Assigned(fTabControlParent) and (fTabControlParent is TneTabControl) then
+    (fTabControlParent as TneTabControl).MouseEnterTabItem(ASender);
 end;
 
 procedure TneTabItem.NewOnMouseLeave(ASender: TObject);
 begin
   inherited;
-  fIsMouseOver:=false;
   if Assigned(fTabControlParent) and (fTabControlParent is TneTabControl) then
     (fTabControlParent as TneTabControl).MouseExitTabItem;
   ApplyStyle;
@@ -1277,7 +1533,7 @@ procedure TneTabItem.NewOnMouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Single);
 begin
  if Assigned(fTabControlParent) and (fTabControlParent is TneTabControl) then
-    (fTabControlParent as TneTabControl).MouseOverTabItem
+    (fTabControlParent as TneTabControl).MouseMoveOverTabItem
       (self.TagString, X, Y);
   ApplyStyle;
 end;
@@ -1307,7 +1563,7 @@ begin
   ApplyStyle;
 end;
 
-procedure TneTabItem.SetIconImage(const newImage: TBitmap);
+procedure TneTabItem.SetIcon(const newImage: TBitmap);
 begin
   fIcon:=newImage;
   ApplyStyle;
@@ -1317,6 +1573,52 @@ procedure TneTabItem.SetShowIcon(const can: Boolean);
 begin
   fShowIcon:=can;
   ApplyStyle;
+end;
+
+{ THintPanel }
+
+procedure THintPanel.ApplyStyle;
+var
+  tmpFMX: TFmxObject;
+begin
+  inherited;
+  if not (fHintStyle=THintStyle.ShowTitle) then Exit;
+  tmpFMX:=FindStyleResource('hinttext');
+  if (tmpFMX is TLabel) then
+    (tmpFMX as TLabel).Text:=fHintText;
+end;
+
+procedure THintPanel.SetHintStyle(const newHintStyle: THintStyle);
+begin
+  fHintStyle:=newHintStyle;
+  if fHintStyle=THintStyle.ShowTitle then
+    Self.StyleLookup:='nehintstyle'
+  else
+    self.StyleLookup:='';
+  ApplyStyle;
+end;
+
+procedure THintPanel.SetHintText(const newHintText: string);
+begin
+  fHintText:=newHintText;
+  ApplyStyle;
+end;
+
+{ functions }
+
+function FindParentNeTabItem(const checkComponent: TFMXObject):TneTabItem;
+begin
+  if not Assigned(checkComponent.Parent) then
+    result:=nil
+  else
+   if checkComponent.Parent Is TneTabItem then
+   begin
+     result:=checkComponent.Parent as TneTabItem;
+     if (result.TabControlParent is TneTabControl) then
+       result:=(result.TabControlParent as TneTabControl).GetTab(result.TagString);
+   end
+   else
+     result:=FindParentNeTabItem(checkComponent.Parent);
 end;
 
 end.

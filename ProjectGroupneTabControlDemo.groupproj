@@ -1,15 +1,15 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{4F672AA5-2FF0-49C0-A859-4A06ED8E4723}</ProjectGuid>
+        <ProjectGuid>{9806BB26-C09E-4C97-B16F-198872CAEFD0}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
         <Projects Include="NETabControlPackage.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="neTabControlDemo.dproj">
+        <Projects Include="Demos\TabControlMainTest\neTabControlDemo.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="Demos\WithinFrames\neTabControlWithinFrames.dproj">
+        <Projects Include="Demos\WebBrowserDemo\WebBrowserDemo.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -30,31 +30,31 @@
         <MSBuild Projects="NETabControlPackage.dproj" Targets="Make"/>
     </Target>
     <Target Name="neTabControlDemo">
-        <MSBuild Projects="neTabControlDemo.dproj"/>
+        <MSBuild Projects="Demos\TabControlMainTest\neTabControlDemo.dproj"/>
     </Target>
     <Target Name="neTabControlDemo:Clean">
-        <MSBuild Projects="neTabControlDemo.dproj" Targets="Clean"/>
+        <MSBuild Projects="Demos\TabControlMainTest\neTabControlDemo.dproj" Targets="Clean"/>
     </Target>
     <Target Name="neTabControlDemo:Make">
-        <MSBuild Projects="neTabControlDemo.dproj" Targets="Make"/>
+        <MSBuild Projects="Demos\TabControlMainTest\neTabControlDemo.dproj" Targets="Make"/>
     </Target>
-    <Target Name="neTabControlWithinFrames">
-        <MSBuild Projects="Demos\WithinFrames\neTabControlWithinFrames.dproj"/>
+    <Target Name="WebBrowserDemo">
+        <MSBuild Projects="Demos\WebBrowserDemo\WebBrowserDemo.dproj"/>
     </Target>
-    <Target Name="neTabControlWithinFrames:Clean">
-        <MSBuild Projects="Demos\WithinFrames\neTabControlWithinFrames.dproj" Targets="Clean"/>
+    <Target Name="WebBrowserDemo:Clean">
+        <MSBuild Projects="Demos\WebBrowserDemo\WebBrowserDemo.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="neTabControlWithinFrames:Make">
-        <MSBuild Projects="Demos\WithinFrames\neTabControlWithinFrames.dproj" Targets="Make"/>
+    <Target Name="WebBrowserDemo:Make">
+        <MSBuild Projects="Demos\WebBrowserDemo\WebBrowserDemo.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="NETabControlPackage;neTabControlDemo;neTabControlWithinFrames"/>
+        <CallTarget Targets="NETabControlPackage;neTabControlDemo;WebBrowserDemo"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="NETabControlPackage:Clean;neTabControlDemo:Clean;neTabControlWithinFrames:Clean"/>
+        <CallTarget Targets="NETabControlPackage:Clean;neTabControlDemo:Clean;WebBrowserDemo:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="NETabControlPackage:Make;neTabControlDemo:Make;neTabControlWithinFrames:Make"/>
+        <CallTarget Targets="NETabControlPackage:Make;neTabControlDemo:Make;WebBrowserDemo:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

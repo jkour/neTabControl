@@ -4,18 +4,18 @@ Compiling documentation...
 Building TableOfContents Tree...
 Building Index Tree...
 Creating Urls...
-DefaultTopic: NETabControlPackage.htm
-DefaultTopicID: NETabControlPackage
+DefaultTopic: neTabControlPackage.htm
+DefaultTopicID: neTabControlPackage
 Generating Web pages...
-Generating ToC page: "Z:\NusEnvision\Components\Delphi\neTabControl\Release\Documentation\Html\toc.htm"
-Generating toc.js: "Z:\NusEnvision\Components\Delphi\neTabControl\Release\Documentation\Html\toc.js"
-Generating Keywords.js: "Z:\NusEnvision\Components\Delphi\neTabControl\Release\Documentation\Html\keywords.js"
-Generating index page: "Z:\NusEnvision\Components\Delphi\neTabControl\Release\Documentation\Html\index.htm"
+Generating ToC page: "Z:\NusEnvision\Components\Delphi\neTabControl\Development\Documentation\Html\toc.htm"
+Generating toc.js: "Z:\NusEnvision\Components\Delphi\neTabControl\Development\Documentation\Html\toc.js"
+Generating Keywords.js: "Z:\NusEnvision\Components\Delphi\neTabControl\Development\Documentation\Html\keywords.js"
+Generating index page: "Z:\NusEnvision\Components\Delphi\neTabControl\Development\Documentation\Html\index.htm"
 Generating CHM file...
 HHC6003: Error: The file Itircl.dll has not been registered correctly.
 Microsoft HTML Help Compiler 4.74.8702
 
-Compiling z:\NusEnvision\Components\Delphi\neTabControl\Release\Documentation\CHM\neTabControl.chm
+Compiling z:\NusEnvision\Components\Delphi\neTabControl\Development\Documentation\CHM\neTabControl.chm
 
 images\alert_caution.gif
 images\alert_note.gif
@@ -51,8 +51,8 @@ images\greencheck.gif
 images\greychck.gif
 images\header-bg.png
 images\hmtoggle_plus0.gif
-images\hmtoggle_plu
-s1.gif
+images\hmtoggle
+_plus1.gif
 images\iconErrorTop.png
 images\ImageSprite.png
 images\LastChild.gif
@@ -94,8 +94,8 @@ images\pubenumeration.gif
 images\pubenummember.png
 images\pubevent.gif
 images\pubextension.gif
-images\pubfie
-ld.gif
+images\pu
+bfield.gif
 images\pubinterface.gif
 images\pubmethod.gif
 images\puboperator.gif
@@ -140,8 +140,8 @@ css\dynatree\29.png
 css\dynatree\3.png
 css\dynatree\30.png
 css\dynatree\31.png
-css\dynat
-ree\32.png
+css\d
+ynatree\32.png
 css\dynatree\33.png
 css\dynatree\34.png
 css\dynatree\35.png
@@ -174,12 +174,12 @@ css\smoothness\images\ui-bg_glass_65_ffffff_1x400.png
 css\smoothness\images\ui-bg_glass_75_dadada_1x400.png
 css\smoothness\images\ui-bg_glass_75_e6e6e6_1x400.png
 css\smoothness\images\ui-bg_glass_95_fef1ec_1x400.png
-css\smoothness\images\ui-bg_highlight-soft_75_cc
-cccc_1x100.png
+css\smoothness\images\ui-bg_highlight-soft_7
+5_cccccc_1x100.png
 css\smoothness\images\ui-icons_222222_256x240.png
 css\smoothness\images\ui-icons_2e83ff_256x240.png
-css\smoothness\images\ui-icons_454545_256
-x240.png
+css\smoothness\images\ui-icons_454545
+_256x240.png
 css\smoothness\images\ui-icons_888888_256x240.png
 css\smoothness\images\ui-icons_cd0a0a_256x240.png
 css\smoothness\jquery-ui.css
@@ -197,44 +197,106 @@ js\jquery.textchange.min.js
 js\splitter.js
 neTabControl.hhc
 neTabControl.hhk
-NETabControlPackage.htm
+neTabControlPackage.htm
 neTabControl.htm
 neTabControl_Classes.htm
+neTabControl.THintPanel.htm
+neTabControl.THintPanel_Properties.htm
+neTabControl.THintPanel.HintStyle.htm
+neTabControl.THintPanel.HintText.htm
+neTabControl.THintPanel_Methods.htm
+neTabControl.THintPanel.ApplyStyle.htm
+neTabControl.THintPanel.SetHintStyle.htm
+neTabControl.THintPanel.SetHintText.htm
+neTabControl.THintPanel_Fields.htm
+neTabControl.THintPanel.fHintStyle.htm
+neTabControl.THintPanel.fHintText.htm
 neTabControl.TneTabControl.htm
 neTabControl.TneTabControl_Constructors.htm
-neTabControl.TneTabControl.Create.htm
+neTabC
+ontrol.TneTabControl.Create.htm
 neTabControl.TneTabControl.Destroy.htm
 neTabControl.TneTabControl_Properties.htm
+neTabControl.TneTabControl.ActiveTag.htm
 neTabControl.TneTabControl.CloseAllOtherTabsLabel.htm
 neTabControl.TneTabControl.CloseImageHover.htm
 neTabControl.TneTabControl.CloseImageNormal.htm
 neTabControl.TneTabControl.CloseImagePressed.htm
 neTabControl.TneTabControl.CloseTabLabel.htm
+neTabControl.TneTabControl.CloseTabOnDoubleClick.htm
 neTabControl.TneTabControl.DisablePopupMenu.htm
-neTabControl.T
-neTabControl.HintStyle.htm
+neTabControl.TneTabControl.HintShowDelay.htm
+neTabControl.TneTabControl.HintStyle.htm
 neTabControl.TneTabControl.MaxTabWidth.htm
-neTabControl.TneTabControl.MixTabWidth.htm
+neTabControl.TneTabControl.MinTabWidth.htm
 neTabControl.TneTabControl.PopupAfterDefault.htm
 neTabControl.TneTabControl.PopupBeforeDefault.htm
 neTabControl.TneTabControl.Version.htm
 neTabControl.TneTabControl_Methods.htm
 neTabControl.TneTabControl.AddTab(string,TFrame).htm
 neTabControl.TneTabControl.AddTab(string,TneTabItem,TFrame).htm
-neTabControl.TneTabControl.AddTab(string,TTabItem,TFrame).htm
+neTabControl.TneTa
+bControl.AddTab(string,TTabItem,TFrame).htm
+neTabControl.TneTabControl.CleanUpTabs.htm
+neTabControl.TneTabControl.DblClick.htm
+neTabControl.TneTabControl.DeleteAllTabs.htm
 neTabControl.TneTabControl.DeleteTab.htm
+neTabControl.TneTabControl.DoChange.htm
 neTabControl.TneTabControl.FindTabOrderFromTag.htm
+neTabControl.TneTabControl.FindTagFromTabOrder.htm
+neTabControl.TneTabControl.GetActiveTag.htm
 neTabControl.TneTabControl.GetFrame.htm
+neTabControl.TneTabControl.GetLastVisitedTag.htm
 neTabControl.TneTabControl.GetTab.htm
 neTabControl.TneTabControl.GetTabsTags.htm
 neTabControl.TneTabControl.GetTabsText.htm
+neTabControl.TneTabControl.GetVersion.htm
 neTabControl.TneTabControl.InsertTab(string,Integer,TFrame).htm
 neTabControl.TneTabControl.InsertTab(string,Integer,TneTabItem,TFrame).htm
+neTabControl.TneTabControl.MouseEnterTabItem.htm
+neTabControl.TneTabControl.MouseExitTabItem.htm
+neTabControl.TneTabControl.MouseMoveOverTabItem.htm
+neTabControl.TneTabControl.OnHintTimer.htm
+
+neTabControl.TneTabControl.OnPopUpChangeTab.htm
+neTabControl.TneTabControl.OnPopUpMenuClose.htm
+neTabControl.TneTabControl.OnPopUpMenuCloseAllOtherTabs.htm
+neTabControl.TneTabControl.SaveTabs.htm
 neTabControl.TneTabControl.SetActiveTab.htm
+neTabControl.TneTabControl.SetHintShowDelay.htm
+neTabControl.TneTabControl.SetHintSTyle.htm
+neTabControl.TneTabControl.SetMaxTabWidth.htm
+neTabControl.TneTabControl.SetMinTabWidth.htm
+neTabControl.TneTabControl.ShowPopUpMenu.htm
 neTabControl.TneTabControl_Events.htm
-neTabControl.TneTabControl.OnAfterDele
-te.htm
+neTabControl.TneTabControl.OnAfterDelete.htm
 neTabControl.TneTabControl.OnBeforeDelete.htm
+neTabControl.TneTabControl_Fields.htm
+neTabControl.TneTabControl.fCloseAllOtherTabsLabel.htm
+neTabControl.TneTabControl.fCloseImageHover.htm
+neTabControl.TneTabControl.fCloseImageNormal.htm
+neTabControl.TneTabControl.fCloseImagePressed.htm
+neTabControl.TneTabControl.fCloseTabLabel.htm
+neTabControl.TneTabControl.fCloseTabOnDoubleClick.htm
+neTabControl.TneTabControl.fCurrentNETabIte
+m.htm
+neTabControl.TneTabControl.fDictionaryFrames.htm
+neTabControl.TneTabControl.fDictionaryT
+abs.htm
+neTabControl.TneTabControl.fDisablePopupMenu.htm
+neTabControl.TneTabControl.fHintPanel.htm
+neTabControl.TneTabControl.fHintPopup.htm
+neTabControl.TneTabControl.fHintShowDelay.htm
+neTabControl.TneTabControl.fHintStyle.htm
+neTabControl.TneTabControl.fHintTimer.htm
+neTabControl.TneTabControl.fHistoryTags.htm
+neTabControl.TneTabControl.fMaxTabWidth.htm
+neTabControl.TneTabControl.fMinTabWidth.htm
+neTabControl.TneTabControl.fOnAfterDelete.htm
+neTabControl.TneTabControl.fOnBeforeDelete.htm
+neTabControl.TneTabControl.fPopupAfterDefaultMenu.htm
+neTabControl.TneTabControl.fPopupBeforeDefaultMenu.htm
+neTabControl.TneTabControl.fVersion.htm
 neTabControl.TneTabItem.htm
 neTabControl.TneTabItem_Constructors.htm
 neTabControl.TneTabItem.Create.htm
@@ -243,27 +305,67 @@ neTabControl.TneTabItem.CanClose.htm
 neTabControl.TneTabItem.CloseImageHover.htm
 neTabControl.TneTabItem.CloseImageNormal.htm
 neTabControl.TneTabItem.CloseImagePressed.htm
-neTabControl.TneTabItem.Deleted.htm
+neTabControl.TneTa
+bItem.Deleted.htm
 neTabControl.TneTabItem.Icon.htm
+neTabControl.TneTabItem.Identifier.htm
 neTabControl.TneTabItem.ShowIcon.htm
+neTabControl.TneTabItem.TabControlParent.htm
+neTabControl.TneTabItem.TagVariant.htm
 neTabControl.TneTabItem.Version.htm
 neTabControl.TneTabItem_Methods.htm
+neTabControl.TneTabItem.AdjustTabWidth.htm
 neTabControl.TneTabItem.ApplyStyle.htm
+neTabControl.TneTabItem.DblClick.htm
+neTabControl.TneTabItem.GetVersion.htm
 neTabControl.TneTabItem.MouseClick.htm
 neTabControl.TneTabItem.MouseDown.htm
 neTabControl.TneTabItem.MouseUp.htm
+neTabControl.TneTabItem.NewOnMouseEnter.htm
+neTabControl.TneTabItem.NewOnMouseLeave.htm
+neTabControl.TneTabItem.NewOnMouseMove.htm
+neTabControl.TneTabItem.OnCloseImageClick.htm
+neTabControl.TneTabItem.OnCloseImageHoverClick.htm
+neTabControl.TneTabItem.OnCloseImageLeave.htm
+neTabControl.TneTabItem.OnCloseImageMouseDown.htm
+neTabControl.TneTabItem.OnCloseImageMouseUp.htm
+neTabControl.TneTabItem.SetCanClose.htm
+neTabContr
+ol.TneTabItem.SetCloseImageHover.htm
+neTabControl.TneTabItem.SetCloseImageNormal.htm
+neTabControl.TneTabItem.SetCloseImagePressed.htm
+neTabControl.TneTabItem.SetIcon.htm
+neTabControl.TneTabItem.SetShowIcon.htm
+neTabControl.TneTabItem_Fields.htm
+neTabControl.TneTabItem.fCanClose.htm
+neTabControl.TneTabItem.fCloseImageHover.htm
+neTabControl.TneTabItem.fCloseImageNormal.htm
+neTabControl.TneTabItem.fCloseImagePressed.htm
+neTabControl.TneTabItem.fDeleted.htm
+neTabControl.TneTabItem.fIcon.htm
+neTabControl.TneTabItem.fIdentifier.htm
+neTabControl.TneTabItem.fIsMousePressed.htm
+neTabControl.TneTabItem.fShowIcon.htm
+neTabControl.TneTabItem.fTabControlParent.htm
+neTabControl.TneTabItem.fTagVariant.htm
+neTabControl.TneTabItem.fVersion.htm
 neTabControl_Enumerations.htm
+neTabControl.TExportElements.htm
 neTabControl.THintStyle.htm
 neTabControl_Delegates.htm
 neTabControl.TOnAfterDelete.htm
 neTabControl.TOnBeforeDelete.htm
+neTabControl_Types.htm
+neTabControl.TExportElementsSet
+.htm
+neTabControl.TSetOfString.htm
 neTabControl_Constants.htm
 neTabControl.BugVersion.htm
 neTabControl.MajorVersion.htm
 neTabControl.MinorVersion.htm
-neTab
-Control_Routines.htm
+neTabControl_Routines.htm
 neTabControl.FindParentForm.htm
+neTabControl.FindParentNeTabItem.htm
 neTabControl.Register.htm
 neTabControl.ResizeBitmap.htm
 HHC5013: Error: URL reference in the TOC cannot be resolved: "neTabControl.TneTabControl.AddTab(stringTFrame).htm".

@@ -2,8 +2,8 @@
 <Project Version="1.0">
   <Title>neTabControl</Title>
   <Summary/>
-  <Author/>
-  <Email/>
+  <Author>John Kouraklis</Author>
+  <Email>j_kour@hotmail.com</Email>
   <Copyright/>
   <Comment/>
   <Language>2057</Language>
@@ -12,14 +12,14 @@
   <FooterHtml/>
   <CustomDefines/>
   <ShowImplementationSection>false</ShowImplementationSection>
-  <ShowPrivateMembers>false</ShowPrivateMembers>
+  <ShowPrivateMembers>true</ShowPrivateMembers>
   <ShowInheritedMembers>true</ShowInheritedMembers>
   <ShowPropertyAccessors>true</ShowPropertyAccessors>
   <FileNamePolicy>0</FileNamePolicy>
   <CompilerVersion>21</CompilerVersion>
   <TargetPlatform>0</TargetPlatform>
   <Sources>
-    <Source>.\NETabControlPackage.dpk</Source>
+    <Source>.\neTabControlPackage.dpk</Source>
   </Sources>
   <Outputs>
     <Output Type="HTML">
