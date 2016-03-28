@@ -36,18 +36,23 @@ There is a style file (neTabControlStyle) which is used in demo to style the tab
 #Screenshots
 
 Customisable Tab Bar
+
 ![alt text](https://github.com/jkour/neTabControl/blob/master/Screenshots/TabBar.png "Tab Bar")
 
 Close Image On Mouse Hover
+
 ![alt text](https://github.com/jkour/neTabControl/blob/master/Screenshots/CloseImageOnHover.png "Close Image On Hover")
 
 Title as Hint
+
 ![alt text](https://github.com/jkour/neTabControl/blob/master/Screenshots/TitleAsHint.png "Title As Hint")
 
 Preview as Hint
+
 ![alt text](https://github.com/jkour/neTabControl/blob/master/Screenshots/PreviewAsHint.png "Preview As Hint")
 
 Customisable Right-click menu
+
 ![alt text](https://github.com/jkour/neTabControl/blob/master/Screenshots/Right-Click.png "Customisable Right-click menu")
 
 
