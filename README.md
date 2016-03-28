@@ -52,7 +52,7 @@ Customisable Right-click menu
 
 
 #Documentation
-There is documentation describing the methods and properties. Please check the "Documentations" folder.
+There is documentation describing the methods and properties. Please check the "Documentation" folder.
 
 #Bugs, Suggestions, Comments and General Contact
 I hope you find the component useful. If you have any comments, spotted bug or changes to the code use the repository or drop me an email at j_kour@hotmail.com
