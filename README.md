@@ -34,7 +34,7 @@ For example you can write: SetActiveTab("Welcome Screen") or DeleteTab('Report S
 * TabItems have close icon
 * TabItems can embed any control that descends from TControl (eg, image, progress bar, etc.) [v.1.0.0]
 * Ability to add controls before or after the tab items (eg. Add button, etc.) [v.1.0.0]
-* Style-indenendent tab item control. You can use any pre-existing style file without any customisation. neTabControl embeds the close image and the other control automatically
+* Style-indenendent tab item control. You can use any pre-existing style file without any customisation. neTabControl embeds the close image and the other control automatically [v.1.0.0]
 * Customisable Pop-up menu
 * Procedure to export the list of open tabs in order to implement load/save workspace feature
 
@@ -77,14 +77,14 @@ Styles
 
 # Platforms
 
-I have tested the component on Win32, Win64 and MacOSX.
+Tested Platforms: Win32, Win64 and MacOSX.
 
 #Documentation
 There is documentation about the classes, the methods and properties. Please check the "Documentation" folder or the wiki.
 
 
 # Known Issues
-There are a few known issues and proposed workarounds. You can see them in thw wiki.
+Check the wiki.
 
 
 #Bugs, Suggestions, Comments and General Contact
