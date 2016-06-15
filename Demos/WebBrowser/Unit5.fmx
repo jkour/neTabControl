@@ -1,0 +1,120 @@
+object Frame5: TFrame5
+  Size.Width = 512.000000000000000000
+  Size.Height = 533.000000000000000000
+  Size.PlatformDefault = False
+  object Rectangle1: TRectangle
+    Align = MostTop
+    Fill.Color = claSkyblue
+    Size.Width = 512.000000000000000000
+    Size.Height = 73.000000000000000000
+    Size.PlatformDefault = False
+    object Label1: TLabel
+      Align = Contents
+      StyledSettings = [Family, Style, FontColor]
+      Margins.Left = 20.000000000000000000
+      Size.Width = 492.000000000000000000
+      Size.Height = 73.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 32.000000000000000000
+      Text = 'Download 1'
+    end
+  end
+  object Label2: TLabel
+    Align = Horizontal
+    StyledSettings = [Family, Style, FontColor]
+    Margins.Left = 20.000000000000000000
+    Margins.Right = 20.000000000000000000
+    Position.X = 20.000000000000000000
+    Position.Y = 80.000000000000000000
+    Size.Width = 472.000000000000000000
+    Size.Height = 65.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 22.000000000000000000
+    Text = 
+      'Select type of component and click the button to download conten' +
+      't 1'
+  end
+  object Button1: TButton
+    Position.X = 408.000000000000000000
+    Position.Y = 160.000000000000000000
+    TabOrder = 3
+    Text = 'Start'
+    OnClick = Button1Click
+  end
+  object Label3: TLabel
+    Position.X = 216.000000000000000000
+    Position.Y = 160.000000000000000000
+    Size.Width = 169.000000000000000000
+    Size.Height = 22.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Ready to download'
+  end
+  object GroupBox1: TGroupBox
+    Position.X = 24.000000000000000000
+    Position.Y = 152.000000000000000000
+    Size.Width = 185.000000000000000000
+    Size.Height = 225.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Type'
+    TabOrder = 5
+    object RadioButton1: TRadioButton
+      GroupName = 'Type'
+      IsChecked = True
+      Position.X = 16.000000000000000000
+      Position.Y = 16.000000000000000000
+      Size.Width = 152.000000000000000000
+      Size.Height = 35.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 4
+      Text = 'AniIndicator'
+    end
+    object RadioButton2: TRadioButton
+      GroupName = 'Type'
+      Position.X = 16.000000000000000000
+      Position.Y = 49.000000000000000000
+      Size.Width = 152.000000000000000000
+      Size.Height = 39.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 3
+      Text = 'ArcDial'
+    end
+    object RadioButton3: TRadioButton
+      GroupName = 'Type'
+      Position.X = 16.000000000000000000
+      Position.Y = 87.000000000000000000
+      Size.Width = 152.000000000000000000
+      Size.Height = 35.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      Text = 'TMS Badge'
+    end
+    object RadioButton4: TRadioButton
+      GroupName = 'Type'
+      Position.X = 16.000000000000000000
+      Position.Y = 120.000000000000000000
+      Size.Width = 152.000000000000000000
+      Size.Height = 35.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = 'Progress Bar'
+    end
+    object RadioButton5: TRadioButton
+      GroupName = 'Type'
+      Position.X = 16.000000000000000000
+      Position.Y = 159.000000000000000000
+      Size.Width = 152.000000000000000000
+      Size.Height = 35.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = 'TMS Progress Bar'
+    end
+  end
+  object ProgressBar1: TProgressBar
+    Orientation = Horizontal
+    Position.X = 216.000000000000000000
+    Position.Y = 192.000000000000000000
+    Size.Width = 273.000000000000000000
+    Size.Height = 20.000000000000000000
+    Size.PlatformDefault = False
+  end
+end

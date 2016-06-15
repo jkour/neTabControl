@@ -1,0 +1,52 @@
+object Frame3: TFrame3
+  Size.Width = 586.000000000000000000
+  Size.Height = 365.000000000000000000
+  Size.PlatformDefault = False
+  object Rectangle1: TRectangle
+    Align = MostTop
+    Fill.Color = claPalegreen
+    Size.Width = 586.000000000000000000
+    Size.Height = 73.000000000000000000
+    Size.PlatformDefault = False
+    object Label1: TLabel
+      Align = Contents
+      StyledSettings = [Family, Style, FontColor]
+      Margins.Left = 20.000000000000000000
+      Size.Width = 566.000000000000000000
+      Size.Height = 73.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 32.000000000000000000
+      Text = 'Options'
+    end
+  end
+  object CheckBox1: TCheckBox
+    IsChecked = True
+    Position.X = 24.000000000000000000
+    Position.Y = 96.000000000000000000
+    TabOrder = 0
+    Text = 'Show Control'
+    OnChange = CheckBox1Change
+  end
+  object CheckBox2: TCheckBox
+    IsChecked = True
+    Position.X = 24.000000000000000000
+    Position.Y = 132.000000000000000000
+    Size.Width = 553.000000000000000000
+    Size.Height = 19.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    Text = 'Show Popup Menu (Right-click on the tab item)'
+    OnChange = CheckBox2Change
+  end
+  object CheckBox3: TCheckBox
+    IsChecked = True
+    Position.X = 24.000000000000000000
+    Position.Y = 168.000000000000000000
+    Size.Width = 257.000000000000000000
+    Size.Height = 19.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    Text = 'Can Close'
+    OnChange = CheckBox3Change
+  end
+end

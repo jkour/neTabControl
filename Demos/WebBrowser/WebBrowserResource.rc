@@ -1,0 +1,5 @@
+ClosePressed RCDATA "..\\..\\Images\\ClosePressed.png"
+CloseNormal RCDATA "..\\..\\Images\\CloseNormal.png"
+CloseHover RCDATA "..\\..\\Images\\CloseHover.png"
+AddImage RCDATA "..\\..\\Images\\Add.png"
+Star RCDATA "..\\..\\Images\\bookmark.png"

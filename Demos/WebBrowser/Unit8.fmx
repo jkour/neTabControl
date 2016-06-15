@@ -1,0 +1,132 @@
+object Form8: TForm8
+  Left = 0
+  Top = 0
+  Caption = 'Form8'
+  ClientHeight = 778
+  ClientWidth = 1098
+  StyleBook = StyleBook1
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnResize = FormResize
+  DesignerMasterStyle = 0
+  object ButtonDownload1: TButton
+    Anchors = [akTop, akRight]
+    Position.X = 736.000000000000000000
+    Position.Y = 16.000000000000000000
+    Size.Width = 145.000000000000000000
+    Size.Height = 49.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    Text = 'Download Content'
+    OnClick = ButtonDownload1Click
+  end
+  object neTabControl1: TneTabControl
+    CloseTabText = 'Close'
+    CloseAllTabsText = 'Close All Tabs'
+    CloseAllOtherTabsText = 'Close All Other Tabs'
+    Align = MostBottom
+    Anchors = [akLeft, akTop, akRight, akBottom]
+    DisableFocusEffect = False
+    Margins.Left = 20.000000000000000000
+    Margins.Right = 20.000000000000000000
+    Margins.Bottom = 20.000000000000000000
+    Position.X = 20.000000000000000000
+    Position.Y = 152.000000000000000000
+    TabOrder = 1
+    Size.Width = 1058.000000000000000000
+    Size.Height = 606.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object GroupBox1: TGroupBox
+    Anchors = [akTop, akRight]
+    Position.X = 888.000000000000000000
+    Position.Y = 8.000000000000000000
+    Size.Width = 193.000000000000000000
+    Size.Height = 65.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Position'
+    TabOrder = 2
+    object RadioButton1: TRadioButton
+      GroupName = 'Position'
+      IsChecked = True
+      Position.X = 16.000000000000000000
+      Position.Y = 24.000000000000000000
+      Size.Width = 73.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = 'Top'
+      OnChange = RadioButton1Change
+    end
+    object RadioButton2: TRadioButton
+      GroupName = 'Position'
+      Position.X = 104.000000000000000000
+      Position.Y = 24.000000000000000000
+      Size.Width = 64.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = 'Left'
+      OnChange = RadioButton2Change
+    end
+  end
+  object Button2: TButton
+    Anchors = [akTop, akRight]
+    Position.X = 640.000000000000000000
+    Position.Y = 16.000000000000000000
+    TabOrder = 3
+    Text = 'Options'
+    OnClick = Button2Click
+  end
+  object Button3: TButton
+    Anchors = [akTop, akRight]
+    Position.X = 640.000000000000000000
+    Position.Y = 48.000000000000000000
+    TabOrder = 4
+    Text = 'Load Style'
+    OnClick = Button3Click
+  end
+  object Label1: TLabel
+    Anchors = [akTop, akRight]
+    Position.X = 640.000000000000000000
+    Position.Y = 80.000000000000000000
+    Size.Width = 81.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'TabHeight:'
+  end
+  object Edit1: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    Anchors = [akTop, akRight]
+    TabOrder = 9
+    Text = '30'
+    Position.X = 640.000000000000000000
+    Position.Y = 104.000000000000000000
+    Size.Width = 81.000000000000000000
+    Size.Height = 25.000000000000000000
+    Size.PlatformDefault = False
+    OnChangeTracking = Edit1ChangeTracking
+  end
+  object StyleBook1: TStyleBook
+    Styles = <
+      item
+      end>
+    Left = 1056
+    Top = 48
+  end
+  object OpenDialog1: TOpenDialog
+    Left = 1064
+    Top = 24
+  end
+  object Label2: TLabel
+    Anchors = [akTop, akRight]
+    Position.X = 728.000000000000000000
+    Position.Y = 104.000000000000000000
+    Size.Width = 361.000000000000000000
+    Size.Height = 25.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Default'
+  end
+end

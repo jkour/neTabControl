@@ -1,0 +1,71 @@
+object Frame2: TFrame2
+  Size.Width = 532.000000000000000000
+  Size.Height = 396.000000000000000000
+  Size.PlatformDefault = False
+  object Layout1: TLayout
+    Align = MostTop
+    Size.Width = 532.000000000000000000
+    Size.Height = 57.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object Label2: TLabel
+      StyledSettings = [Family, FontColor]
+      Position.X = 8.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 489.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 16.000000000000000000
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
+      Text = 'Enter an address and hit Go'
+    end
+    object Label1: TLabel
+      Position.X = 8.000000000000000000
+      Position.Y = 32.000000000000000000
+      Size.Width = 65.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      Text = 'Address:'
+    end
+    object Edit1: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 2
+      Position.X = 72.000000000000000000
+      Position.Y = 30.000000000000000000
+      Size.Width = 369.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object Button1: TButton
+      Position.X = 456.000000000000000000
+      Position.Y = 30.000000000000000000
+      Size.Width = 41.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 3
+      Text = 'Go'
+      OnClick = Button1Click
+    end
+  end
+  object Layout2: TLayout
+    Align = Client
+    Size.Width = 532.000000000000000000
+    Size.Height = 339.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    object Label3: TLabel
+      Align = Contents
+      StyledSettings = [Family, Style, FontColor]
+      Margins.Left = 20.000000000000000000
+      Margins.Top = 20.000000000000000000
+      Margins.Right = 20.000000000000000000
+      Margins.Bottom = 20.000000000000000000
+      Size.Width = 492.000000000000000000
+      Size.Height = 299.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 32.000000000000000000
+      TextSettings.HorzAlign = Center
+      TextSettings.VertAlign = Leading
+    end
+  end
+end
