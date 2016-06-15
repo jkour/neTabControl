@@ -1,5 +1,0 @@
-object Frame5: TFrame5
-  Size.Width = 496.000000000000000000
-  Size.Height = 337.000000000000000000
-  Size.PlatformDefault = False
-end

@@ -1,5 +1,0 @@
-object BasicFrame: TBasicFrame
-  Size.Width = 513.000000000000000000
-  Size.Height = 414.000000000000000000
-  Size.PlatformDefault = False
-end
