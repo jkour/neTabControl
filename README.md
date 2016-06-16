@@ -3,6 +3,8 @@ neTabControl is a FireMonkey control for Delphi. It builds on the native TabCont
 
 > **Important note:** Starting from v.1.0.0, neTabControl is not a simple subclass of TTabControl as in previous versions. If you use previous versions you need to update the control in the forms you're using it
 
+[![](https://youtu.be/PXnLUaEnt44)](https://youtu.be/PXnLUaEnt44)
+
 
 #Design
 The control uses three elements:
@@ -77,14 +79,14 @@ Styles
 
 # Platforms
 
-Tested Platforms: Win32, Win64 and MacOSX.
+This is a FireMonkey component. It should work on any platform but I have tested only on Win32, Win64 and MacOSX.
 
 #Documentation
-There is documentation about the classes, the methods and properties. Please check the "Documentation" folder or the wiki.
+There is documentation about the classes, the methods and properties. Please check the "Documentation" folder.
 
 
 # Known Issues
-Check the wiki.
+Check the wiki [here](https://github.com/jkour/neTabControl/wiki#known-issues "here").
 
 
 #Bugs, Suggestions, Comments and General Contact
