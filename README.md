@@ -3,7 +3,8 @@ neTabControl is a FireMonkey control for Delphi. It builds on the native TabCont
 
 > **Important note:** Starting from v.1.0.0, neTabControl is not a simple subclass of TTabControl as in previous versions. If you use previous versions you need to update the control in the forms you're using it
 
-[![](https://youtu.be/PXnLUaEnt44)](https://youtu.be/PXnLUaEnt44)
+#Video Demonstration
+Follow this link for a quick demo: [neTabControl Video](https://youtu.be/1OxMN-HeWhk "neTabControl Video")
 
 
 #Design
