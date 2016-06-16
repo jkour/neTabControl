@@ -11,7 +11,7 @@ Follow this link for a quick demo: [neTabControl Video](https://youtu.be/1OxMN-H
 The control uses three elements:
 
 1. A Tag
-2. A TneTabItem: An ancestor of TTabItem
+2. A TneTabItem: An subclass of TTabItem
 3. A Frame
 
 The neTabControl holds several TabItems, which all inherit from TneTabItem and shows a TFrame for each TneTabItem.
