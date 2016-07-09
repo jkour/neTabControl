@@ -129,6 +129,7 @@
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <DCC_UseMSBuildExternally>true</DCC_UseMSBuildExternally>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <DCC_Description>NE Firemonkey TabControl</DCC_Description>
         <VerInfo_Locale>1033</VerInfo_Locale>
@@ -155,17 +156,17 @@
         <DCCReference Include="neTabGeneralUtils.pas"/>
         <DCCReference Include="neTabItem.pas"/>
         <DCCReference Include="neTabTypes.pas"/>
-        <DCCReference Include="..\SupportCode\Model.ProSu.Classes.Provider.pas"/>
-        <DCCReference Include="..\SupportCode\Model.ProSu.Classes.Subscriber.pas"/>
-        <DCCReference Include="..\SupportCode\Model.ProSu.InterfaceActions.pas"/>
-        <DCCReference Include="..\SupportCode\Model.ProSu.Interfaces.pas"/>
-        <RcItem Include="..\..\Images\CloseHover.png">
-            <ResourceType>RCDATA</ResourceType>
-            <ResourceId>CloseHover</ResourceId>
-        </RcItem>
+        <DCCReference Include="..\SupportCode\Model.Provider.pas"/>
+        <DCCReference Include="..\SupportCode\Model.Subscriber.pas"/>
+        <DCCReference Include="..\SupportCode\Model.IntActions.pas"/>
+        <DCCReference Include="..\SupportCode\Model.Interf.pas"/>
         <RcItem Include="..\..\Images\CloseNormal.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>CloseNormal</ResourceId>
+        </RcItem>
+        <RcItem Include="..\..\Images\CloseHover.png">
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>CloseHover</ResourceId>
         </RcItem>
         <RcItem Include="..\..\Images\ClosePressed.png">
             <ResourceType>RCDATA</ResourceType>
@@ -229,7 +230,16 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployClass Name="ProjectiOSDeviceResourceRules"/>
+                <DeployClass Name="DependencyModule">
+                    <Platform Name="Win32">
+                        <Operation>0</Operation>
+                        <Extensions>.dll;.bpl</Extensions>
+                    </Platform>
+                    <Platform Name="OSX32">
+                        <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
+                    </Platform>
+                </DeployClass>
                 <DeployClass Name="ProjectOSXResource">
                     <Platform Name="OSX32">
                         <RemoteDir>Contents\Resources</RemoteDir>
@@ -541,16 +551,7 @@
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
-                <DeployClass Name="DependencyModule">
-                    <Platform Name="Win32">
-                        <Operation>0</Operation>
-                        <Extensions>.dll;.bpl</Extensions>
-                    </Platform>
-                    <Platform Name="OSX32">
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                </DeployClass>
+                <DeployClass Name="ProjectiOSDeviceResourceRules"/>
                 <ProjectRoot Platform="iOSDevice64" Name="$(PROJECTNAME).app"/>
                 <ProjectRoot Platform="Win64" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="iOSDevice32" Name="$(PROJECTNAME).app"/>

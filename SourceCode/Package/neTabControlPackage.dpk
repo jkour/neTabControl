@@ -26,7 +26,7 @@ package neTabControlPackage;
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
-{$DESCRIPTION 'A FMX TabControl with enhanced features'}
+{$DESCRIPTION 'NE Firemonkey TabControl'}
 {$IMPLICITBUILD ON}
 
 requires
@@ -38,9 +38,9 @@ contains
   neTabGeneralUtils in 'neTabGeneralUtils.pas',
   neTabItem in 'neTabItem.pas',
   neTabTypes in 'neTabTypes.pas',
-  Model.ProSu.Classes.Provider in '..\SupportCode\Model.ProSu.Classes.Provider.pas',
-  Model.ProSu.Classes.Subscriber in '..\SupportCode\Model.ProSu.Classes.Subscriber.pas',
-  Model.ProSu.InterfaceActions in '..\SupportCode\Model.ProSu.InterfaceActions.pas',
-  Model.ProSu.Interfaces in '..\SupportCode\Model.ProSu.Interfaces.pas';
+  Model.Provider in '..\SupportCode\Model.Provider.pas',
+  Model.Subscriber in '..\SupportCode\Model.Subscriber.pas',
+  Model.IntActions in '..\SupportCode\Model.IntActions.pas',
+  Model.Interf in '..\SupportCode\Model.Interf.pas';
 
 end.

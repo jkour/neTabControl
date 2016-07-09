@@ -1,16 +1,16 @@
 /// <exclude />
-unit Model.ProSu.Classes.Subscriber;
+unit Model.Subscriber;
 
 interface
 
-uses Model.ProSu.InterfaceActions, Model.ProSu.Interfaces;
+uses Model.IntActions, Model.Interf;
 
-function SubscriberClass: ISubscriberInterface;
+function SubscriberClass: ISubscriber;
 
 implementation
 
 type
-  TProSuSubscriber = class (TInterfacedObject, ISubscriberInterface)
+  TSubscriber = class (TInterfacedObject, ISubscriber)
   private
     fUpdateMethod: TUpdateSubscriberMethod;
     fUpdateNotificationMethod: TUpdateSubscriberInterfaceMethod;
@@ -21,39 +21,39 @@ type
     /// <param name="action">
     ///   <see cref="Model.ProSu.InterfaceActions|TInterfaceActions" />
     /// </param>
-    procedure UpdateSubscriber (action: TInterfaceActions); overload;
-    procedure UpdateSubscriber (notificationClass: INotificationInterface); overload;
+    procedure UpdateSubscriber (action: TIntActions); overload;
+    procedure UpdateSubscriber (notificationClass: INotification); overload;
     procedure SetUpdateSubscriberMethod (newMethod: TUpdateSubscriberMethod); overload;
     procedure SetUpdateSubscriberMethod (newNotificationClass: TUpdateSubscriberInterfaceMethod); overload;
   end;
 
 
 { TProSuSubscriber }
-function SubscriberClass:ISubscriberInterface;
+function SubscriberClass:ISubscriber;
 begin
-  result:=TProSuSubscriber.Create;
+  result:=TSubscriber.Create;
 end;
 
 
-procedure TProSuSubscriber.SetUpdateSubscriberMethod(
+procedure TSubscriber.SetUpdateSubscriberMethod(
   newMethod: TUpdateSubscriberMethod);
 begin
   fUpdateMethod:=newMethod;
 end;
 
-procedure TProSuSubscriber.UpdateSubscriber(action: TInterfaceActions);
+procedure TSubscriber.UpdateSubscriber(action: TIntActions);
 begin
   if Assigned(fUpdateMethod) then fUpdateMethod(action);
 end;
 
-procedure TProSuSubscriber.SetUpdateSubscriberMethod(
+procedure TSubscriber.SetUpdateSubscriberMethod(
   newNotificationClass: TUpdateSubscriberInterfaceMethod);
 begin
   fUpdateNotificationMethod:=newNotificationClass;
 end;
 
-procedure TProSuSubscriber.UpdateSubscriber(
-  notificationClass: INotificationInterface);
+procedure TSubscriber.UpdateSubscriber(
+  notificationClass: INotification);
 begin
   if Assigned(fUpdateNotificationMethod) then
     fUpdateNotificationMethod(notificationClass);

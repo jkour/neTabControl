@@ -1,17 +1,17 @@
 /// <exclude />
-unit Model.ProSu.Classes.Provider;
+unit Model.Provider;
 
 interface
 
-uses Model.ProSu.InterfaceActions, Model.ProSu.Interfaces,
+uses Model.IntActions, Model.Interf,
     System.Generics.Collections;
 
-function ProviderClass: IProviderInterface;
+function ProviderClass: IProvider;
 
 implementation
 
 type
- TProSuProvider = class (TInterfacedObject, IProviderInterface)
+ TProvider = class (TInterfacedObject, IProvider)
   private
     /// <summary>
     ///   This list keeps track of the subscribers the provider is managing
@@ -19,10 +19,10 @@ type
     /// <seealso cref="Model.ProSu.Interfaces|ISubscriberInterface">
     ///   Isubscriber
     /// </seealso>
-    fSubscriberList: TList<ISubscriberInterface>;
+    fSubscriberList: TList<ISubscriber>;
   public
-    procedure Subscribe(tmpSubscriber: ISubscriberInterface);
-    procedure Unsubscribe(tmpSubscriber: ISubscriberInterface);
+    procedure Subscribe(tmpSubscriber: ISubscriber);
+    procedure Unsubscribe(tmpSubscriber: ISubscriber);
     /// <param name="action">
     ///   <see cref="Model.ProSu.InterfaceActions|TInterfaceActions" />
     /// </param>
@@ -38,29 +38,29 @@ type
     ///     NotifySubscribers([Default]);
     ///   </para>
     /// </example>
-    procedure NotifySubscribers (action: TInterfaceActions); overload;
-    procedure NotifySubscribers (notificationClass: INotificationInterface); overload;
+    procedure NotifySubscribers (action: TIntActions); overload;
+    procedure NotifySubscribers (notificationClass: INotification); overload;
 
     constructor Create;
     destructor Destroy; override;
   end;
 
-function ProviderClass: IProviderInterface;
+function ProviderClass: IProvider;
 begin
-  result:=TProSuProvider.Create;
+  result:=TProvider.Create;
 end;
 
 { TProSuProvider }
 
-constructor TProSuProvider.Create;
+constructor TProvider.Create;
 begin
   inherited;
-  fSubscriberList:=TList<ISubscriberInterface>.Create;
+  fSubscriberList:=TList<ISubscriber>.Create;
 end;
 
-destructor TProSuProvider.Destroy;
+destructor TProvider.Destroy;
 var
-  iTemp: ISubscriberInterface;
+  iTemp: ISubscriber;
 begin
   for itemp in fSubscriberList do
       Unsubscribe(iTemp);
@@ -68,29 +68,29 @@ begin
   inherited;
 end;
 
-procedure TProSuProvider.NotifySubscribers(
-  notificationClass: INotificationInterface);
+procedure TProvider.NotifySubscribers(
+  notificationClass: INotification);
 var
-  tmpSubscriber: ISubscriberInterface;
+  tmpSubscriber: ISubscriber;
 begin
   for tmpSubscriber in fSubscriberList  do
     tmpSubscriber.UpdateSubscriber(notificationClass);
 end;
 
-procedure TProSuProvider.NotifySubscribers(action: TInterfaceActions);
+procedure TProvider.NotifySubscribers(action: TIntActions);
 var
-  tmpSubscriber: ISubscriberInterface;
+  tmpSubscriber: ISubscriber;
 begin
   for tmpSubscriber in fSubscriberList  do
     tmpSubscriber.UpdateSubscriber(action);
 end;
 
-procedure TProSuProvider.Subscribe(tmpSubscriber: ISubscriberInterface);
+procedure TProvider.Subscribe(tmpSubscriber: ISubscriber);
 begin
   fSubscriberList.Add(tmpSubscriber);
 end;
 
-procedure TProSuProvider.Unsubscribe(tmpSubscriber: ISubscriberInterface);
+procedure TProvider.Unsubscribe(tmpSubscriber: ISubscriber);
 begin
   fSubscriberList.Remove(tmpSubscriber);
 end;

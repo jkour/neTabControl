@@ -41,21 +41,34 @@ interface
 uses
   System.Classes, FMX.Types, FMX.Controls, FMX.Layouts,
   FMX.Styles.Objects, FMX.StdCtrls,FMX.TabControl, System.Generics.Collections,
-  FMX.Forms, FMX.Graphics, FMX.Objects, System.UITypes, Model.ProSu.Classes.Provider,
-  Model.ProSu.Interfaces, Model.ProSu.Classes.Subscriber, Model.ProSu.InterfaceActions,
+  FMX.Forms, FMX.Graphics, FMX.Objects, System.UITypes, Model.Provider,
+  Model.Interf, Model.Subscriber, Model.IntActions,
   FMX.Menus,
   neTabTypes, neTabGeneralUtils, neTabItem;
 
 const
   MajorVersion = '1';
-  MinorVersion = '0';
-  BugVersion = '0';
+  MinorVersion = '1';
+  BugVersion = '1';
 
 
 //***************************************************************
 //
 // Version History
 //
+//
+//
+// 1.1.1 - 09/07/2016
+//
+//** Improvement
+//
+//    * Observer framework renamed
+//
+// 1.1.0 - 09/07/2016
+//
+//** Improvement
+//
+//    * Installer recognises Delphi installation and targets
 //
 // 1.0.0 - 15/06/2016
 //
@@ -184,7 +197,7 @@ type
     /// </summary>
     fMainTabsDictionary: TDictionary<string, TTabItem>;
 
-    fSubscriber: ISubscriberInterface;
+    fSubscriber: ISubscriber;
 
     {$REGION 'Keeps the tags the user is visiting. Used to revert to the last tab when a tab item is deleted'}
     /// <summary>
@@ -228,7 +241,7 @@ type
     procedure SetActiveTab(const newTab: TneTabItem);
     procedure SetActiveTag(const newTag: string);
 
-    procedure ShowPopupMenu (const notificationClass: INotificationInterface);
+    procedure ShowPopupMenu (const notificationClass: INotification);
 
     //Private Events
     procedure OnChangeTab(Sender: TObject);
@@ -240,7 +253,7 @@ type
 
     //Foundation procedures/functions
     function GetVersion:string;
-    procedure UpdateFromProvider(const notificationClass: INotificationInterface);
+    procedure UpdateFromProvider(const notificationClass: INotification);
   protected
     // Protected declarations
   public
@@ -1012,7 +1025,7 @@ procedure TneTabControl.OnInternalTimer(Sender: TObject);
 begin
   fInternalTimer.Enabled:=false;
   case fInternalTimer.Action of
-    TInterfaceAction.DeleteTab: DeleteTab(fInternalTimer.Value);
+    intactDeleteTab: DeleteTab(fInternalTimer.Value);
   end;
 end;
 
@@ -1192,7 +1205,7 @@ begin
 end;
 
 procedure TneTabControl.ShowPopupMenu(
-  const notificationClass: INotificationInterface);
+  const notificationClass: INotification);
 var
   tmpPopup: TPopupMenu;
   tmpMenuItem: TMenuItem;
@@ -1332,24 +1345,24 @@ begin
 end;
 
 procedure TneTabControl.UpdateFromProvider(
-  const notificationClass: INotificationInterface);
+  const notificationClass: INotification);
 var
   receivedNotClass: TneNotificationClass;
 begin
   if not Assigned(notificationClass) then
     Exit;
   receivedNotClass:=notificationClass as TneNotificationClass;
-  if TInterfaceAction.DeleteTab in receivedNotClass.Action then
+  if intactDeleteTab in receivedNotClass.Action then
   begin
-    fInternalTimer.Action:=TInterfaceAction.DeleteTab;
+    fInternalTimer.Action:=intactDeleteTab;
     fInternalTimer.Value:=receivedNotClass.Value;
     fInternalTimer.Enabled:=True;
   end;
 
-  if TInterfaceAction.ShowPopupMenu in receivedNotClass.Action then
+  if intactShowPopupMenu in receivedNotClass.Action then
     ShowPopupMenu(receivedNotClass);
 
-  if TInterfaceAction.UpdateTabHeight in receivedNotClass.Action then
+  if intactUpdateTabHeight in receivedNotClass.Action then
     self.TabHeight:=receivedNotClass.ValueInt;
 end;
 

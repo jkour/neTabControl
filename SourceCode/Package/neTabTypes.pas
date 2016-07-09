@@ -39,20 +39,33 @@ unit neTabTypes;
 interface
 
 uses
-  FMX.Types, Model.ProSu.InterfaceActions, Model.ProSu.Interfaces,
+  FMX.Types, Model.IntActions, Model.Interf,
   System.Types, FMX.Menus, System.Classes, System.Generics.Collections,
   FMX.TabControl;
 
 const
   MajorVersion = '1';
-  MinorVersion = '0';
-  BugVersion = '0';
+  MinorVersion = '1';
+  BugVersion = '1';
 
 
 //***************************************************************
 //
 // Version History
 //
+//
+//
+// 1.1.1 - 09/07/2016
+//
+//** Improvement
+//
+//    * Observer framework renamed
+//
+// 1.1.0 - 09/07/2016
+//
+//** Improvement
+//
+//    * Installer recognises Delphi installation and targets
 //
 // 1.0.0 - 15/06/2016
 //
@@ -156,13 +169,13 @@ type
 
   TneTimer = class(TTimer)
   public
-    Action: TInterfaceAction;
+    Action: TIntAction;
     Value: string;
   end;
 
-  TneNotificationClass = class(TInterfacedObject, INotificationInterface)
+  TneNotificationClass = class(TInterfacedObject, INotification)
   private
-    fActions: TInterfaceActions;
+    fActions: TIntActions;
     fSender: TObject;
     fValue: string;
     fValueInt: integer;
@@ -171,7 +184,7 @@ type
     fPopupDefault,
     fPopupAfter: TPopupMenu;
   public
-    property Action: TInterfaceActions read fActions write fActions;
+    property Action: TIntActions read fActions write fActions;
     property Value: string read fValue write fValue;
     property ValueInt: Integer read fValueInt write fValueInt;
     property Sender: TObject read fSender write fSender;

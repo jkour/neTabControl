@@ -1,6 +1,6 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{27119A4A-E1FC-45F5-90B0-09642798CA19}</ProjectGuid>
+        <ProjectGuid>{2223EF71-DC84-4A53-83E8-31E5EA49D1B4}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
         <Projects Include="Package\neTabControlPackage.dproj">

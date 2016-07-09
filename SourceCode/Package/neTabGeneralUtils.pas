@@ -43,14 +43,27 @@ uses
 
 const
   MajorVersion = '1';
-  MinorVersion = '0';
-  BugVersion = '0';
+  MinorVersion = '1';
+  BugVersion = '1';
 
 
 //***************************************************************
 //
 // Version History
 //
+//
+//
+// 1.1.1 - 09/07/2016
+//
+//** Improvement
+//
+//    * Observer framework renamed
+//
+// 1.1.0 - 09/07/2016
+//
+//** Improvement
+//
+//    * Installer recognises Delphi installation and targets
 //
 // 1.0.0 - 15/06/2016
 //

@@ -2,12 +2,12 @@
 /// <summary>
 ///   This unit defines the interfaces for the Provider-Subscriber model
 /// </summary>
-unit Model.ProSu.Interfaces;
+unit Model.Interf;
 
 interface
 
 uses
-  Model.ProSu.InterfaceActions;
+  Model.IntActions;
 
 type
   {$REGION 'This interface is used to pass information between the provider and the subscriber.'}
@@ -16,7 +16,7 @@ type
   ///   subscriber.
   /// </summary>
   {$ENDREGION}
-  INotificationInterface = interface
+  INotification = interface
     ['{433A448E-9943-40AE-BECB-B8FF653C9CC0}']
   end;
 
@@ -24,13 +24,13 @@ type
   ///   This type is used to pass the correct UpdateSubscriber method to the
   ///   Subscriber interface.
   /// </summary>
-  TUpdateSubscriberMethod = procedure (const action: TInterfaceActions) of object;
-  TUpdateSubscriberInterfaceMethod = procedure (const notificationClass: INotificationInterface) of object;
+  TUpdateSubscriberMethod = procedure (const action: TIntActions) of object;
+  TUpdateSubscriberInterfaceMethod = procedure (const notificationClass: INotification) of object;
 
   /// <summary>
   ///   This interface is used by the Subscribers
   /// </summary>
-  ISubscriberInterface = interface
+  ISubscriber = interface
     ['{955BF992-F4FA-4141-9C0F-04600C582C00}']
     /// <summary>
     ///   This method is assigned the UpdateSubscriber methods from the class
@@ -42,8 +42,8 @@ type
     /// <seealso cref="Model.ProSu.InterfaceActions|TInterfaceActions">
     ///   TInetrfaceActions
     /// </seealso>
-    procedure UpdateSubscriber (action: TInterfaceActions); overload;
-    procedure UpdateSubscriber (notificationClass: INotificationInterface); overload;
+    procedure UpdateSubscriber (action: TIntActions); overload;
+    procedure UpdateSubscriber (notificationClass: INotification); overload;
     /// <summary>
     ///   Use this method to assign a method to the subscriber.
     /// </summary>
@@ -54,7 +54,7 @@ type
   /// <summary>
   ///   This interface is used by the provider
   /// </summary>
-  IProviderInterface = interface
+  IProvider = interface
     ['{DD326AE1-5049-43AA-9215-DF53DB5FC958}']
     /// <summary>
     ///   This method is called by the subscriber in order to subscribe to the
@@ -66,7 +66,7 @@ type
     /// <seealso cref="Model.ProSu.Interfaces|ISubscriber">
     ///   ISubscriber
     /// </seealso>
-    procedure Subscribe(tmpSubscriber: ISubscriberInterface);
+    procedure Subscribe(tmpSubscriber: ISubscriber);
     /// <summary>
     ///   This method is called from a subscriber to unsubscribe from a
     ///   provider
@@ -77,7 +77,7 @@ type
     /// <seealso cref="Model.ProSu.Interfaces|ISubscriber">
     ///   ISubscriber
     /// </seealso>
-    procedure Unsubscribe(tmpSubscriber: ISubscriberInterface);
+    procedure Unsubscribe(tmpSubscriber: ISubscriber);
     /// <summary>
     ///   This method is called from the Provider to communicate with the
     ///   subscribers
@@ -89,8 +89,8 @@ type
     /// <seealso cref="TInterfaceActions">
     ///   <see cref="Model.ProSu.InterfaceActions|TInterfaceActions" />
     /// </seealso>
-    procedure NotifySubscribers (action: TInterfaceActions); overload;
-    procedure NotifySubscribers (notificationClass: INotificationInterface); overload;
+    procedure NotifySubscribers (action: TIntActions); overload;
+    procedure NotifySubscribers (notificationClass: INotification); overload;
   end;
 
 

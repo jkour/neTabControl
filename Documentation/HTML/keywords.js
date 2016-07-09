@@ -41,8 +41,8 @@
 ,{"title":"neTabTypes.TneNotificationClass","href":"neTabTypes.TneNotificationClass.htm"}
 ,{"title":"neTabTypes.TneTimer","href":"neTabTypes.TneTimer.htm"}
 ,{"title":"neTabTypes.TSetOfStrings","href":"neTabTypes.TSetOfStrings.htm"}
-,{"title":"register","href":"neTabItem.register.htm"}
 ,{"title":"Register","href":"neTabControl.Register.htm"}
+,{"title":"register","href":"neTabItem.register.htm"}
 ,{"title":"SCloseAllTabs","href":"neTabTypes.SCloseAllTabs.htm"}
 ,{"title":"SCloseOtherTabs","href":"neTabTypes.SCloseOtherTabs.htm"}
 ,{"title":"SCloseTab","href":"neTabTypes.SCloseTab.htm"}

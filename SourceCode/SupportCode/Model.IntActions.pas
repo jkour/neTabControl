@@ -5,7 +5,7 @@
 /// <remarks>
 ///   Use
 /// </remarks>
-unit Model.ProSu.InterfaceActions;
+unit Model.IntActions;
 
 interface
 
@@ -18,14 +18,14 @@ type
   /// <remarks>
   ///   Add more options in this type to meet the needs in your application
   /// </remarks>
-  TInterfaceAction = (
+  TIntAction = (
     /// <summary>
     ///   This action is the default. It may lead to no action
     /// </summary>
-    Default,
-    DeleteTab,
-    ShowPopupMenu,
-    UpdateTabHeight
+    intactDefault,
+    intactDeleteTab,
+    intactShowPopupMenu,
+    intactUpdateTabHeight
     );
 
   {$REGION 'The set of actions to be passed to the Observers'}
@@ -37,7 +37,7 @@ type
   /// </example>
   /// <seealso cref="Model.ProSu.InterfaceActions|TInterfaceAction" />
   {$ENDREGION}
-  TInterfaceActions = set of TInterfaceAction;
+  TIntActions = set of TIntAction;
 
 implementation
 

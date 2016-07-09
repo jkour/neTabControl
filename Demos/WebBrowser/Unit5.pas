@@ -2,7 +2,7 @@ unit Unit5;
 
 interface
 
-//{$DEFINE TMS}
+{$DEFINE TMS}
 
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,

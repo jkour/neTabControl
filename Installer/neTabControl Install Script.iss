@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "neTabControl"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.1.1"
 #define MyAppPublisher "NusEnvision"
 #define MyAppURL "https://github.com/jkour/neTabControl"
 #define MyPackageName "neTabControlPackage.bpl"
@@ -20,7 +20,7 @@
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{CBDFF8DC-5797-4CD3-9531-295946478CB2}
+AppId={{5C78FE03-C4ED-4D27-A222-8E4A9EC11384}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -31,7 +31,7 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={commondocs}\NusEnvision\{#MyAppName}
 DefaultGroupName=NusEnvision\neTabControl
 DisableProgramGroupPage=yes
-OutputBaseFilename=neTabControl-1.1.0-setup
+OutputBaseFilename=neTabControl-1.1.1-setup
 Compression=lzma
 SolidCompression=yes
 ShowLanguageDialog=no
@@ -59,10 +59,6 @@ Source: "..\..\Release\SourceCode\Package\neTabControlPackageResource.rc"; DestD
 Source: "..\..\Release\SourceCode\Package\neTabGeneralUtils.pas"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
 Source: "..\..\Release\SourceCode\Package\neTabItem.pas"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
 Source: "..\..\Release\SourceCode\Package\neTabTypes.pas"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
-Source: "..\..\Release\SourceCode\SupportCode\Model.ProSu.Classes.Provider.pas"; DestDir: "{app}\SourceCode\SupportCode\"; Flags: ignoreversion
-Source: "..\..\Release\SourceCode\SupportCode\Model.ProSu.Classes.Subscriber.pas"; DestDir: "{app}\SourceCode\SupportCode\"; Flags: ignoreversion
-Source: "..\..\Release\SourceCode\SupportCode\Model.ProSu.InterfaceActions.pas"; DestDir: "{app}\SourceCode\SupportCode\"; Flags: ignoreversion
-Source: "..\..\Release\SourceCode\SupportCode\Model.ProSu.Interfaces.pas"; DestDir: "{app}\SourceCode\SupportCode\"; Flags: ignoreversion
 Source: "..\..\Release\Demos\WebBrowser\Entitlement.TemplateOSX32.xml"; DestDir: "{app}\Demos\WebBrowser\"; Flags: ignoreversion
 Source: "..\..\Release\Demos\WebBrowser\info.plist.TemplateOSX.xml"; DestDir: "{app}\Demos\WebBrowser\"; Flags: ignoreversion
 Source: "..\..\Release\Demos\WebBrowser\Unit2.fmx"; DestDir: "{app}\Demos\WebBrowser\"; Flags: ignoreversion
@@ -84,12 +80,18 @@ Source: "..\..\Release\Demos\WebBrowser\WebBrowser.stat"; DestDir: "{app}\Demos\
 Source: "..\..\Release\Demos\WebBrowser\WebBrowserResource.rc"; DestDir: "{app}\Demos\WebBrowser\"; Flags: ignoreversion
 ; Compile batch file
 Source: "CompileSource.bat"; Flags: dontcopy
+Source: "..\..\Release\SourceCode\SupportCode\Model.IntActions.pas"; DestDir: "{app}\SourceCode\SupportCode\"; Flags: ignoreversion
+Source: "..\..\Release\SourceCode\SupportCode\Model.Interf.pas"; DestDir: "{app}\SourceCode\SupportCode\"; Flags: ignoreversion
+Source: "..\..\Release\SourceCode\SupportCode\Model.Provider.pas"; DestDir: "{app}\SourceCode\SupportCode\"; Flags: ignoreversion
+Source: "..\..\Release\SourceCode\SupportCode\Model.Subscriber.pas"; DestDir: "{app}\SourceCode\SupportCode\"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 
 [Dirs]
 Name: "{app}\Bpl"
+Name: "{app}\SupportCode\__history\"
+Name: "{app}\SupportCode\__recovery\"
 
 [Code]
 const

@@ -227,13 +227,13 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
- <param name="Name" value="register">
- <param name="Local" value="neTabItem.register.htm">
+ <param name="Name" value="Register">
+ <param name="Local" value="neTabControl.Register.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
- <param name="Name" value="Register">
- <param name="Local" value="neTabControl.Register.htm">
+ <param name="Name" value="register">
+ <param name="Local" value="neTabItem.register.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">

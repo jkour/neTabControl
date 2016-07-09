@@ -41,20 +41,33 @@ interface
 uses
   System.SysUtils, System.Classes, FMX.Types, FMX.Controls, FMX.Layouts,
   FMX.Styles.Objects, FMX.StdCtrls,FMX.TabControl, System.Generics.Collections,
-  FMX.Forms, FMX.Graphics, FMX.Objects, System.UITypes, Model.ProSu.Classes.Provider,
-  Model.ProSu.Interfaces, Model.ProSu.Classes.Subscriber, Model.ProSu.InterfaceActions,
+  FMX.Forms, FMX.Graphics, FMX.Objects, System.UITypes, Model.Provider,
+  Model.Interf, Model.Subscriber, Model.IntActions,
   neTabTypes, neTabGeneralUtils, FMX.Menus, System.Types;
 
 const
   MajorVersion = '1';
-  MinorVersion = '0';
-  BugVersion = '0';
+  MinorVersion = '1';
+  BugVersion = '1';
 
 
 //***************************************************************
 //
 // Version History
 //
+//
+//
+// 1.1.1 - 09/07/2016
+//
+//** Improvement
+//
+//    * Observer framework renamed
+//
+// 1.1.0 - 09/07/2016
+//
+//** Improvement
+//
+//    * Installer recognises Delphi installation and targets
 //
 // 1.0.0 - 15/06/2016
 //
@@ -156,7 +169,7 @@ type
     fMinTabWidth,
     fMaxTabWidth: Single;
 
-    fProvider: IProviderInterface;
+    fProvider: IProvider;
     fMouseState: TMouseState;
     fRefreshCloseImage: boolean;
     //procedures/functions
@@ -227,7 +240,7 @@ type
     /// </summary>
     procedure RefreshControl;
 
-    property Provider: IProviderInterface read fProvider;
+    property Provider: IProvider read fProvider;
   end;
 
 
@@ -515,7 +528,7 @@ begin
   notifClass:=TneNotificationClass.Create;
   notifClass.Sender:=self;
   notifClass.Value:=self.TabTag;
-  notifClass.Action:=[TInterfaceAction.ShowPopupMenu];
+  notifClass.Action:=[TIntAction.intactShowPopupMenu];
   notifClass.Point:=TPointF.Create(X,Y);
   notifClass.PopupBefore:=fPopupMenuBeforeDefault;
   notifClass.PopupDefault:=tmpPop;
@@ -530,7 +543,7 @@ var
   newNotifClass: TneNotificationClass;
 begin
   newNotifClass:=TneNotificationClass.Create;
-  newNotifClass.Action:=[DeleteTab];
+  newNotifClass.Action:=[intactDeleteTab];
   newNotifClass.Sender:=Self;
   newNotifClass.Value:=self.TabTag;
   fProvider.NotifySubscribers(newNotifClass);

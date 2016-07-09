@@ -17,3 +17,5 @@ Demos/WebBrowser/Win32
 Demos/WebBrowser/OSX32
 Demos/WebBrowser/Win64
 Thumbs.db
+SourceCode/Builds/Win32
+SourceCode/TestDevelopment/OSX32
