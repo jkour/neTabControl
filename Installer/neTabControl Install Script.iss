@@ -5,11 +5,16 @@
 #define MyAppVersion "1.0.0"
 #define MyAppPublisher "NusEnvision"
 #define MyAppURL "https://github.com/jkour/neTabControl"
+#define MyPackageName "neTabControlPackage.bpl"
+#define MyPackageDescription "NusEnvision FMX neTabControl"
+#define MyPackageProjectName "neTabControlPackage.dproj"
 
 #define Delphi101BaseVersion = '18.0';
 #define Delphi101BerlinPath = 'C:\Program Files (x86)\Embarcadero\Studio\18.0\bin\';
 #define Delphi101BerlinRsvars = Delphi101BerlinPath+'rsvars.bat'
 #define Delphi101BerlinDCC32 = Delphi101BerlinPath+'dcc32.exe'
+#define Delphi101BerlinBuildDirectory= 'D101Berlin'
+#define Delphi101BerlinBaseRegistryPath ='Software\Embarcadero\BDS\18.0\'
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -26,7 +31,7 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={commondocs}\NusEnvision\{#MyAppName}
 DefaultGroupName=NusEnvision\neTabControl
 DisableProgramGroupPage=yes
-OutputBaseFilename=neTabControl-1.0.0-D101Berlin-setup
+OutputBaseFilename=neTabControl-1.0.0-setup
 Compression=lzma
 SolidCompression=yes
 ShowLanguageDialog=no
@@ -91,9 +96,19 @@ const
   Delphi101BerlinPath = 'C:\Program Files (x86)\Embarcadero\Studio\18.0\bin\';
   Delphi101BPLPath = 'C:\Users\Public\Documents\Embarcadero\Studio\18.0\Bpl';
 
+type
+  TAvailableDelphi = (availD101Berlin);
+
 var
   IsAvailableDelphi101Berlin: boolean;
 
+  ChooseDelphiInstallationPage: TInputOptionWizardPage;
+  availableDelphiInstallations: integer;
+
+  ChooseDelphiTargetsPage: TInputOptionWizardPage;
+  availableDelphiTargets: integer;
+
+//Splits a string to TString List
 procedure SplitString(const strToSplit: string; const separator: string; 
    var outputList: TStringList);
 var 
@@ -117,181 +132,216 @@ begin
   until Length(text)=0;
 end;
   
+
+//Installs the Platform
+procedure InstallForPlatform(const basicParams: string; const BuildFolderID:
+  string; const runDir: string; const currPlatform: string;
+  const delphiRegistryPath: string ); 
+
+var
+  Params,
+  BPLDir,
+  DCUDir,
+  cmdLine,
+  fullRegistryLibraryPath: string;
+  ResultCode: integer;
+
+begin
+  Params:='';
+  Params:=basicParams+currPlatform+' ';
+  BPLDir:=ExpandConstant('{app}')+'\Bpl\'+BuildFolderID+'\'+currPlatform;
+  Params:=Params+'"'+BPLDir+'"';
+  DCUDir:=runDir+'\'+BuildFolderID;
+
+  Params:=Params+' "'+DCUDir+'"';
+
+  Exec(ExpandConstant('{tmp}')+'\CompileSource.bat', 
+     Params,
+     '',
+     SW_HIDE, ewWaitUntilTerminated, ResultCode);
+  if ResultCode<>0 then 
+   MsgBox('Error while compiling for '+currPlatform, mbInformation, mb_OK)
+  else
+  begin
+  //Folders
+   fullRegistryLibraryPath:=delphiRegistryPath+'Library\'+currPlatform;
+
+   if RegQueryStringValue(HKEY_CURRENT_USER,fullRegistryLibraryPath,'Search Path', cmdLine) then
+   begin
+     if Pos(ExpandConstant('{app}')+'\SourceCode\Package\'+BuildFolderID+'\'+currPlatform+'\Release', cmdLine)=0 then
+       cmdLine:=cmdLine+';'+ExpandConstant('{app}')+'\SourceCode\Package\'+BuildFolderID+'\'+currPlatform+'\Release'; 
+
+       RegWriteStringValue(HKEY_CURRENT_USER,fullRegistryLibraryPath,'Search Path', cmdLine); 
+   end;
+
+   if RegQueryStringValue(HKEY_CURRENT_USER,fullRegistryLibraryPath,'Browsing Path', cmdLine) then
+   begin
+     if Pos(ExpandConstant('{app}')+'\SourceCode\Package', cmdLine)=0 then
+       cmdLine:=cmdLine+';'+ExpandConstant('{app}')+'\SourceCode\Package'; 
+
+       RegWriteStringValue(HKEY_CURRENT_USER,fullRegistryLibraryPath,'Browsing Path', cmdLine); 
+   end;
+
+   if RegQueryStringValue(HKEY_CURRENT_USER,fullRegistryLibraryPath,'Browsing Path', cmdLine) then
+   begin
+     if Pos(ExpandConstant('{app}')+'\SourceCode\SupportCode', cmdLine)=0 then
+       cmdLine:=cmdLine+';'+ExpandConstant('{app}')+'\SourceCode\SupportCode'; 
+
+       RegWriteStringValue(HKEY_CURRENT_USER,fullRegistryLibraryPath,'Browsing Path', cmdLine); 
+   end;
+
+  if RegQueryStringValue(HKEY_CURRENT_USER,fullRegistryLibraryPath,'Debug DCU Path', cmdLine) then
+   begin
+     if Pos(ExpandConstant('{app}')+'\SourceCode\Package\'+BuildFolderID+'\'+currPlatform+'\Debug', cmdLine)=0 then 
+       RegWriteStringValue(HKEY_CURRENT_USER,fullRegistryLibraryPath,'Debug DCU Path',
+        cmdLine+';'+ExpandConstant('{app}')+'\SourceCode\Package\'+BuildFolderID+'\'+currPlatform+'\Debug');
+
+   end;
+  end;
+end;
+
+procedure InstallIDEPackageForInstallation(const delphiRegistryPath: string;
+           const BuildFolderID: string);
+begin
+ RegWriteStringValue(HKEY_CURRENT_USER, delphiRegistryPAth+'Known Packages',
+    ExpandConstant('{app}')+'\Bpl\'+BuildFolderID+'\Win32\'+ExpandConstant('{#MyPackageName}'), 
+    ExpandConstant('{#MyPackageDescription}'));
+end;
+
+
+procedure InstallPackage(const currPackage: TAvailableDelphi;
+  const installIDEPackage: boolean);
+var
+  BuildFolderID,
+  PathFolder,
+  runDir, 
+  basicParams,
+  registryPath, 
+  str: string; 
+  targetStr: array of string;
+  i: integer;
+begin
+  case currPackage of 
+    availD101Berlin:
+          begin
+            str:='Delphi 10.1 Berlin';
+            BuildFolderID:=ExpandConstant('{#Delphi101BerlinBuildDirectory}');
+            PathFolder:=ExpandConstant('{#Delphi101BerlinPath}');
+            RegistryPath:=ExpandConstant('{#Delphi101BerlinBaseRegistryPath}');
+          end;
+  else
+    Exit;
+  end;
+
+  WizardForm.StatusLabel.Caption:= 'Installing component for '+str+'...';
+
+//Remove old BPL
+  WizardForm.StatusLabel.Caption:= 'Removing old BPL files...';
+  if FileExists(ExpandConstant('{app}')+'\Bpl\'+BuildFolderID+'\'+ExpandConstant('{#MyPackageName}')) then
+   DeleteFile(ExpandConstant('{app}')+'\Bpl\'+BuildFolderID+'\'+ExpandConstant('{#MyPackageName}'));
+
+  //Prepare to compile
+  ExtractTemporaryFile('CompileSource.bat');
+  runDir:=ExpandConstant('{app}')+'\SourceCode\Package';
+   
+  basicParams:='"'+runDir+'"';
+  basicParams:=basicParams+' "'+PathFolder+'rsvars.bat" ';
+  basicParams:=basicParams+ExpandConstant('{#MyPackageProjectName}')+' ';
+
+
+  SetArrayLength(targetStr, 0);
+
+  if ChooseDelphiTargetsPage.Values[0] then 
+  begin
+    SetArrayLength(targetStr, length(targetStr)+1);
+    targetStr[length(targetStr)-1]:='Win32';
+  end; 
+
+  if ChooseDelphiTargetsPage.Values[1] then 
+  begin
+    SetArrayLength(targetStr, length(targetStr)+1);
+    targetStr[length(targetStr)-1]:='Win64';
+  end; 
+
+  if ChooseDelphiTargetsPage.Values[2] then 
+  begin
+    SetArrayLength(targetStr, length(targetStr)+1);
+    targetStr[length(targetStr)-1]:='OSX32';
+  end; 
+
+  for i:=0 to length(targetStr)-1 do
+  begin
+    //Install - targets
+    WizardForm.StatusLabel.Caption:= 'Compiling for '+targetStr[i]+'...';
+    InstallForPlatform(basicParams, BuildFolderID, runDir, targetStr[i],
+     RegistryPath); 
+  end;
+
+  //Delete Temp File
+  DeleteFile(ExpandConstant('{tmp}')+'\CompileSource.bat');
+
+  //IDE Package        
+  if InstallIDEPackage then
+  begin
+   WizardForm.StatusLabel.Caption:= 'Registering IDE Package';
+   InstallIDEPackageForInstallation(RegistryPath, BuildFolderID);
+  end;
+
+end;
+
 procedure CurStepChanged(CurStep: TSetupStep);
 var
-  basicParams,
-  Params: string;
-  cmdLine: string;
-  ResultCode: integer;
-  runDir, 
-  BPLDir: string;
   InstallIDEPackage: boolean;
+  IsAnyDelphiChosen: boolean;
+  i: integer;
 begin
    if (CurStep=ssPostInstall) then 
    begin
-     if not IsAvailableDelphi101Berlin then 
-       Exit; 
-     InstallIDEPackage:=false;
-     WizardForm.StatusLabel.Caption:= 'Checking Delphi installation...';
-     if DirExists(Delphi101BerlinPath) then
-     begin
-       WizardForm.StatusLabel.Caption:= 'Delphi 10.1 Berlin found';
-//Remove old BPL
-       WizardForm.StatusLabel.Caption:= 'Removing old BPL files...';
-       if FileExists(ExpandConstant('{app}')+'\Bpl\neTabControl.bpl') then
-         DeleteFile(ExpandConstant('{app}')+'\Bpl\neTabControl.bpl');
+     if availableDelphiInstallations=0 then 
+       Exit;
+     IsAnyDelphiChosen:=false;
+     
+     for i:=0 to availableDelphiInstallations-1 do
+       if ChooseDelphiInstallationPage.Values[i] then 
+         IsAnyDelphiChosen:=true;  
 
-//Prepare to compile
-       ExtractTemporaryFile('CompileSource.bat');
-       runDir:=ExpandConstant('{app}')+'\SourceCode\Package';
-         
-       basicParams:='"'+runDir+'"';
-       basicParams:=basicParams+' "'+ExpandConstant('{#Delphi101BerlinPath}')+'\rsvars.bat" ';
-       basicParams:=basicParams+'neTabControlPackage.dproj ';
-
-//Build - Win32
-       WizardForm.StatusLabel.Caption:= 'Compiling Win32...';
-       Params:='';
-       Params:=basicParams+'Win32 ';
-       BPLDir:=ExpandConstant('{app}')+'\Bpl';
-       Params:=Params+'"'+BPLDir+'"';
-
-       Exec(ExpandConstant('{tmp}')+'\CompileSource.bat', 
-           Params,
-           '',
-           SW_HIDE, ewWaitUntilTerminated, ResultCode);
-       if ResultCode<>0 then 
-         MsgBox('Error while compiling for Win32', mbInformation, mb_OK)
-       else
-       begin
-//Folders - Win32
-         InstallIDEPackage:=true;
-         WizardForm.StatusLabel.Caption:= 'Registering Win32 Folders...';
-         if RegQueryStringValue(HKEY_CURRENT_USER,'Software\Embarcadero\BDS\18.0\Library\Win32','Search Path', cmdLine) then
-         begin
-           if Pos(ExpandConstant('{app}')+'\SourceCode\Package', cmdLine)=0 then
-             cmdLine:=cmdLine+';'+ExpandConstant('{app}')+'\SourceCode\Package'; 
-
-           if Pos(ExpandConstant('{app}')+'\SourceCode\SupportCode', cmdLine)=0 then;
-             cmdLine:=cmdLine+';'+ExpandConstant('{app}')+'\SourceCode\SupportCode';
-
-             RegWriteStringValue(HKEY_CURRENT_USER,'Software\Embarcadero\BDS\18.0\Library\Win32','Search Path', cmdLine); 
-         end;
-
-        if RegQueryStringValue(HKEY_CURRENT_USER,'Software\Embarcadero\BDS\18.0\Library\Win32','Debug DCU Path', cmdLine) then
-         begin
-           if Pos(ExpandConstant('{app}')+'\SourceCode\Package\Win32\Debug', cmdLine)=0 then 
-             RegWriteStringValue(HKEY_CURRENT_USER,'Software\Embarcadero\BDS\18.0\Library\Win32','Debug DCU Path',
-              cmdLine+';'+ExpandConstant('{app}')+'\SourceCode\Package\Win32\Debug');
-
-         end;
-       end;
-       
-//Build - Win64  
-       WizardForm.StatusLabel.Caption:= 'Compiling Win64...';
-       Params:='';
-       Params:=basicParams+'Win64 ';
-       BPLDir:=ExpandConstant('{app}')+'\Bpl';
-       Params:=Params+'"'+BPLDir+'\Win64"';
-
-       Exec(ExpandConstant('{tmp}')+'\CompileSource.bat', 
-           Params,
-           '',
-           SW_HIDE, ewWaitUntilTerminated, ResultCode);            
-       if ResultCode<>0 then 
-         MsgBox('Error while compiling for Win64', mbInformation, mb_OK)
-       else
-       begin
-//Folders - Win64
-         InstallIDEPackage:=true;
-         WizardForm.StatusLabel.Caption:= 'Registering Win64 Folders...';
-         if RegQueryStringValue(HKEY_CURRENT_USER,'Software\Embarcadero\BDS\18.0\Library\Win64','Search Path', cmdLine) then
-         begin
-           if Pos(ExpandConstant('{app}')+'\SourceCode\Package', cmdLine)=0 then
-             RegWriteStringValue(HKEY_CURRENT_USER,'Software\Embarcadero\BDS\18.0\Library\Win64','Search Path',
-               cmdLine+';'+ExpandConstant('{app}')+'\SourceCode\Package'); 
-
-           if Pos(ExpandConstant('{app}')+'\SourceCode\SupportCode', cmdLine)=0 then;
-             RegWriteStringValue(HKEY_CURRENT_USER,'Software\Embarcadero\BDS\18.0\Library\Win64','Search Path',
-               cmdLine+';'+ExpandConstant('{app}')+'\SourceCode\SupportCode'); 
-         end;
-
-        if RegQueryStringValue(HKEY_CURRENT_USER,'Software\Embarcadero\BDS\18.0\Library\Win64','Debug DCU Path', cmdLine) then
-         begin
-           if Pos(ExpandConstant('{app}')+'\SourceCode\Package\Win64\Debug', cmdLine)=0 then 
-             RegWriteStringValue(HKEY_CURRENT_USER,'Software\Embarcadero\BDS\18.0\Library\Win64','Debug DCU Path',
-              cmdLine+';'+ExpandConstant('{app}')+'\SourceCode\Package\Win64\Debug');
-
-         end;
-       end;
-//Build - OSX32
-       WizardForm.StatusLabel.Caption:= 'Compiling OSX32...';
-       Params:='';
-       Params:=basicParams+'OSX32 ';
-       BPLDir:=ExpandConstant('{app}')+'\Bpl';
-       Params:=Params+'"'+BPLDir+'\OSX32"';
-
-       Exec(ExpandConstant('{tmp}')+'\CompileSource.bat', 
-           Params,
-           '',
-           SW_HIDE, ewWaitUntilTerminated, ResultCode);
-       if ResultCode<>0 then 
-         MsgBox('Error while compiling for Win64', mbInformation, mb_OK)
-       else
-       begin
-//Folders - OSX32
-         InstallIDEPackage:=true;
-         WizardForm.StatusLabel.Caption:= 'Registering OSX32 Folders...';
-         if RegQueryStringValue(HKEY_CURRENT_USER,'Software\Embarcadero\BDS\18.0\Library\OSX32','Search Path', cmdLine) then
-         begin
-           if Pos(ExpandConstant('{app}')+'\SourceCode\Package', cmdLine)=0 then
-             RegWriteStringValue(HKEY_CURRENT_USER,'Software\Embarcadero\BDS\18.0\Library\OSX32','Search Path',
-               cmdLine+';'+ExpandConstant('{app}')+'\SourceCode\Package'); 
-
-           if Pos(ExpandConstant('{app}')+'\SourceCode\SupportCode', cmdLine)=0 then;
-             RegWriteStringValue(HKEY_CURRENT_USER,'Software\Embarcadero\BDS\18.0\Library\OSX32','Search Path',
-               cmdLine+';'+ExpandConstant('{app}')+'\SourceCode\SupportCode'); 
-         end;
-
-        if RegQueryStringValue(HKEY_CURRENT_USER,'Software\Embarcadero\BDS\18.0\Library\OSX32','Debug DCU Path', cmdLine) then
-         begin
-           if Pos(ExpandConstant('{app}')+'\SourceCode\Package\OSX32\Debug', cmdLine)=0 then 
-             RegWriteStringValue(HKEY_CURRENT_USER,'Software\Embarcadero\BDS\18.0\Library\OSX32','Debug DCU Path',
-              cmdLine+';'+ExpandConstant('{app}')+'\SourceCode\Package\OSX32\Debug');
-
-         end;
-       end;
-
-       DeleteFile(ExpandConstant('{tmp}')+'\CompileSource.bat');
-
-//Copy packages to locations
-
-//IDE Package        
-       if InstallIDEPackage then
-       begin
-         WizardForm.StatusLabel.Caption:= 'Registering IDE Package';
-         RegWriteStringValue(HKEY_CURRENT_USER, 'Software\Embarcadero\BDS\18.0\Known Packages',
-            ExpandConstant('{app}')+'\Bpl\neTabControlPackage.bpl', 'NusEnvision FMX neTabControl');
-       end;
-     end
+     if not IsAnyDelphiChosen then
+       InstallIDEPackage:=false
      else
-       WizardForm.StatusLabel.Caption:= 'Delphi installation not found';
+       InstallIDEPackage:=true;
+
+     if ChooseDelphiInstallationPage.Values[0] then
+       InstallPackage(availD101Berlin, InstallIDEPackage);
+
    end;
 end;
 
-//Uninstall 
-procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+
+procedure UninstallForPlatform(const delphiRegistryPath: string; const 
+  currPlatform: string; const BuildFolderID: string);
 var
-  delStr,
-  fullStr: string;
+  fullStr,
+  delStr, 
+  fullRegistryLibraryPath: string;
 begin
-  if (CurUninstallStep=usPostUninstall) then 
-  begin
 //Registry
-   RegDeleteValue(HKEY_CURRENT_USER, 'Software\Embarcadero\BDS\18.0\Known Packages',
-     ExpandConstant('{app}')+'\Bpl\neTabControlPackage.bpl'); 
-//Folders - Win32
-   if RegQueryStringValue(HKEY_CURRENT_USER,'Software\Embarcadero\BDS\18.0\Library\Win32','Search Path', fullStr) then
+   RegDeleteValue(HKEY_CURRENT_USER, delphiRegistryPath+'Known Packages',
+    ExpandConstant('{app}')+'\Bpl\'+BuildFolderID+'\'+ExpandConstant('{#MyPackageName}'));
+
+//Folders
+  fullRegistryLibraryPath:=delphiRegistryPath+'Library\'+currPlatform;
+
+   if RegQueryStringValue(HKEY_CURRENT_USER,fullRegistryLibraryPath ,'Search Path', fullStr) then
+   begin
+     delStr:=ExpandConstant('{app}')+'\SourceCode\Package\'+BuildFolderID+'\'+currPlatform+'\Release';
+     if Pos(delStr, fullStr)>0 then
+     begin 
+      Delete(fullStr, Pos(delStr, fullStr), length(delStr)+1);
+      RegWriteStringValue(HKEY_CURRENT_USER,fullRegistryLibraryPath,'Search Path', fullStr);
+     end;
+   end;
+                                                                                                   
+   if RegQueryStringValue(HKEY_CURRENT_USER,fullRegistryLibraryPath,'Browsing Path', fullStr) then
    begin
     delStr:=ExpandConstant('{app}')+'\SourceCode\Package';
     if Pos(delStr, fullStr)>0 then
@@ -302,19 +352,36 @@ begin
      begin 
        Delete(fullStr, Pos(delStr, fullStr), length(delStr)+1);
      end;
-     RegWriteStringValue(HKEY_CURRENT_USER,'Software\Embarcadero\BDS\18.0\Library\Win32','Search Path', fullStr);
+     //check if the last character is ';'--if yes, then delete
+     if fullstr[length(fullstr)]=';' then 
+       Delete(fullstr, length(fullstr),1);
+
+     RegWriteStringValue(HKEY_CURRENT_USER,fullRegistryLibraryPath,'Browsing Path', fullStr);
     end;
    end;
 
-   if RegQueryStringValue(HKEY_CURRENT_USER,'Software\Embarcadero\BDS\18.0\Library\Win32','Debug DCU Path', fullStr) then
+   if RegQueryStringValue(HKEY_CURRENT_USER,fullRegistryLibraryPath,'Debug DCU Path', fullStr) then
    begin
-    delStr:=ExpandConstant('{app}')+'\SourceCode\Package\Win32\Debug';
+    delStr:=ExpandConstant('{app}')+'\SourceCode\Package\'+BuildFolderID+'\'+currPlatform+'\Debug';
     if Pos(delStr, fullStr)>0 then
     begin 
      Delete(fullStr, Pos(delStr, fullStr), length(delStr)+1);
-     RegWriteStringValue(HKEY_CURRENT_USER,'Software\Embarcadero\BDS\18.0\Library\Win32','Debug DCU Path', fullStr);
+     RegWriteStringValue(HKEY_CURRENT_USER,fullRegistryLibraryPath,'Debug DCU Path', fullStr);
     end;
    end;
+end;
+
+//Uninstall 
+procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+begin
+  if (CurUninstallStep=usPostUninstall) then 
+  begin
+   if DirExists(Delphi101BerlinPath) then
+     begin
+       UninstallForPlatform(
+         ExpandConstant('{#Delphi101BerlinBaseRegistryPath}'), 'Win32', 
+         ExpandConstant('{#Delphi101BerlinBuildDirectory}'));
+     end;
   end;
 end;
 
@@ -336,4 +403,46 @@ begin
     else
       result:=true;
   end;
+end;
+
+procedure InitializeWizard;
+var
+  i: integer;
+begin
+  { Create the pages }
+  ChooseDelphiInstallationPage := CreateInputOptionPage(wpWelcome,
+    'Choose Delphi Installation', '',
+    'Check the Delphi versions you want to install the component for and then click Next.',
+    false, False);
+
+  availableDelphiInstallations:=0;
+  if IsAvailableDelphi101Berlin then
+  begin
+    ChooseDelphiInstallationPage.Add('Delphi 10.1 Berlin');
+    inc(availableDelphiInstallations);
+  end;
+
+  if availableDelphiInstallations=0 then
+    Exit;
+
+  for i:=0 to availableDelphiInstallations-1 do
+   ChooseDelphiInstallationPage.Values[i]:=true;
+
+  ChooseDelphiTargetsPage := CreateInputOptionPage(ChooseDelphiInstallationPage.ID,
+    'Choose Targets', '',
+    'Check the targets you want to install the component for and then click Next.',
+    false, False);
+
+  availableDelphiTargets:=0;
+  ChooseDelphiTargetsPage.Add('Win32');
+  inc(availableDelphiTargets);
+  ChooseDelphiTargetsPage.Add('Win64');
+  inc(availableDelphiTargets);      
+  ChooseDelphiTargetsPage.Add('OSX32');
+  inc(availableDelphiTargets);
+
+
+  for i:=0 to availableDelphiTargets-1 do
+   ChooseDelphiTargetsPage.Values[i]:=true;
+
 end;

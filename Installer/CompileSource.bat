@@ -15,8 +15,20 @@ rem 5:BPL output
 set BPLDir=%5
 echo %BPLDir%
 
+rem 6:DCU output
+set DCUDir=%6
+echo %DCUDir%
+
+
 call %rsvarsDir%
 set FullProjPath=%runDir%\%projFile%
 echo %FullProjPath%
 
-%FrameworkDir%\msbuild.exe %FullProjPath% /p:platform=%currPlatform% /p:config=Debug /p:DCC_BPLOutput=%BPLDir%
+set FullDCUPathDebug=%DCUDir%\%currPlatform%\Debug
+echo FullDCUPathDebug
+
+set FullDCUPathRelease=%DCUDir%\%currPlatform%\Release
+echo FullDCUPathRelease
+
+%FrameworkDir%\msbuild.exe %FullProjPath% /p:platform=%currPlatform% /p:config=Debug /p:DCC_BPLOutput=%BPLDir% /p:DCC_DCUOutput=%FullDCUPathDebug%
+%FrameworkDir%\msbuild.exe %FullProjPath% /p:platform=%currPlatform% /p:config=Release /p:DCC_BPLOutput=%BPLDir% /p:DCC_DCUOutput=%FullDCUPathRelease%
