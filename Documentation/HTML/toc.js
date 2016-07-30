@@ -70,6 +70,7 @@
 ,{"title":"DeleteSidebarControl(Integer,TneSibebarControlPosition)","key":"neTabControl.TneTabControl.DeleteSidebarControl(Integer,TneSibebarControlPosition)","href":"neTabControl.TneTabControl.DeleteSidebarControl.htm"}
 ,{"title":"DeleteTab(string,Boolean)","key":"neTabControl.TneTabControl.DeleteTab(string,Boolean)","href":"neTabControl.TneTabControl.DeleteTab.htm"}
 ,{"title":"GetControl(string)","key":"neTabControl.TneTabControl.GetControl(string)","href":"neTabControl.TneTabControl.GetControl.htm"}
+,{"title":"GetFrame(string)","key":"neTabControl.TneTabControl.GetFrame(string)","href":"neTabControl.TneTabControl.GetFrame.htm"}
 ,{"title":"GetSidebarControl(Integer,TneSibebarControlPosition)","key":"neTabControl.TneTabControl.GetSidebarControl(Integer,TneSibebarControlPosition)","href":"neTabControl.TneTabControl.GetSidebarControl.htm"}
 ,{"title":"GetSidebarControlCount(TneSibebarControlPosition)","key":"neTabControl.TneTabControl.GetSidebarControlCount(TneSibebarControlPosition)","href":"neTabControl.TneTabControl.GetSidebarControlCount.htm"}
 ,{"title":"GetTab(string)","key":"neTabControl.TneTabControl.GetTab(string)","href":"neTabControl.TneTabControl.GetTab.htm"}

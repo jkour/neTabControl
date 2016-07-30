@@ -483,6 +483,12 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="GetFrame(string)">
+ <param name="Local" value="neTabControl.TneTabControl.GetFrame.htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="GetSidebarControl(Integer,TneSibebarControlPosition)">
  <param name="Local" value="neTabControl.TneTabControl.GetSidebarControl.htm">
  <param name="ImageNumber" value="2">

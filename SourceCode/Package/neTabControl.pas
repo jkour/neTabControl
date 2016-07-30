@@ -48,8 +48,8 @@ uses
 
 const
   MajorVersion = '1';
-  MinorVersion = '1';
-  BugVersion = '1';
+  MinorVersion = '2';
+  BugVersion = '0';
 
 
 //***************************************************************
@@ -57,6 +57,12 @@ const
 // Version History
 //
 //
+//
+// 1.2.0 - 09/07/2016
+//
+//** New Features
+//
+//    * GetFrame method added
 //
 // 1.1.1 - 09/07/2016
 //
@@ -309,6 +315,7 @@ type
     procedure GetTagList(var tagList: TStringList);
     function GetTag(const tabIndex: Integer): string;
     function GetTab(const tag: string): TneTabItem;
+    function GetFrame(const tag: string): TFrame;
     function GetControl (const tag: string): TControl;
     {$REGION 'Refreshes the control of the tab. Must be called everytime the ControlToShow is altered'}
     /// <summary>
@@ -843,6 +850,14 @@ function TneTabControl.GetControl(const tag: string): TControl;
 begin
   if fTabsDictionary.ContainsKey(Trim(tag)) then
     result:=fTabsDictionary.Items[trim(tag)].ControlToShow
+  else
+    result:=nil;
+end;
+
+function TneTabControl.GetFrame(const tag: string): TFrame;
+begin
+  if fFramesDictionary.ContainsKey(Trim(tag)) then
+    result:=fFramesDictionary.Items[Trim(tag)]
   else
     result:=nil;
 end;

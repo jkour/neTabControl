@@ -13,12 +13,12 @@
 <UL>
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="BugVersion">
- <param name="Local" value="neTabTypes.BugVersion.htm">
+ <param name="Local" value="neTabGeneralUtils.BugVersion.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="BugVersion">
- <param name="Local" value="neTabGeneralUtils.BugVersion.htm">
+ <param name="Local" value="neTabTypes.BugVersion.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
@@ -48,6 +48,11 @@
 
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="MajorVersion">
+ <param name="Local" value="neTabGeneralUtils.MajorVersion.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="MajorVersion">
  <param name="Local" value="neTabControl.MajorVersion.htm">
 </OBJECT>
 
@@ -62,8 +67,8 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
- <param name="Name" value="MajorVersion">
- <param name="Local" value="neTabGeneralUtils.MajorVersion.htm">
+ <param name="Name" value="MinorVersion">
+ <param name="Local" value="neTabControl.MinorVersion.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
@@ -79,11 +84,6 @@
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="MinorVersion">
  <param name="Local" value="neTabTypes.MinorVersion.htm">
-</OBJECT>
-
-<LI><OBJECT type="text/sitemap">
- <param name="Name" value="MinorVersion">
- <param name="Local" value="neTabControl.MinorVersion.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
@@ -227,13 +227,13 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
- <param name="Name" value="Register">
- <param name="Local" value="neTabControl.Register.htm">
+ <param name="Name" value="register">
+ <param name="Local" value="neTabItem.register.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
- <param name="Name" value="register">
- <param name="Local" value="neTabItem.register.htm">
+ <param name="Name" value="Register">
+ <param name="Local" value="neTabControl.Register.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
@@ -584,6 +584,11 @@
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="TneTabControl.GetControl(string)">
  <param name="Local" value="neTabControl.TneTabControl.GetControl.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.GetFrame(string)">
+ <param name="Local" value="neTabControl.TneTabControl.GetFrame.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">

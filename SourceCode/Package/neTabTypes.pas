@@ -45,8 +45,8 @@ uses
 
 const
   MajorVersion = '1';
-  MinorVersion = '1';
-  BugVersion = '1';
+  MinorVersion = '2';
+  BugVersion = '0';
 
 
 //***************************************************************
@@ -54,6 +54,12 @@ const
 // Version History
 //
 //
+//
+// 1.2.0 - 09/07/2016
+//
+//** New Features
+//
+//    * GetFrame method added
 //
 // 1.1.1 - 09/07/2016
 //
