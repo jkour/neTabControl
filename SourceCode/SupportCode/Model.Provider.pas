@@ -74,7 +74,7 @@ var
   tmpSubscriber: ISubscriber;
 begin
   for tmpSubscriber in fSubscriberList  do
-    tmpSubscriber.UpdateSubscriber(notificationClass);
+      tmpSubscriber.UpdateSubscriber(notificationClass);
 end;
 
 procedure TProvider.NotifySubscribers(action: TIntActions);

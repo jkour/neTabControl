@@ -13,17 +13,17 @@
 <UL>
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="BugVersion">
- <param name="Local" value="neTabGeneralUtils.BugVersion.htm">
-</OBJECT>
-
-<LI><OBJECT type="text/sitemap">
- <param name="Name" value="BugVersion">
  <param name="Local" value="neTabTypes.BugVersion.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="BugVersion">
  <param name="Local" value="neTabControl.BugVersion.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="BugVersion">
+ <param name="Local" value="neTabGeneralUtils.BugVersion.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
@@ -48,17 +48,17 @@
 
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="MajorVersion">
- <param name="Local" value="neTabGeneralUtils.MajorVersion.htm">
-</OBJECT>
-
-<LI><OBJECT type="text/sitemap">
- <param name="Name" value="MajorVersion">
  <param name="Local" value="neTabControl.MajorVersion.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="MajorVersion">
  <param name="Local" value="neTabTypes.MajorVersion.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="MajorVersion">
+ <param name="Local" value="neTabGeneralUtils.MajorVersion.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
@@ -73,17 +73,17 @@
 
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="MinorVersion">
- <param name="Local" value="neTabGeneralUtils.MinorVersion.htm">
-</OBJECT>
-
-<LI><OBJECT type="text/sitemap">
- <param name="Name" value="MinorVersion">
  <param name="Local" value="neTabItem.MinorVersion.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="MinorVersion">
  <param name="Local" value="neTabTypes.MinorVersion.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="MinorVersion">
+ <param name="Local" value="neTabGeneralUtils.MinorVersion.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
@@ -117,6 +117,16 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="neTabControl.TOnAfterCloseAllItems">
+ <param name="Local" value="neTabControl.TOnAfterCloseAllItems.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="neTabControl.TOnAfterCloseOtherItems">
+ <param name="Local" value="neTabControl.TOnAfterCloseOtherItems.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="neTabControl.TOnAfterDeleteItem">
  <param name="Local" value="neTabControl.TOnAfterDeleteItem.htm">
 </OBJECT>
@@ -134,6 +144,16 @@
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="neTabControl.TOnBeforeAddSibarControl">
  <param name="Local" value="neTabControl.TOnBeforeAddSibarControl.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="neTabControl.TOnBeforeCloseAllItems">
+ <param name="Local" value="neTabControl.TOnBeforeCloseAllItems.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="neTabControl.TOnBeforeCloseOtherItems">
+ <param name="Local" value="neTabControl.TOnBeforeCloseOtherItems.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
@@ -372,6 +392,26 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneCloseImageControl.DoMouseEnter">
+ <param name="Local" value="neTabItem.TneCloseImageControl.DoMouseEnter.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneCloseImageControl.DoMouseLeave">
+ <param name="Local" value="neTabItem.TneCloseImageControl.DoMouseLeave.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneCloseImageControl.MouseDown(TMouseButton,TShiftState,Single,Single)">
+ <param name="Local" value="neTabItem.TneCloseImageControl.MouseDown.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneCloseImageControl.MouseUp(TMouseButton,TShiftState,Single,Single)">
+ <param name="Local" value="neTabItem.TneCloseImageControl.MouseUp.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="TneCloseImageControl.SetCloseImage(TBitmap)">
  <param name="Local" value="neTabItem.TneCloseImageControl.SetCloseImage.htm">
 </OBJECT>
@@ -547,6 +587,11 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.DeleteAllTabs(Boolean)">
+ <param name="Local" value="neTabControl.TneTabControl.DeleteAllTabs.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="TneTabControl.DeleteSidebarControl(Integer,TneSibebarControlPosition)">
  <param name="Local" value="neTabControl.TneTabControl.DeleteSidebarControl.htm">
 </OBJECT>
@@ -667,6 +712,16 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.OnAfterCloseAllItems">
+ <param name="Local" value="neTabControl.TneTabControl.OnAfterCloseAllItems.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.OnAfterCloseOtherItems">
+ <param name="Local" value="neTabControl.TneTabControl.OnAfterCloseOtherItems.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="TneTabControl.OnAfterDeleteItem">
  <param name="Local" value="neTabControl.TneTabControl.OnAfterDeleteItem.htm">
 </OBJECT>
@@ -689,6 +744,16 @@
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="TneTabControl.OnBeforeAddSidebarControl">
  <param name="Local" value="neTabControl.TneTabControl.OnBeforeAddSidebarControl.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.OnBeforeCloseAllItems">
+ <param name="Local" value="neTabControl.TneTabControl.OnBeforeCloseAllItems.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.OnBeforeCloseOtherItems">
+ <param name="Local" value="neTabControl.TneTabControl.OnBeforeCloseOtherItems.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
@@ -897,6 +962,11 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabControl.Tabs[Integer]">
+ <param name="Local" value="neTabControl.TneTabControl.Tabs[Integer].htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="TneTabControl.ToggleVisible(Boolean,TneSibebarControlPosition)">
  <param name="Local" value="neTabControl.TneTabControl.ToggleVisible.htm">
 </OBJECT>
@@ -962,11 +1032,6 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
- <param name="Name" value="TneTabItem.DoMouseLeave">
- <param name="Local" value="neTabItem.TneTabItem.DoMouseLeave.htm">
-</OBJECT>
-
-<LI><OBJECT type="text/sitemap">
  <param name="Name" value="TneTabItem.MaxTabWidth">
  <param name="Local" value="neTabItem.TneTabItem.MaxTabWidth.htm">
 </OBJECT>
@@ -1027,6 +1092,11 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneTabItem.UpdateFromProvider(INotification)">
+ <param name="Local" value="neTabItem.TneTabItem.UpdateFromProvider.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="TneTabPosition">
  <param name="Local" value="neTabControl.TneTabPosition.htm">
 </OBJECT>
@@ -1077,6 +1147,16 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TOnAfterCloseAllItems">
+ <param name="Local" value="neTabControl.TOnAfterCloseAllItems.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TOnAfterCloseOtherItems">
+ <param name="Local" value="neTabControl.TOnAfterCloseOtherItems.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="TOnAfterDeleteItem">
  <param name="Local" value="neTabControl.TOnAfterDeleteItem.htm">
 </OBJECT>
@@ -1094,6 +1174,16 @@
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="TOnBeforeAddSibarControl">
  <param name="Local" value="neTabControl.TOnBeforeAddSibarControl.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TOnBeforeCloseAllItems">
+ <param name="Local" value="neTabControl.TOnBeforeCloseAllItems.htm">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TOnBeforeCloseOtherItems">
+ <param name="Local" value="neTabControl.TOnBeforeCloseOtherItems.htm">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">

@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "neTabControl"
-#define MyAppVersion "1.1.1"
+#define MyAppVersion "1.2.0"
 #define MyAppPublisher "NusEnvision"
 #define MyAppURL "https://github.com/jkour/neTabControl"
 #define MyPackageName "neTabControlPackage.bpl"
@@ -31,7 +31,7 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={commondocs}\NusEnvision\{#MyAppName}
 DefaultGroupName=NusEnvision\neTabControl
 DisableProgramGroupPage=yes
-OutputBaseFilename=neTabControl-1.1.1-setup
+OutputBaseFilename=neTabControl-1.2.0-setup
 Compression=lzma
 SolidCompression=yes
 ShowLanguageDialog=no
@@ -43,9 +43,6 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Source: "\\Mac\ProductionHD\NusEnvision\Components\Delphi\neTabControl\Release\Documentation\*"; DestDir: "{commondocs}\NusEnvision\neTabControl\Documentation"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\..\Release\Images\*"; DestDir: "{commondocs}\NusEnvision\neTabControl\Images\"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
-Source: "..\..\Release\SourceCode\neTabControlProjectGroup.dsk"; DestDir: "{commondocs}\NusEnvision\neTabControl\SourceCode\"; Flags: ignoreversion
-Source: "..\..\Release\SourceCode\neTabControlProjectGroup.groupproj"; DestDir: "{app}\SourceCode\"; Flags: ignoreversion
-Source: "..\..\Release\SourceCode\neTabControlProjectGroup_prjgroup.tvsconfig"; DestDir: "{app}\SourceCode\"; Flags: ignoreversion
 Source: "..\..\Release\SourceCode\Package\neTabControl.pas"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
 Source: "..\..\Release\SourceCode\Package\neTabControlPackage.dpk"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
 Source: "..\..\Release\SourceCode\Package\neTabControlPackage.dproj"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
@@ -84,6 +81,7 @@ Source: "..\..\Release\SourceCode\SupportCode\Model.IntActions.pas"; DestDir: "{
 Source: "..\..\Release\SourceCode\SupportCode\Model.Interf.pas"; DestDir: "{app}\SourceCode\SupportCode\"; Flags: ignoreversion
 Source: "..\..\Release\SourceCode\SupportCode\Model.Provider.pas"; DestDir: "{app}\SourceCode\SupportCode\"; Flags: ignoreversion
 Source: "..\..\Release\SourceCode\SupportCode\Model.Subscriber.pas"; DestDir: "{app}\SourceCode\SupportCode\"; Flags: ignoreversion
+Source: "..\..\Release\SourceCode\neTabControlProjectGroup.groupproj"; DestDir: "{app}\SourceCode\"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"

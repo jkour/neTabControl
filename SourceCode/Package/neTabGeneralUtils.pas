@@ -53,11 +53,20 @@ const
 //
 //
 //
-// 1.2.0 - 09/07/2016
+// 1.2.0 - 21/08/2016
+//
+//** Bug
+//    * Access Violation when the mouse hovered over close image on MacOS
+//      and Win64 (This fixed a known issue in 1.1.1)
+//    * fActiveTab was never set
 //
 //** New Features
 //
 //    * GetFrame method added
+//    * OnBeforeCloseAllItems, OnAfterCloseAllItems, OnBeforeCloseOtherItems,
+//      OnAfterCloseOtherItems events added
+//    * DeleteAllTabs procedure added
+//    * Tabs[index] property added
 //
 // 1.1.1 - 09/07/2016
 //

@@ -6,7 +6,22 @@
         <Projects Include="Package\neTabControlPackage.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="TabControlDesignerProject.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Metrics\Metrics.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="3By3-II\ThreeByThreeV2.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="TestDevelopment\TestDevelopment.dproj">
+            <Dependencies/>
+        </Projects>
         <Projects Include="..\Demos\WebBrowser\WebBrowser.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="PlainTest\PlainTest.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -26,6 +41,42 @@
     <Target Name="neTabControlPackage:Make">
         <MSBuild Projects="Package\neTabControlPackage.dproj" Targets="Make"/>
     </Target>
+    <Target Name="TabControlDesignerProject">
+        <MSBuild Projects="TabControlDesignerProject.dproj"/>
+    </Target>
+    <Target Name="TabControlDesignerProject:Clean">
+        <MSBuild Projects="TabControlDesignerProject.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TabControlDesignerProject:Make">
+        <MSBuild Projects="TabControlDesignerProject.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Metrics">
+        <MSBuild Projects="Metrics\Metrics.dproj"/>
+    </Target>
+    <Target Name="Metrics:Clean">
+        <MSBuild Projects="Metrics\Metrics.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Metrics:Make">
+        <MSBuild Projects="Metrics\Metrics.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ThreeByThreeV2">
+        <MSBuild Projects="3By3-II\ThreeByThreeV2.dproj"/>
+    </Target>
+    <Target Name="ThreeByThreeV2:Clean">
+        <MSBuild Projects="3By3-II\ThreeByThreeV2.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ThreeByThreeV2:Make">
+        <MSBuild Projects="3By3-II\ThreeByThreeV2.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="TestDevelopment">
+        <MSBuild Projects="TestDevelopment\TestDevelopment.dproj"/>
+    </Target>
+    <Target Name="TestDevelopment:Clean">
+        <MSBuild Projects="TestDevelopment\TestDevelopment.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestDevelopment:Make">
+        <MSBuild Projects="TestDevelopment\TestDevelopment.dproj" Targets="Make"/>
+    </Target>
     <Target Name="WebBrowser">
         <MSBuild Projects="..\Demos\WebBrowser\WebBrowser.dproj"/>
     </Target>
@@ -35,14 +86,23 @@
     <Target Name="WebBrowser:Make">
         <MSBuild Projects="..\Demos\WebBrowser\WebBrowser.dproj" Targets="Make"/>
     </Target>
+    <Target Name="PlainTest">
+        <MSBuild Projects="PlainTest\PlainTest.dproj"/>
+    </Target>
+    <Target Name="PlainTest:Clean">
+        <MSBuild Projects="PlainTest\PlainTest.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="PlainTest:Make">
+        <MSBuild Projects="PlainTest\PlainTest.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="neTabControlPackage;WebBrowser"/>
+        <CallTarget Targets="neTabControlPackage;TabControlDesignerProject;Metrics;ThreeByThreeV2;TestDevelopment;WebBrowser;PlainTest"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="neTabControlPackage:Clean;WebBrowser:Clean"/>
+        <CallTarget Targets="neTabControlPackage:Clean;TabControlDesignerProject:Clean;Metrics:Clean;ThreeByThreeV2:Clean;TestDevelopment:Clean;WebBrowser:Clean;PlainTest:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="neTabControlPackage:Make;WebBrowser:Make"/>
+        <CallTarget Targets="neTabControlPackage:Make;TabControlDesignerProject:Make;Metrics:Make;ThreeByThreeV2:Make;TestDevelopment:Make;WebBrowser:Make;PlainTest:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

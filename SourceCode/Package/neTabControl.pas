@@ -39,12 +39,12 @@ unit neTabControl;
 interface
 
 uses
-  System.Classes, FMX.Types, FMX.Controls, FMX.Layouts,
+  FMX.Types, FMX.Controls, FMX.Layouts,
   FMX.Styles.Objects, FMX.StdCtrls,FMX.TabControl, System.Generics.Collections,
   FMX.Forms, FMX.Graphics, FMX.Objects, System.UITypes, Model.Provider,
   Model.Interf, Model.Subscriber, Model.IntActions,
   FMX.Menus,
-  neTabTypes, neTabGeneralUtils, neTabItem;
+  neTabTypes, neTabGeneralUtils, neTabItem, System.Classes;
 
 const
   MajorVersion = '1';
@@ -58,12 +58,21 @@ const
 //
 //
 //
-// 1.2.0 - 09/07/2016
+// 1.2.0 - 21/08/2016
+//
+//** Bug
+//    * Access Violation when the mouse hovered over close image on MacOS
+//      and Win64 (This fixed a known issue in 1.1.1)
+//    * fActiveTab was never set
 //
 //** New Features
 //
 //    * GetFrame method added
-//
+//    * OnBeforeCloseAllItems, OnAfterCloseAllItems, OnBeforeCloseOtherItems,
+//      OnAfterCloseOtherItems events added
+//    * DeleteAllTabs procedure added
+//    * Tabs[index] property added
+
 // 1.1.1 - 09/07/2016
 //
 //** Improvement
@@ -145,6 +154,12 @@ type
                     of object;
   TOnAfterDeleteItem = procedure (var item: TneTabItem) of object;
 
+  TOnBeforeCloseAllItems = procedure (var continueClose: Boolean) of object;
+  TOnAfterCloseAllItems = procedure of object;
+
+  TOnBeforeCloseOtherItems = procedure (var continueClose: Boolean) of object;
+  TOnAfterCloseOtherItems = procedure of object;
+
   TOnBeforePopupMenu = procedure (
                                   const tabItem: TneTabItem;
                                   var popupMenu: TPopupMenu;
@@ -220,9 +235,15 @@ type
     fOnBeforeAddItem: TOnBeforeAddItem;
     fOnAfterAddItem: TOnAfterAddItem;
     fOnChange: TNotifyEvent;
+
     fOnBeforeDeleteItem: TOnBeforeDeleteItem;
     fOnAfterDeleteItem: TOnAfterDeleteItem;
     fOnBeforePopupMenu: TOnBeforePopupMenu;
+
+    fOnBeforeCloseAllItems: TOnBeforeCloseAllItems;
+    fOnAfterCloseAllItems: TOnAfterCloseAllItems;
+    fOnBeforeCloseOtherItems: TOnBeforeCloseOtherItems;
+    fOnAfterCloseOtherItems: TOnAfterCloseOtherItems;
 
     fOnBeforeAddSidebarControl: TOnBeforeAddSibarControl;
     fOnAfterAddSidebarControl: TOnAfterAddSidebarControl;
@@ -248,6 +269,8 @@ type
     procedure SetActiveTag(const newTag: string);
 
     procedure ShowPopupMenu (const notificationClass: INotification);
+
+    function GetTabByIndex(const tabIndex: Integer): TneTabItem;
 
     //Private Events
     procedure OnChangeTab(Sender: TObject);
@@ -302,6 +325,16 @@ type
     ///   CanClose</see> property is false
     /// </param>
     procedure DeleteTab(const Tag: string; const forceDelete: Boolean=False);
+    {$REGION 'Deletes all the tabs'}
+    /// <summary>
+    ///   Deletes all the tabs
+    /// </summary>
+    /// <param name="forceDelete">
+    ///   If true, deletes the tabs that have the <see cref="neTabItem|TneTabItem.CanClose">
+    ///   CanClose</see> property false
+    /// </param>
+    {$ENDREGION}
+    procedure DeleteAllTabs (const forceDelete: Boolean = False);
 
     /// <summary>
     ///   Generates a list of TneTabItems sorted based on the index, ie. the
@@ -356,7 +389,6 @@ type
     /// <summary>
     ///   Returns the number of the tabs
     /// </summary>
-    property TabCount: integer read GetTabCount;
 
     {$REGION 'Saves the open tabs to a list of strings.'}
     /// <summary>
@@ -393,6 +425,10 @@ type
     {$ENDREGION}
     procedure SaveTabs(const exportElements: TExportElements;
       const excludeTabs: TSetOfStrings; var savedTabs: TStringList);
+
+    //Public Properties
+    property TabCount: integer read GetTabCount;
+    property Tabs[const tabIndex: Integer]: TneTabItem read GetTabByIndex;
 
   published
     /// <summary>
@@ -482,6 +518,7 @@ type
     property OnAfterAddItem: TOnAfterAddItem read fOnAfterAddItem
           write fOnAfterAddItem;
     property OnChange: TNotifyEvent read fOnChange write fOnChange;
+
     property OnBeforeDeleteItem: TOnBeforeDeleteItem read fOnBeforeDeleteItem
           write fOnBeforeDeleteItem;
     property OnAfterDeleteItem: TOnAfterDeleteItem read fOnAfterDeleteItem
@@ -493,6 +530,15 @@ type
     {$ENDREGION}
     property OnBeforePopupMenu: TOnBeforePopupMenu read fOnBeforePopupMenu
           write fOnBeforePopupMenu;
+
+    property OnBeforeCloseAllItems: TOnBeforeCloseAllItems
+      read fOnBeforeCloseAllItems write fOnBeforeCloseAllItems;
+    property OnAfterCloseAllItems: TOnAfterCloseAllItems
+      read fOnAfterCloseAllItems write fOnAfterCloseAllItems;
+    property OnBeforeCloseOtherItems: TOnBeforeCloseOtherItems
+      read fOnBeforeCloseOtherItems write fOnBeforeCloseOtherItems;
+    property OnAfterCloseOtherItems: TOnAfterCloseOtherItems
+      read fOnAfterCloseOtherItems write fOnAfterCloseOtherItems;
 
     property OnBeforeAddSidebarControl: TOnBeforeAddSibarControl
           read fOnBeforeAddSidebarControl write fOnBeforeAddSidebarControl;
@@ -751,6 +797,12 @@ begin
 
 end;
 
+procedure TneTabControl.DeleteAllTabs(const forceDelete: Boolean);
+begin
+  while self.tabcount>0 do
+    Self.DeleteTab(self.GetTag(0), forceDelete);
+end;
+
 procedure TneTabControl.DeleteSidebarControl(const controlIndex: Integer;
   const position: tneSibebarControlPosition);
 var
@@ -912,35 +964,40 @@ begin
     result:=nil;
 end;
 
+function TneTabControl.GetTabByIndex(const tabIndex: Integer): TneTabItem;
+var
+  tmpList: TList<TneTabItem>;
+begin
+  if (tabIndex<-1) or (tabIndex>fTabsDictionary.Count-1) then
+  begin
+    result:=nil;
+    exit;
+  end;
+  tmpList:=Tlist<TneTabItem>.Create;
+  GetTabItemsList(tmpList);
+  result:=tmpList.Items[tabIndex];
+  tmpList.Free;
+end;
+
+
 function TneTabControl.GetTabCount: Integer;
 begin
   result:=fTabsDictionary.Count;
 end;
 
 function TneTabControl.GetTag(const tabIndex: Integer): string;
-var
-  tmpList: TList<TneTabItem>;
 begin
-  if (tabIndex<-1) or (tabIndex>fTabsDictionary.Count-1) then
-    exit;
-  tmpList:=Tlist<TneTabItem>.Create;
-  GetTabItemsList(tmpList);
-  result:=tmpList.Items[tabIndex].TabTag;
-  tmpList.Free;
+  result:=Tabs[tabIndex].TabTag;
 end;
 
 procedure TneTabControl.GetTagList(var tagList: TStringList);
 var
-  tmpList: TList<TneTabItem>;
   i: integer;
 begin
   if not Assigned(tagList) then
     Exit;
-  tmpList:=TList<TneTabItem>.Create;
-  GetTabItemsList(tmpList);
-  for i:=0 to tmpList.Count-1 do
-    tagList.Add(tmpList.Items[i].TabTag);
-  tmpList.Free;
+  for i := 0 to fTabsDictionary.Count-1 do
+    tagList.Add(Tabs[i].TabTag);
 end;
 
 function TneTabControl.
@@ -999,6 +1056,7 @@ begin
     insTab.Index:=tabIndex;
 end;
 
+
 procedure TneTabControl.OnChangeTab(Sender: TObject);
 var
   tmpActiveTag: string;
@@ -1007,6 +1065,7 @@ begin
   if fMainTabsDictionary.ContainsKey(tmpActiveTag) and
        fFramesDictionary.ContainsKey(tmpActiveTag) then
   begin
+    fActiveTab:=GetTab(tmpActiveTag);
     fMainControl.ActiveTab:=fMainTabsDictionary.Items[tmpActiveTag];
     fHistoryList.AddHistory(tmpActiveTag);
     if Assigned(fOnChange) then
@@ -1015,15 +1074,28 @@ begin
 end;
 
 procedure TneTabControl.OnCloseAllTabs(Sender: TObject);
+var
+  continueClose: boolean;
 begin
-  while self.tabcount>0 do
-    Self.DeleteTab(self.GetTag(0));
+  continueClose:=True;
+  if Assigned(fOnBeforeCloseAllItems) then
+    fOnBeforeCloseAllItems(continueClose);
+  if continueClose then  
+    DeleteAllTabs;
+  if Assigned(fOnAfterCloseAllItems) then
+    fOnAfterCloseAllItems;
 end;
 
 procedure TneTabControl.OnCloseOtherTabs(Sender: TObject);
 var
   i: Integer;
+  continueClose: boolean;
 begin
+  continueClose:=true;
+  if Assigned(fOnBeforeCloseOtherItems) then
+    fOnBeforeCloseOtherItems(continueClose);
+  if not continueClose then
+    Exit;
   i:=0;
   if not (Sender is TMenuItem) then
     Exit;
@@ -1034,6 +1106,8 @@ begin
     Self.DeleteTab(self.GetTag(i));
   end;
   self.ActiveTag:=Self.GetTag(0);
+  if Assigned(fOnAfterCloseOtherItems) then
+    fOnAfterCloseOtherItems;
 end;
 
 procedure TneTabControl.OnInternalTimer(Sender: TObject);
@@ -1181,6 +1255,10 @@ begin
     (not (fTabsDictionary.ContainsKey(Trim(newTab.TabTag)))) then
     Exit;
 
+/////////////
+///  There is no need to change the active tab of the MainTab control
+///  because the OnChange effect of the fTabBar takes care of it
+////////////
   fTabBar.ActiveTab:=newTab;
   fActiveTag:=newTab.TabTag;
 end;

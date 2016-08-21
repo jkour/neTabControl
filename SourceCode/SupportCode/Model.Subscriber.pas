@@ -55,7 +55,7 @@ end;
 procedure TSubscriber.UpdateSubscriber(
   notificationClass: INotification);
 begin
-  if Assigned(fUpdateNotificationMethod) then
+  if Assigned(fUpdateNotificationMethod) and Assigned(notificationClass) then
     fUpdateNotificationMethod(notificationClass);
 end;
 

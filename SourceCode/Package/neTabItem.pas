@@ -43,7 +43,8 @@ uses
   FMX.Styles.Objects, FMX.StdCtrls,FMX.TabControl, System.Generics.Collections,
   FMX.Forms, FMX.Graphics, FMX.Objects, System.UITypes, Model.Provider,
   Model.Interf, Model.Subscriber, Model.IntActions,
-  neTabTypes, neTabGeneralUtils, FMX.Menus, System.Types;
+  neTabTypes, neTabGeneralUtils, FMX.Menus, System.Types{,
+  {};
 
 const
   MajorVersion = '1';
@@ -57,11 +58,20 @@ const
 //
 //
 //
-// 1.2.0 - 09/07/2016
+// 1.2.0 - 21/08/2016
+//
+//** Bug
+//    * Access Violation when the mouse hovered over close image on MacOS
+//      and Win64 (This fixed a known issue in 1.1.1)
+//    * fActiveTab was never set
 //
 //** New Features
 //
 //    * GetFrame method added
+//    * OnBeforeCloseAllItems, OnAfterCloseAllItems, OnBeforeCloseOtherItems,
+//      OnAfterCloseOtherItems events added
+//    * DeleteAllTabs procedure added
+//    * Tabs[index] property added
 //
 // 1.1.1 - 09/07/2016
 //
@@ -146,14 +156,20 @@ type
 
   TneCloseImageControl = class (TneControl)
   private
+    fProvider: IProvider;
     function GetCloseImage: TImage;
+    procedure NotifyTabItem(const newAction: TIntAction);
+  protected
+    procedure DoMouseLeave; override;
+    procedure DoMouseEnter; override;
+    procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Single); override;
+    procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Single); override;
   public
     property CloseImage: TImage read GetCloseImage;
     procedure SetCloseImage(const newImage: TBitmap);
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
   end;
-
 
   /// <summary>
   ///   This class represents a tabitem in the control
@@ -176,8 +192,10 @@ type
     fMaxTabWidth: Single;
 
     fProvider: IProvider;
+    fSubscriber: ISubscriber;
     fMouseState: TMouseState;
     fRefreshCloseImage: boolean;
+    fInternalTimer: TneTimer;
     //procedures/functions
     procedure SetControlToShow (const newControl: TControl);
     procedure SetCloseImage(const index: TCloseImagesType; const newImage: TBitmap);
@@ -191,18 +209,15 @@ type
     procedure SetMinTabWidth (const newWidth: single);
     procedure SetMaxTabWidth (const newWidth: single);
     function GetTabWidth: Single;
+    procedure SafeApplyStyle;
+    procedure OnInternalTimer (Sender: TObject);
 
-    //Procedures for the close image
-    procedure CloseImageOnMouseEnter(Sender: TObject);
-    procedure CloseImageMouseUp(ASender: TObject;
-      Button: TMouseButton; Shift: TShiftState; X, Y: Single);
-    procedure CloseImageMouseDown(ASender: TObject;
-      Button: TMouseButton; Shift: TShiftState; X, Y: Single);
   protected
+    procedure UpdateFromProvider(const notificationClass: INotification);
+
     procedure MouseClick(Button: TMouseButton; Shift: TShiftState; X,
       Y: Single); override;
     procedure MouseMove(Shift: TShiftState; X, Y: Single); override;
-    procedure DoMouseLeave; override;
   published
     /// <summary>
     ///   This property holds the tag of the tab item (identifier)
@@ -240,11 +255,11 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    procedure ApplyStyle; override;
     /// <summary>
     ///   Refreshes the control by calling ApplyStyle and DoMouseLeave event.
     /// </summary>
     procedure RefreshControl;
+    procedure ApplyStyle; override;
 
     property Provider: IProvider read fProvider;
   end;
@@ -269,7 +284,7 @@ var
   tmpFMXObject, tmpFMXObject1: TFmxObject;
   tmpControl: TneControl;
   tmpImage: TneCloseImageControl;
-
+  tmpBitmap: TBitmap;
 begin
   inherited;
 
@@ -288,12 +303,11 @@ begin
           tmpControl:=tmpFMXObject1 as TneControl;
       if tmpFMXObject1.ClassNameIs('TneCloseImageControl') then
           tmpImage:=tmpFMXObject1 as TneCloseImageControl;
-      end;
     end;
+  end;
 
 
   //Control
-
   if not fShowControl then
     tmpControl.Free;
 
@@ -333,69 +347,39 @@ begin
 
   //Close image
 
-  tmpImage.Free;
+  if Assigned(tmpImage) then
+  begin
+    tmpImage.fProvider.Unsubscribe(fSubscriber);
+    tmpImage.Free;
+  end;
 
   if fCanClose then
   begin
-
     tmpImage:=TneCloseImageControl.Create(self);
+    tmpImage.fProvider.Subscribe(fSubscriber);
+
     case fMouseState of
-      msNone: tmpImage.SetCloseImage(fCloseImages[ImageNormal]);
-      msHover: tmpImage.SetCloseImage(fCloseImages[ImageHover]);
-      msUp: tmpImage.SetCloseImage(fCloseImages[ImageNormal]);
-      msDown: tmpImage.SetCloseImage(fCloseImages[ImagePressed]);
+      msNone: tmpBitmap:=fCloseImages[ImageNormal];
+      msHover: tmpBitmap:=fCloseImages[ImageHover];
+      msUp: tmpBitmap:=fCloseImages[ImageNormal];
+      msDown: tmpBitmap:=fCloseImages[ImagePressed];
     end;
+
+    if Assigned(tmpBitmap) then
+      tmpImage.SetCloseImage(tmpBitmap);
 
     tmpImage.Align:=TAlignLayout.Right;
     tmpImage.Margins.Right:=5;
     tmpImage.Margins.Top:=4;
     tmpImage.Margins.Bottom:=4;
     tmpImage.Margins.Left:=4;
-    tmpImage.CloseImage.OnMouseEnter:=CloseImageOnMouseEnter;
-    tmpImage.CloseImage.OnMouseUp:=CloseImageMouseUp;
-    tmpImage.CloseImage.OnMouseDown:=CloseImageMouseDown;
 
     if Assigned(tmpFMXObject) then
-        tmpImage.Parent:=tmpFMXObject;
+      tmpImage.Parent:=tmpFMXObject;
   end;
 
 end;
 
-
-procedure TneTabItem.CloseImageMouseDown(ASender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: Single);
-begin
-  inherited;
-  fMouseState:=msDown;
-  {TODO -oOwner -cCategory : Access Violation on MacOS}
-//////////
-///  Access violation on MacOS
-///  Need to investigate
-/////////
-  {$IFDEF MSWINDOWS}
-  ApplyStyle;
-  {$ENDIF}
-end;
-
-procedure TneTabItem.CloseImageMouseUp(ASender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: Single);
-begin
-  inherited;
-  fMouseState:=msUp;
-  {$IFDEF MSWINDOWS}
-  ApplyStyle;
-  {$ENDIF}
-  NotifyToDeleteTab;
-end;
-
-procedure TneTabItem.CloseImageOnMouseEnter(Sender: TObject);
-begin
-  inherited;
-  fMouseState:=msHover;
-  {$IFDEF MSWINDOWS}
-  ApplyStyle;
-  {$ENDIF}
-end;
 
 procedure TneTabItem.CloseMenuItem(Sender: TObject);
 begin
@@ -421,12 +405,21 @@ begin
   fMinTabWidth:=110;
   fMaxTabWidth:=160;
   fTabWidth:=fMinTabWidth;
+  fSubscriber:=SubscriberClass;
+  fSubscriber.SetUpdateSubscriberMethod(UpdateFromProvider);
+  fInternalTimer:=TneTimer.Create(self);
+  fInternalTimer.Interval:=10;
+  fInternalTimer.OnTimer:=OnInternalTimer;
+  fInternalTimer.Enabled:=false;
 end;
 
 destructor TneTabItem.Destroy;
 begin
+  fSubscriber:=nil;
+  fProvider:=nil;
   fPopupMenuBeforeDefault.Free;
   fPopupMenuAfterDefault.Free;
+  fInternalTimer.Free;
   inherited;
 end;
 
@@ -448,20 +441,17 @@ begin
     Self.ShowFullPopupMenu(self,X,Y);
 end;
 
-procedure TneTabItem.DoMouseLeave;
+procedure TneTabItem.MouseMove(Shift: TShiftState; X, Y: Single);
 begin
   inherited;
   fMouseState:=msNone;
   fRefreshCloseImage:=True;
-  {$IFDEF MSWINDOWS}
-  ApplyStyle;
-  {$ENDIF}
+  SafeApplyStyle;
 end;
 
-procedure TneTabItem.MouseMove(Shift: TShiftState; X, Y: Single);
+procedure TneTabItem.SafeApplyStyle;
 begin
-  inherited;
-  self.DoMouseLeave;
+  ApplyStyle;
 end;
 
 procedure TneTabItem.SetCanClose(const showCont: Boolean);
@@ -480,7 +470,7 @@ end;
 procedure TneTabItem.SetControlToShow(const newControl: TControl);
 begin
   fControlToShow:=newControl;
-  ApplyStyle;
+  SafeApplyStyle;
 end;
 
 
@@ -544,6 +534,26 @@ begin
 
 end;
 
+procedure TneTabItem.UpdateFromProvider(const notificationClass: INotification);
+var
+  tmpActions: TIntActions;
+begin
+  if not Assigned(notificationClass) then
+    Exit;
+  tmpActions:=(notificationClass as TneNotificationClass).Action;
+  if intactMouseEnter in tmpActions then
+    fMouseState:=msHover;
+  if intactMouseLeave in tmpActions then
+    fMouseState:=msNone;
+  if intactMouseUp in tmpActions then
+    fMouseState:=msUp;
+  if intactMouseDown in tmpActions then
+    fMouseState:=msDown;
+  fInternalTimer.Enabled:=true;
+  if intactMouseUp in tmpActions then
+    NotifyToDeleteTab;
+end;
+
 procedure TneTabItem.NotifyToDeleteTab;
 var
   newNotifClass: TneNotificationClass;
@@ -556,11 +566,17 @@ begin
 end;
 
 
+procedure TneTabItem.OnInternalTimer(Sender: TObject);
+begin
+  fInternalTimer.Enabled:=false;
+  SafeApplyStyle;
+end;
+
 procedure TneTabItem.RefreshControl;
 begin
   fMouseState:=msNone;
   fRefreshCloseImage:=false;
-  ApplyStyle;
+  fInternalTimer.Enabled:=true;
 end;
 
 { TneCloseImageControl }
@@ -571,17 +587,57 @@ begin
   fControl:=TImage.Create(self);
   fControl.Parent:=self;
   fControl.Align:=TAlignLayout.client;
+  fControl.HitTest:=false;
   self.Width:=16;
+  fProvider:=ProviderClass;
+end;
+
+procedure TneCloseImageControl.DoMouseLeave;
+begin
+  inherited;
+  NotifyTabItem(intactMouseLeave);
 end;
 
 destructor TneCloseImageControl.Destroy;
 begin
+  fProvider:=nil;
   inherited;
+end;
+
+procedure TneCloseImageControl.DoMouseEnter;
+begin
+  inherited;
+  NotifyTabItem(intactMouseEnter);
 end;
 
 function TneCloseImageControl.GetCloseImage: TImage;
 begin
   result:=(fControl as TImage);
+end;
+
+procedure TneCloseImageControl.MouseDown(Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+  inherited;
+  NotifyTabItem(intactMouseDown);
+end;
+
+procedure TneCloseImageControl.MouseUp(Button: TMouseButton; Shift: TShiftState;
+  X, Y: Single);
+begin
+  inherited;
+  NotifyTabItem(intactMouseUp);
+end;
+
+procedure TneCloseImageControl.NotifyTabItem(const newAction: TIntAction);
+var
+  newNotifClass: TneNotificationClass;
+begin
+  inherited;
+  newNotifClass:=TneNotificationClass.Create;
+  newNotifClass.Action:=[newAction];
+  newNotifClass.Sender:=Self;
+  fProvider.NotifySubscribers(newNotifClass);
 end;
 
 procedure TneCloseImageControl.SetCloseImage(const newImage: TBitmap);

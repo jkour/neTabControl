@@ -25,7 +25,11 @@ type
     intactDefault,
     intactDeleteTab,
     intactShowPopupMenu,
-    intactUpdateTabHeight
+    intactUpdateTabHeight,
+    intactMouseEnter,
+    intactMouseLeave,
+    intactMouseUp,
+    intactMouseDown
     );
 
   {$REGION 'The set of actions to be passed to the Observers'}
