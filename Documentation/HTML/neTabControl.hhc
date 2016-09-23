@@ -181,6 +181,18 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="HintInterval">
+ <param name="Local" value="neTabControl.TneTabControl.HintInterval.htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="HintType">
+ <param name="Local" value="neTabControl.TneTabControl.HintType.htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="HitTest">
  <param name="Local" value="neTabControl.TneTabControl.HitTest.htm">
  <param name="ImageNumber" value="2">
@@ -409,6 +421,12 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TabOrientation">
+ <param name="Local" value="neTabControl.TneTabControl.TabOrientation.htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="TabPosition">
  <param name="Local" value="neTabControl.TneTabControl.TabPosition.htm">
  <param name="ImageNumber" value="2">
@@ -417,6 +435,12 @@
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="Tabs[Integer]">
  <param name="Local" value="neTabControl.TneTabControl.Tabs[Integer].htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="Transition">
+ <param name="Local" value="neTabControl.TneTabControl.Transition.htm">
  <param name="ImageNumber" value="2">
 </OBJECT>
 
@@ -664,6 +688,12 @@
  <param name="ImageNumber" value="2">
 </OBJECT>
 
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="OnCustomHint">
+ <param name="Local" value="neTabControl.TneTabControl.OnCustomHint.htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
 </UL>
 </UL>
 </UL>
@@ -675,14 +705,26 @@
 
 <UL>
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneDoChangeType">
+ <param name="Local" value="neTabControl.TneDoChangeType.htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneHintType">
+ <param name="Local" value="neTabControl.TneHintType.htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="TneSibebarControlPosition">
  <param name="Local" value="neTabControl.TneSibebarControlPosition.htm">
  <param name="ImageNumber" value="2">
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
- <param name="Name" value="TneTabPosition">
- <param name="Local" value="neTabControl.TneTabPosition.htm">
+ <param name="Name" value="TneTabOrientation">
+ <param name="Local" value="neTabControl.TneTabOrientation.htm">
  <param name="ImageNumber" value="2">
 </OBJECT>
 
@@ -769,6 +811,12 @@
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="TOnBeforePopupMenu">
  <param name="Local" value="neTabControl.TOnBeforePopupMenu.htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TOnCustomHint">
+ <param name="Local" value="neTabControl.TOnCustomHint.htm">
  <param name="ImageNumber" value="2">
 </OBJECT>
 
@@ -1031,6 +1079,24 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="Caption">
+ <param name="Local" value="neTabItem.TneTabItem.Caption.htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="CaptionAlignment">
+ <param name="Local" value="neTabItem.TneTabItem.CaptionAlignment.htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="CloseAlignment">
+ <param name="Local" value="neTabItem.TneTabItem.CloseAlignment.htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="CloseImageHover">
  <param name="Local" value="neTabItem.TneTabItem.CloseImageHover.htm">
  <param name="ImageNumber" value="2">
@@ -1049,8 +1115,26 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="ControlAlignment">
+ <param name="Local" value="neTabItem.TneTabItem.ControlAlignment.htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="ControlToShow">
  <param name="Local" value="neTabItem.TneTabItem.ControlToShow.htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="HintInterval">
+ <param name="Local" value="neTabItem.TneTabItem.HintInterval.htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="HintText">
+ <param name="Local" value="neTabItem.TneTabItem.HintText.htm">
  <param name="ImageNumber" value="2">
 </OBJECT>
 
@@ -1123,6 +1207,12 @@
 </OBJECT>
 
 <LI><OBJECT type="text/sitemap">
+ <param name="Name" value="DoMouseLeave">
+ <param name="Local" value="neTabItem.TneTabItem.DoMouseLeave.htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
  <param name="Name" value="MouseClick(TMouseButton,TShiftState,Single,Single)">
  <param name="Local" value="neTabItem.TneTabItem.MouseClick.htm">
  <param name="ImageNumber" value="2">
@@ -1137,6 +1227,12 @@
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="RefreshControl">
  <param name="Local" value="neTabItem.TneTabItem.RefreshControl.htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="SetWidth(Single)">
+ <param name="Local" value="neTabItem.TneTabItem.SetWidth.htm">
  <param name="ImageNumber" value="2">
 </OBJECT>
 
@@ -1273,6 +1369,28 @@
 <LI><OBJECT type="text/sitemap">
  <param name="Name" value="GetLastEntry">
  <param name="Local" value="neTabTypes.THistoryClass.GetLastEntry.htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
+</UL>
+</UL>
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="TneHintTimer">
+ <param name="Local" value="neTabTypes.TneHintTimer.htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
+<UL>
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="Fields">
+ <param name="Local" value="neTabTypes.TneHintTimer_Fields.htm">
+ <param name="ImageNumber" value="2">
+</OBJECT>
+
+<UL>
+<LI><OBJECT type="text/sitemap">
+ <param name="Name" value="MousePoint">
+ <param name="Local" value="neTabTypes.TneHintTimer.MousePoint.htm">
  <param name="ImageNumber" value="2">
 </OBJECT>
 
