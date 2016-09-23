@@ -189,10 +189,10 @@ end;
 
 procedure TForm8.FormResize(Sender: TObject);
 begin
-  if neTabControl1.TabPosition=TneTabPosition.Left then
+  if neTabControl1.TabOrientation=TneTabOrientation.orLeft then
   begin
-    neTabControl1.TabPosition:=TneTabPosition.Top;
-    neTabControl1.TabPosition:=TneTabPosition.Left;
+    neTabControl1.TabOrientation:=TneTabOrientation.orTop;
+    neTabControl1.TabOrientation:=TneTabOrientation.orLeft;
   end;
 end;
 
@@ -242,12 +242,12 @@ end;
 
 procedure TForm8.RadioButton1Change(Sender: TObject);
 begin
-  neTabControl1.TabPosition:=TneTabPosition.Top;
+  neTabControl1.TabOrientation:=TneTabOrientation.orTop;
 end;
 
 procedure TForm8.RadioButton2Change(Sender: TObject);
 begin
-  neTabControl1.TabPosition:=TneTabPosition.Left;
+  neTabControl1.TabOrientation:=TneTabOrientation.orLeft;
 end;
 
 end.

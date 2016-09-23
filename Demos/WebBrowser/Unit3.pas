@@ -14,9 +14,16 @@ type
     CheckBox1: TCheckBox;
     CheckBox2: TCheckBox;
     CheckBox3: TCheckBox;
+    GroupBox1: TGroupBox;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    RadioButton3: TRadioButton;
     procedure CheckBox1Change(Sender: TObject);
     procedure CheckBox2Change(Sender: TObject);
     procedure CheckBox3Change(Sender: TObject);
+    procedure RadioButton1Change(Sender: TObject);
+    procedure RadioButton2Change(Sender: TObject);
+    procedure RadioButton3Change(Sender: TObject);
   private
     fParentTabControl: TneTabControl;
     procedure SetParentTabControl (const newParent: TneTabControl);
@@ -72,6 +79,21 @@ constructor TFrame3.Create(AOwner: TComponent);
 begin
   inherited;
   self.Name:='';
+end;
+
+procedure TFrame3.RadioButton1Change(Sender: TObject);
+begin
+  fParentTabControl.HintType:=TneHintType.Off;
+end;
+
+procedure TFrame3.RadioButton2Change(Sender: TObject);
+begin
+  fParentTabControl.HintType:=TneHintType.Text;
+end;
+
+procedure TFrame3.RadioButton3Change(Sender: TObject);
+begin
+  fParentTabControl.HintType:=TneHintType.Preview;
 end;
 
 procedure TFrame3.SetParentTabControl(const newParent: TneTabControl);

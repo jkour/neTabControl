@@ -49,4 +49,47 @@ object Frame3: TFrame3
     Text = 'Can Close'
     OnChange = CheckBox3Change
   end
+  object GroupBox1: TGroupBox
+    Position.X = 24.000000000000000000
+    Position.Y = 200.000000000000000000
+    Size.Width = 120.000000000000000000
+    Size.Height = 121.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Hints'
+    TabOrder = 3
+    object RadioButton1: TRadioButton
+      GroupName = 'Hints'
+      IsChecked = True
+      Position.X = 16.000000000000000000
+      Position.Y = 24.000000000000000000
+      Size.Width = 89.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = 'Off'
+      OnChange = RadioButton1Change
+    end
+    object RadioButton2: TRadioButton
+      GroupName = 'Hints'
+      Position.X = 16.000000000000000000
+      Position.Y = 56.000000000000000000
+      Size.Width = 88.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      Text = 'Text'
+      OnChange = RadioButton2Change
+    end
+    object RadioButton3: TRadioButton
+      GroupName = 'Hints'
+      Position.X = 16.000000000000000000
+      Position.Y = 88.000000000000000000
+      Size.Width = 89.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = 'Preview'
+      OnChange = RadioButton3Change
+    end
+  end
 end

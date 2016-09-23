@@ -3,18 +3,6 @@ program WebBrowser;
 {$R *.dres}
 
 uses
-  {$IFDEF EUREKALOG}
-  EMemLeaks,
-  EResLeaks,
-  EDialogWinAPIMSClassic,
-  EDialogWinAPIEurekaLogDetailed,
-  EDialogWinAPIStepsToReproduce,
-  EDebugExports,
-  EDebugJCL,
-  EFixSafeCallException,
-  EMapWin32,
-  EAppFMX,
-  ExceptionLog7,
   {$ENDIF}
   System.StartUpCopy,
   FMX.Forms,
