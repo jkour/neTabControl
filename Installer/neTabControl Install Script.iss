@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "neTabControl"
-#define MyAppVersion "1.2.0"
+#define MyAppVersion "1.3.0"
 #define MyAppPublisher "NusEnvision"
 #define MyAppURL "https://github.com/jkour/neTabControl"
 #define MyPackageName "neTabControlPackage.bpl"
@@ -31,7 +31,7 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={commondocs}\NusEnvision\{#MyAppName}
 DefaultGroupName=NusEnvision\neTabControl
 DisableProgramGroupPage=yes
-OutputBaseFilename=neTabControl-1.2.0-setup
+OutputBaseFilename=neTabControl-1.3.0-setup
 Compression=lzma
 SolidCompression=yes
 ShowLanguageDialog=no
@@ -43,38 +43,6 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Source: "\\Mac\ProductionHD\NusEnvision\Components\Delphi\neTabControl\Release\Documentation\*"; DestDir: "{commondocs}\NusEnvision\neTabControl\Documentation"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\..\Release\Images\*"; DestDir: "{commondocs}\NusEnvision\neTabControl\Images\"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
-Source: "..\..\Release\SourceCode\Package\neTabControl.pas"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
-Source: "..\..\Release\SourceCode\Package\neTabControlPackage.dpk"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
-Source: "..\..\Release\SourceCode\Package\neTabControlPackage.dproj"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
-Source: "..\..\Release\SourceCode\Package\neTabControlPackage.dproj.local"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
-Source: "..\..\Release\SourceCode\Package\neTabControlPackage.dres"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
-Source: "..\..\Release\SourceCode\Package\neTabControlPackage.dsk"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
-Source: "..\..\Release\SourceCode\Package\neTabControlPackage.identcache"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
-Source: "..\..\Release\SourceCode\Package\neTabControlPackage.res"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
-Source: "..\..\Release\SourceCode\Package\neTabControlPackage.stat"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
-Source: "..\..\Release\SourceCode\Package\neTabControlPackageResource.rc"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
-Source: "..\..\Release\SourceCode\Package\neTabGeneralUtils.pas"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
-Source: "..\..\Release\SourceCode\Package\neTabItem.pas"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
-Source: "..\..\Release\SourceCode\Package\neTabTypes.pas"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
-Source: "..\..\Release\Demos\WebBrowser\Entitlement.TemplateOSX32.xml"; DestDir: "{app}\Demos\WebBrowser\"; Flags: ignoreversion
-Source: "..\..\Release\Demos\WebBrowser\info.plist.TemplateOSX.xml"; DestDir: "{app}\Demos\WebBrowser\"; Flags: ignoreversion
-Source: "..\..\Release\Demos\WebBrowser\Unit2.fmx"; DestDir: "{app}\Demos\WebBrowser\"; Flags: ignoreversion
-Source: "..\..\Release\Demos\WebBrowser\Unit2.pas"; DestDir: "{app}\Demos\WebBrowser\"; Flags: ignoreversion
-Source: "..\..\Release\Demos\WebBrowser\Unit3.fmx"; DestDir: "{app}\Demos\WebBrowser\"; Flags: ignoreversion
-Source: "..\..\Release\Demos\WebBrowser\Unit3.pas"; DestDir: "{app}\Demos\WebBrowser\"; Flags: ignoreversion
-Source: "..\..\Release\Demos\WebBrowser\Unit5.fmx"; DestDir: "{app}\Demos\WebBrowser\"; Flags: ignoreversion
-Source: "..\..\Release\Demos\WebBrowser\Unit5.pas"; DestDir: "{app}\Demos\WebBrowser\"; Flags: ignoreversion
-Source: "..\..\Release\Demos\WebBrowser\Unit8.fmx"; DestDir: "{app}\Demos\WebBrowser\"; Flags: ignoreversion
-Source: "..\..\Release\Demos\WebBrowser\Unit8.pas"; DestDir: "{app}\Demos\WebBrowser\"; Flags: ignoreversion
-Source: "..\..\Release\Demos\WebBrowser\Unit8.vlb"; DestDir: "{app}\Demos\WebBrowser\"; Flags: ignoreversion
-Source: "..\..\Release\Demos\WebBrowser\WebBrowser.deployproj"; DestDir: "{app}\Demos\WebBrowser\"; Flags: ignoreversion
-Source: "..\..\Release\Demos\WebBrowser\WebBrowser.dpr"; DestDir: "{app}\Demos\WebBrowser\"; Flags: ignoreversion
-Source: "..\..\Release\Demos\WebBrowser\WebBrowser.dproj"; DestDir: "{app}\Demos\WebBrowser\"; Flags: ignoreversion
-Source: "..\..\Release\Demos\WebBrowser\WebBrowser.dres"; DestDir: "{app}\Demos\WebBrowser\"; Flags: ignoreversion
-Source: "..\..\Release\Demos\WebBrowser\WebBrowser.identcache"; DestDir: "{app}\Demos\WebBrowser\"; Flags: ignoreversion
-Source: "..\..\Release\Demos\WebBrowser\WebBrowser.res"; DestDir: "{app}\Demos\WebBrowser\"; Flags: ignoreversion
-Source: "..\..\Release\Demos\WebBrowser\WebBrowser.stat"; DestDir: "{app}\Demos\WebBrowser\"; Flags: ignoreversion
-Source: "..\..\Release\Demos\WebBrowser\WebBrowserResource.rc"; DestDir: "{app}\Demos\WebBrowser\"; Flags: ignoreversion
 ; Compile batch file
 Source: "CompileSource.bat"; Flags: dontcopy
 Source: "..\..\Release\SourceCode\SupportCode\Model.IntActions.pas"; DestDir: "{app}\SourceCode\SupportCode\"; Flags: ignoreversion
@@ -82,12 +50,26 @@ Source: "..\..\Release\SourceCode\SupportCode\Model.Interf.pas"; DestDir: "{app}
 Source: "..\..\Release\SourceCode\SupportCode\Model.Provider.pas"; DestDir: "{app}\SourceCode\SupportCode\"; Flags: ignoreversion
 Source: "..\..\Release\SourceCode\SupportCode\Model.Subscriber.pas"; DestDir: "{app}\SourceCode\SupportCode\"; Flags: ignoreversion
 Source: "..\..\Release\SourceCode\neTabControlProjectGroup.groupproj"; DestDir: "{app}\SourceCode\"; Flags: ignoreversion
+Source: "..\SourceCode\Package\neTabControl.pas"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
+Source: "..\SourceCode\Package\neTabControlPackage.dproj"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
+Source: "..\SourceCode\Package\neTabControlPackage.dsk"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
+Source: "..\SourceCode\Package\neTabControlPackageResource.rc"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
+Source: "..\SourceCode\Package\neTabControlResource.rc"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
+Source: "..\SourceCode\Package\neTabGeneralUtils.pas"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
+Source: "..\SourceCode\Package\neTabItem.pas"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
+Source: "..\SourceCode\Package\neTabTypes.pas"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
+Source: "..\SourceCode\SupportCode\Model.IntActions.pas"; DestDir: "{app}\SourceCode\SupportCode\"; Flags: ignoreversion
+Source: "..\SourceCode\SupportCode\Model.Interf.pas"; DestDir: "{app}\SourceCode\SupportCode\"; Flags: ignoreversion
+Source: "..\SourceCode\SupportCode\Model.Provider.pas"; DestDir: "{app}\SourceCode\SupportCode\"; Flags: ignoreversion
+Source: "..\SourceCode\SupportCode\Model.Subscriber.pas"; DestDir: "{app}\SourceCode\SupportCode\"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 
 [Dirs]
 Name: "{app}\Bpl"
+Name: "{app}\SupportCode\__history\"
+Name: "{app}\SupportCode\__recovery\"
 Name: "{app}\SupportCode\__history\"
 Name: "{app}\SupportCode\__recovery\"
 
