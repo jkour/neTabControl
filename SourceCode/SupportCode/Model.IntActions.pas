@@ -29,7 +29,9 @@ type
     intactMouseEnter,
     intactMouseLeave,
     intactMouseUp,
-    intactMouseDown
+    intactMouseDown,
+    intactShowHint,
+    intactHideHint
     );
 
   {$REGION 'The set of actions to be passed to the Observers'}

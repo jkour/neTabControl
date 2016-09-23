@@ -45,7 +45,7 @@ uses
 
 const
   MajorVersion = '1';
-  MinorVersion = '2';
+  MinorVersion = '3';
   BugVersion = '0';
 
 
@@ -53,7 +53,19 @@ const
 //
 // Version History
 //
+// 1.3.0 - 24/09/2016
 //
+//** New Features
+//
+//    * ControlAlignment, CaptionAlignment, CloseAlignment properties added
+//    * Access to the text element of a TabItem
+//    * TabPosition property added (see below for the renaming of the old
+//      TabPosition property)
+//
+//** Improvement
+//
+//    * The TabPosition property in previous releases is renamed to
+//      TabOrientation
 //
 // 1.2.0 - 21/08/2016
 //
@@ -188,6 +200,11 @@ type
     Value: string;
   end;
 
+  TneHintTimer = class(TneTimer)
+  public
+    MousePoint: TPointF;
+  end;
+
   TneNotificationClass = class(TInterfacedObject, INotification)
   private
     fActions: TIntActions;
@@ -272,6 +289,5 @@ begin
   else
     result:='';
 end;
-
 
 end.

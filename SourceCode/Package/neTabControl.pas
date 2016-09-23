@@ -39,16 +39,16 @@ unit neTabControl;
 interface
 
 uses
-  FMX.Types, FMX.Controls, FMX.Layouts,
-  FMX.Styles.Objects, FMX.StdCtrls,FMX.TabControl, System.Generics.Collections,
-  FMX.Forms, FMX.Graphics, FMX.Objects, System.UITypes, Model.Provider,
+  FMX.Controls, FMX.Layouts,
+  FMX.Styles.Objects,FMX.TabControl, System.Generics.Collections,
+  FMX.Forms, FMX.Graphics, System.UITypes, Model.Provider,
   Model.Interf, Model.Subscriber, Model.IntActions,
   FMX.Menus,
-  neTabTypes, neTabGeneralUtils, neTabItem, System.Classes;
+  neTabTypes, neTabGeneralUtils, neTabItem, System.Classes, System.Types, FMX.Types;
 
 const
   MajorVersion = '1';
-  MinorVersion = '2';
+  MinorVersion = '3';
   BugVersion = '0';
 
 
@@ -57,6 +57,19 @@ const
 // Version History
 //
 //
+// 1.3.0 - 24/09/2016
+//
+//** New Features
+//
+//    * ControlAlignment, CaptionAlignment, CloseAlignment properties added
+//    * Access to the text element of a TabItem
+//    * TabPosition property added (see below for the renaming of the old
+//      TabPosition property)
+//
+//** Improvement
+//
+//    * The TabPosition property in previous releases is renamed to
+//      TabOrientation
 //
 // 1.2.0 - 21/08/2016
 //
@@ -143,8 +156,10 @@ const
 
 
 type
-  TneTabPosition = (Top, Left, Right, Bottom);
+  TneTabOrientation = (orTop, orLeft, orRight, orBottom);
   TneSibebarControlPosition = (sbLeft, sbRight);
+  TneHintType = (Off, Text, Preview, Custom);
+  TneDoChangeType = (dcTabBar, dcMainTab);
 
   TOnBeforeAddItem = procedure (var newItem:TneTabItem; var ContinueAdd: Boolean)
                     of object;
@@ -173,6 +188,9 @@ type
                     of object;
   TOnAfterDeleteSidebarControl = procedure (var item: TControl) of object;
 
+  TOnCustomHint = procedure (var hintItem: TneTabItem; var HintControl: TControl;
+                                var CanContinue:boolean) of object;
+
   /// <summary>
   ///   This is the tab control
   /// </summary>
@@ -191,9 +209,11 @@ type
     fMainControl: TTabControl;
 
     fInternalTimer: TneTimer;
+    fPopup: TPopup;
 
     //properties
-    fTabPosition: TneTabPosition;
+    fTabOrientation: TneTabOrientation;
+    fTabPosition: TTabPosition;
     fTabHeight: Integer;
     fCloseImageNormal,
     fCloseImageHover,
@@ -203,6 +223,10 @@ type
     fCloseTabText,
     fCloseAllTabsText,
     fCloseAllOtherTabsText: string;
+    fTransitionType: TTabTransition;
+    fHintInterval: Cardinal;
+    fHintType: TneHintType;
+    fCloseTimer: TTimer;
 
     //Internal
     /// <summary>
@@ -250,11 +274,13 @@ type
     fOnBeforeDeleteSidebarControl: TOnBeforeDeleteSidebarControl;
     fOnAfterDeleteSidebarControl: TOnAfterDeleteSidebarControl;
 
+    fOnCustomHint: TOnCustomHint;
+
     //Foundation Fields
     fVersion: string;
 
     //Procedures/Function
-    procedure SetTabPosition (const newPos: TneTabPosition);
+    procedure SetTabOrientation (const newPos: TneTabOrientation);
     /// <summary>
     ///   Updates the positon of the controls dpending on the TnePosition (Top,
     ///   Left, Right, Bottom)
@@ -272,6 +298,20 @@ type
 
     function GetTabByIndex(const tabIndex: Integer): TneTabItem;
 
+    procedure SetTabPosition(const newTabFormat: TTabPosition);
+
+    procedure DoMainChange(const source: TneDoChangeType);
+
+    {$REGION ''}
+    /// <param name="X">
+    ///   Comes from MouseMove. Relative to hTabItem
+    /// </param>
+    /// <param name="Y">
+    ///   Comes from MouseMove. Relative to hTabItem
+    /// </param>
+    {$ENDREGION}
+    procedure ShowHint(const hTag: string; const Point: TPointF);
+
     //Private Events
     procedure OnChangeTab(Sender: TObject);
     procedure OnInternalTimer(Sender: TObject);
@@ -279,10 +319,14 @@ type
     procedure OnCloseOtherTabs(Sender: TObject);
     procedure OnSelectTabInPopupMenu(Sender: TObject);
     procedure OnMouseEnterToMainControl(Sender: TObject);
+    procedure OnTabBarChange(Sender: TObject);
+    procedure OnMainBarChange(Sender: TObject);
 
     //Foundation procedures/functions
     function GetVersion:string;
     procedure UpdateFromProvider(const notificationClass: INotification);
+    procedure SetHintInterval(const Value: Cardinal);
+    procedure OnCloseHintTimer(Sender: TObject);
   protected
     // Protected declarations
   public
@@ -431,11 +475,18 @@ type
     property Tabs[const tabIndex: Integer]: TneTabItem read GetTabByIndex;
 
   published
+    {$REGION 'Defines the orientation of the tabs'}
     /// <summary>
-    ///   Defines the position of the tabs
+    ///   Defines the orientation of the tabs
     /// </summary>
-    property TabPosition: TneTabPosition read fTabPosition write SetTabPosition
-                default TneTabPosition.Top;
+    /// <remarks>
+    ///   This is not to be conufsed
+    /// </remarks>
+    {$ENDREGION}
+    property TabOrientation: TneTabOrientation read fTabOrientation write SetTabOrientation
+                default TneTabOrientation.orTop;
+    property TabPosition: TTabPosition read fTabPosition write SetTabPosition
+                default TTabPosition.PlatformDefault;
     /// <summary>
     ///   Defines the height of the tab item
     /// </summary>
@@ -451,6 +502,72 @@ type
     property CloseAllTabsText: string read fCloseAllTabsText write fCloseAllTabsText;
     property CloseAllOtherTabsText: string read fCloseAllOtherTabsText
         write fCloseAllOtherTabsText;
+    {$REGION 'Defines the transition effect when tabs change'}
+    /// <summary>
+    ///   Defines the transition effect when tabs change
+    /// </summary>
+    /// <value>
+    ///   <list type="table">
+    ///     <listheader>
+    ///       <term>Value</term>
+    ///       <description>Description</description>
+    ///     </listheader>
+    ///     <item>
+    ///       <term>None</term>
+    ///       <description>No transition effect. This is the default
+    ///         effect</description>
+    ///     </item>
+    ///     <item>
+    ///       <term>Slide</term>
+    ///       <description>Slide effect</description>
+    ///     </item>
+    ///   </list>
+    /// </value>
+    {$ENDREGION}
+    property Transition: TTabTransition read fTransitionType write fTransitionType
+                  default TTabTransition.None;
+
+    {$REGION 'Defines the time interval for the hint'}
+    /// <summary>
+    ///   Defines the time interval for the hint
+    /// </summary>
+    /// <remarks>
+    ///   Default: 1000ms
+    /// </remarks>
+    {$ENDREGION}
+    property HintInterval: Cardinal read fHintInterval write SetHintInterval default 1000;
+    {$REGION 'Defines the type of the hint'}
+    /// <summary>
+    ///   Defines the type of the hint
+    /// </summary>
+    /// <value>
+    ///   <list type="table">
+    ///     <listheader>
+    ///       <term>Value</term>
+    ///       <description>Description</description>
+    ///     </listheader>
+    ///     <item>
+    ///       <term>Off</term>
+    ///       <description>No hint (default0</description>
+    ///     </item>
+    ///     <item>
+    ///       <term>Text</term>
+    ///       <description>Shows the value of <see cref="neTabControl|TneTabControl.HintText">
+    ///         HintText</see> property. If it is empty, it shows the
+    ///         title of the tab <br /></description>
+    ///     </item>
+    ///     <item>
+    ///       <term>Preview</term>
+    ///       <description>Shows a preview of the tab item</description>
+    ///     </item>
+    ///     <item>
+    ///       <term>Custom</term>
+    ///       <description />
+    ///     </item>
+    ///   </list>
+    /// </value>
+    {$ENDREGION}
+    property HintType: TneHintType read fHintType write fHintType default TneHintType.Off;
 
     property Align;
     property Anchors;
@@ -549,6 +666,8 @@ type
     property OnAfterDeleteSidebarControl: TOnAfterDeleteSidebarControl
           read fOnAfterDeleteSidebarControl write fOnAfterDeleteSidebarControl;
 
+    property OnCustomHint: TOnCustomHint read fOnCustomHint write fOnCustomHint;
+
     //Foundation properties
     property Version: string read GetVersion;
   end;
@@ -560,8 +679,8 @@ function GetTabControl (const aClass: TClass): TneTabControl;
 implementation
 
 uses
-  System.Math, System.Types, FMX.Dialogs, System.Generics.Defaults, System.SysUtils,
-  System.StrUtils;
+  System.Math, FMX.Dialogs, System.Generics.Defaults, System.SysUtils,
+  System.StrUtils, System.UIConsts, FMX.StdCtrls, FMX.Effects, FMX.Ani, FMX.Objects;
 
 procedure Register;
 begin
@@ -651,6 +770,8 @@ begin
   newItem.CloseImageNormal:=fCloseImageNormal;
   newItem.CloseImageHover:=fCloseImageHover;
   newItem.CloseImagePressed:=fCloseImagePressed;
+  newItem.Height:=fTabHeight;
+  newItem.HintInterval:=fHintInterval;
 
   newFrame.TagString:=trimTag;
 
@@ -667,7 +788,7 @@ begin
   mainTab:=TTabItem.Create(self);
   mainTab.Parent:=fMainControl;
   mainTab.Height:=fTabHeight;
-
+  mainTab.TagString:=trimTag;
   newFrame.Parent:=mainTab;
   newFrame.OnMouseEnter:=OnMouseEnterToMainControl;
 
@@ -693,7 +814,9 @@ constructor TneTabControl.Create(AOwner: TComponent);
 begin
   inherited;
   fTabHeight:=30;
-  fTabPosition:=TneTabPosition.Top;
+  fTabOrientation:=TneTabOrientation.orTop;
+  fTabPosition:=TTabPosition.PlatformDefault;
+  fTransitionType:=TTabTransition.None;
 
   fCloseImageNormal:=TBitmap.Create;
   fCloseImageHover:=TBitmap.Create;
@@ -738,7 +861,7 @@ begin
     RowSpan:=1;
   end;
 
-  //TneTabPosition is Top by default
+  //TneTabOrientation is Top by default
   fLeftLayout:=TLayout.Create(self);
   fLeftLayout.Stored:=false;
   fLeftLayout.Parent:=fMainLayout;
@@ -750,7 +873,7 @@ begin
   fTabBar.Stored:=False;
   fTabBar.Align:=TAlignLayout.Client;
   fTabBar.TabPosition:=TTabPosition.Top;
-  fTabBar.OnChange:=OnChangeTab;
+  fTabBar.OnChange:=OnTabBarChange;
   fTabBar.TabHeight:=TabHeight;
 
   fRightLayout:=TLayout.Create(self);
@@ -766,6 +889,7 @@ begin
   fMainControl.Parent:=fMainGridLayout;
   fMainControl.Align:=TAlignLayout.Client;
   fMainControl.TabPosition:=TTabPosition.None;
+  fMainControl.OnChange:=OnMainBarChange;
   with fMainGridLayout.ControlCollection.Items[1] do
   begin
     Column:=0;
@@ -795,6 +919,15 @@ begin
   fLeftSidebarControls:=TList<TControl>.Create;
   fRightSidebarControls:=TList<TControl>.Create;
 
+  fPopup:=TPopup.Create(self);
+  fPopup.Placement:=TPlacement.Mouse;
+  fPopup.HorizontalOffset:=200;
+  fPopup.VerticalOffset:=200;
+  fHintType:=Off;
+  fCloseTimer:=TTimer.Create(self);
+  fCloseTimer.Interval:=2000;
+  fCloseTimer.OnTimer:=OnCloseHintTimer;
+  fCloseTimer.Enabled:=false;
 end;
 
 procedure TneTabControl.DeleteAllTabs(const forceDelete: Boolean);
@@ -843,6 +976,7 @@ var
   delItem: TneTabItem;
   delFrame: TFrame;
   lastTag: string;
+  removeIndex: Integer;
 begin
   if (Trim(Tag)='') or (not fTabsDictionary.ContainsKey(Trim(Tag))) then
     Exit;
@@ -858,13 +992,14 @@ begin
   if (not continueDelete) or ((not forceDelete) and (not delItem.CanClose)) then
     Exit;
 
-  fTabBar.Delete(delItem.Index);
+  removeIndex:=delItem.Index;
+  fTabBar.Delete(removeIndex);
   fTabsDictionary.Remove(Trim(Tag));
 
   delFrame:=fFramesDictionary.Items[Trim(Tag)];
   delFrame.Parent:=nil;
 
-  fMainControl.RemoveObject(delFrame);
+  fMainControl.Delete(removeIndex);
   fMainTabsDictionary.Remove(Trim(Tag));
 
   if Assigned(fOnAfterDeleteItem) then
@@ -895,7 +1030,41 @@ begin
   fHistoryList.Free;
   fLeftSidebarControls.Free;
   fRightSidebarControls.Free;
+  fPopup.Free;
+  fCloseTimer.Free;
   inherited;
+end;
+
+procedure TneTabControl.DoMainChange(const source: TneDoChangeType);
+var
+  tmpActiveTag: string;
+begin
+
+  case source of
+    dcTabBar: tmpActiveTag:=(fTabBar.ActiveTab as TneTabItem).TabTag;
+    dcMainTab: tmpActiveTag:=fMainControl.ActiveTab.TagString;
+  end;
+
+  if (not fMainTabsDictionary.ContainsKey(tmpActiveTag)) or
+       (not fFramesDictionary.ContainsKey(tmpActiveTag)) or
+          (not fTabsDictionary.ContainsKey(tmpActiveTag)) then
+    Exit;
+
+  case source of
+    dcTabBar: if fTransitionType=TTabTransition.Slide then
+         fMainControl.SetActiveTabWithTransition(fMainTabsDictionary.Items[tmpActiveTag],
+                      fTransitionType)
+              else
+                fMainControl.ActiveTab:=fMainTabsDictionary.Items[tmpActiveTag];
+    dcMainTab: fTabBar.ActiveTab:=fTabsDictionary.Items[tmpActiveTag];
+  end;
+
+  fActiveTab:=GetTab(tmpActiveTag);
+  fActiveTag:=tmpActiveTag;
+
+  fHistoryList.AddHistory(tmpActiveTag);
+  if Assigned(fOnChange) then
+    fOnChange(Self);
 end;
 
 function TneTabControl.GetControl(const tag: string): TControl;
@@ -1061,15 +1230,19 @@ procedure TneTabControl.OnChangeTab(Sender: TObject);
 var
   tmpActiveTag: string;
 begin
-  tmpActiveTag:=((Sender as TTabControl).ActiveTab as TneTabItem).TabTag;
-  if fMainTabsDictionary.ContainsKey(tmpActiveTag) and
-       fFramesDictionary.ContainsKey(tmpActiveTag) then
+  if ((Sender as TTabControl).ActiveTab is TneTabItem)
+    and Assigned((Sender as TTabControl).ActiveTab) then
   begin
-    fActiveTab:=GetTab(tmpActiveTag);
-    fMainControl.ActiveTab:=fMainTabsDictionary.Items[tmpActiveTag];
-    fHistoryList.AddHistory(tmpActiveTag);
-    if Assigned(fOnChange) then
-      fOnChange(Self);
+    tmpActiveTag:=((Sender as TTabControl).ActiveTab as TneTabItem).TabTag;
+    if fMainTabsDictionary.ContainsKey(tmpActiveTag) and
+         fFramesDictionary.ContainsKey(tmpActiveTag) then
+    begin
+      fActiveTab:=GetTab(tmpActiveTag);
+      fMainControl.ActiveTab:=fMainTabsDictionary.Items[tmpActiveTag];
+      fHistoryList.AddHistory(tmpActiveTag);
+      if Assigned(fOnChange) then
+        fOnChange(Self);
+    end;
   end;
 end;
 
@@ -1084,6 +1257,25 @@ begin
     DeleteAllTabs;
   if Assigned(fOnAfterCloseAllItems) then
     fOnAfterCloseAllItems;
+end;
+
+procedure TneTabControl.OnCloseHintTimer(Sender: TObject);
+var
+  tmpAni: TFloatAnimation;
+begin
+  if not fPopup.IsOpen then
+    Exit;
+  fCloseTimer.Enabled:=false;
+  tmpAni:=TFloatAnimation.Create(fPopup);
+  tmpAni.Parent:=fPopup;
+  tmpAni.PropertyName:='Opacity';
+  tmpAni.StartValue:=1;
+  tmpAni.StopValue:=0;
+  tmpAni.Duration:=0.5;
+  tmpAni.Loop:=false;
+  tmpAni.AutoReverse:=false;
+  tmpAni.Start;
+  fPopup.IsOpen:=false;
 end;
 
 procedure TneTabControl.OnCloseOtherTabs(Sender: TObject);
@@ -1118,6 +1310,11 @@ begin
   end;
 end;
 
+procedure TneTabControl.OnMainBarChange(Sender: TObject);
+begin
+  DoMainChange(TneDoChangeType.dcMainTab);
+end;
+
 procedure TneTabControl.OnMouseEnterToMainControl(Sender: TObject);
 var
   tmpList: TList<TneTabItem>;
@@ -1135,6 +1332,11 @@ begin
   if not (Sender is TMenuItem) then
     Exit;
   self.ActiveTag:=(Sender as TMenuItem).TagString;
+end;
+
+procedure TneTabControl.OnTabBarChange(Sender: TObject);
+begin
+  DoMainChange(TneDoChangeType.dcTabBar);
 end;
 
 procedure TneTabControl.RefreshControl(const tag: string);
@@ -1280,6 +1482,11 @@ begin
   end;
 end;
 
+procedure TneTabControl.SetHintInterval(const Value: Cardinal);
+begin
+  fHintInterval := Value;
+end;
+
 procedure TneTabControl.SetTabHeight(const newHeight: Integer);
 begin
   if newHeight=0 then
@@ -1287,14 +1494,174 @@ begin
   else
     fTabHeight:=newHeight;
   fMainGridLayout.RowCollection.Items[0].Value:=fTabHeight;
+  fMainGridLayout.ColumnCollection.Items[0].Value:=fTabHeight;
   fMainLayout.Height:=fTabHeight;
-  fTabBar.Height:=fTabHeight;
+  fTabBar.TabHeight:=fTabHeight;
 end;
 
-procedure TneTabControl.SetTabPosition(const newPos: TneTabPosition);
+procedure TneTabControl.SetTabOrientation(const newPos: TneTabOrientation);
 begin
-  fTabPosition:=newPos;
+  fTabOrientation:=newPos;
   UpdatePosition;
+end;
+
+procedure TneTabControl.SetTabPosition(const newTabFormat: TTabPosition);
+begin
+  case newTabFormat of
+    TTabPosition.PlatformDefault,
+    TTabPosition.Top:  begin
+                        fTabBar.TabPosition:=TTabPosition.Top;
+                        if fTabOrientation=TneTabOrientation.orTop then
+                          fMainGridLayout.RowCollection.Items[0].Value:=fTabHeight
+                        else
+                        if fTabOrientation=TneTabOrientation.orLeft then
+                          fMainGridLayout.ColumnCollection.Items[0].Value:=fTabHeight;
+                        fMainControl.TabPosition:=TTabPosition.None;
+                        end;
+    TTabPosition.Dots: begin
+                         fTabBar.TabPosition:=TTabPosition.None;
+                         if fTabOrientation=TneTabOrientation.orTop then
+                           fMainGridLayout.RowCollection.Items[0].Value:=0
+                         else
+                         if fTabOrientation=TneTabOrientation.orLeft then
+                           fMainGridLayout.ColumnCollection.Items[0].Value:=0;
+                         fMainControl.TabPosition:=TTabPosition.Dots;
+                       end;
+    TTabPosition.None: begin
+                        fTabBar.TabPosition:=TTabPosition.None;
+                        if fTabOrientation=TneTabOrientation.orTop then
+                          fMainGridLayout.RowCollection.Items[0].Value:=0
+                        else
+                        if fTabOrientation=TneTabOrientation.orLeft then
+                          fMainGridLayout.ColumnCollection.Items[0].Value:=0;
+                        fMainControl.TabPosition:=TTabPosition.None;
+                       end;
+  end;
+  fTabPosition:=newTabFormat;
+end;
+
+procedure TneTabControl.ShowHint(const hTag: string; const Point:TPointF);
+var
+  tmpTabItem: TneTabItem;
+  tmpLabel: TLabel;
+  tmpRoundRect: TRoundRect;
+  tmpRect: TRectangle;
+  tmpBitmap: TBitmap;
+  textWidth,
+  textHeight: single;
+  tmpHint: string;
+  tmpShadow: TShadowEffect;
+  tmpAni: TFloatAnimation;
+  tmpControl: TControl;
+  tmpImage: TImage;
+  canContinue: Boolean;
+begin
+  for tmpControl in fPopup.Controls do
+    tmpControl.Free;
+  if Trim(hTag)=ActiveTag then
+    Exit;
+
+  tmpTabItem:=GetTab(Trim(hTag));
+  if not Assigned(tmpTabItem) then
+    Exit;
+
+  if Trim(tmpTabItem.HintText)='' then
+    tmpHint:=tmpTabItem.Text
+  else
+    tmpHint:=tmpTabItem.HintText;
+
+  tmpHint:=Trim(tmpHint);
+  tmpBitmap:=TBitmap.Create;
+  try
+    textWidth := tmpBitmap.Canvas.TextWidth(tmpHint);
+    textHeight:= tmpBitmap.Canvas.TextHeight(tmpHint);
+  finally
+    tmpBitmap.Free;
+  end;
+
+  fPopup.Width:=textWidth+40;
+  fPopup.Height:=textHeight+10;
+
+  canContinue:=true;
+
+  case fHintType of
+    Off: ;
+    Text: begin
+            tmpRoundRect:=TRoundRect.Create(fPopup);
+            tmpRoundRect.Parent:=fPopup;
+            tmpRoundRect.Align:=TAlignLayout.Client;
+            tmpRoundRect.Fill.Color:=claCornsilk;
+            tmpRoundRect.Stroke.Color:=claGray;
+            tmpLabel:=TLabel.Create(tmpRoundRect);
+            tmpLabel.Align:=TAlignLayout.Client;
+            tmpLabel.Margins.Left:=10;
+            tmpLabel.Margins.Right:=10;
+            tmpLabel.Margins.top:=5;
+            tmpLabel.Margins.Bottom:=5;
+            tmpLabel.Text:=tmpHint;
+            tmpLabel.Parent:=tmpRoundRect;
+          end;
+    Preview: begin
+               if Assigned(GetFrame(trim(hTag))) then
+               begin
+                 fPopup.Width:=150;
+                 fPopup.Height:=100;
+                 tmpRect:=TRectangle.Create(fPopup);
+                 tmpRect.Parent:=fPopup;
+                 tmpRect.Align:=TAlignLayout.Client;
+                 tmpRect.Fill.Color:=claCornsilk;
+                 tmpRect.Stroke.Color:=claGray;
+
+                 tmpImage:=TImage.Create(tmpRect);
+                 tmpImage.Parent:=fPopup;
+                 tmpImage.Align:=TAlignLayout.Client;
+                 tmpImage.Margins.Top:=5;
+                 tmpImage.Margins.Bottom:=5;
+                 tmpImage.Margins.Left:=10;
+                 tmpImage.Margins.Right:=10;
+                 tmpImage.Bitmap:=GetFrame(Trim(hTag)).MakeScreenshot;
+               end;
+             end;
+    Custom: begin
+              if Assigned(fOnCustomHint) then
+              begin
+                tmpControl:=TControl.Create(fPopup);
+                if Assigned(fOnCustomHint) then
+                begin
+                  fOnCustomHint(tmpTabItem, tmpControl, canContinue);
+                  if not canContinue then
+                  begin
+                    tmpControl.Free;
+                    Exit;
+                  end;
+                  tmpControl.Parent:=fPopup;
+                  fPopup.Width:=tmpControl.Width;
+                  fPopup.Height:=tmpControl.Height;
+                end
+                else
+                  tmpControl.Free;
+              end;
+            end;
+  end;
+
+  if not canContinue then
+    Exit;
+  tmpShadow:=TShadowEffect.Create(fPopup);
+  tmpShadow.Parent:=fPopup;
+  tmpShadow.Direction:=60;
+  tmpShadow.Opacity:=0.6;
+  tmpShadow.Softness:=0.3;
+
+  tmpAni:=TFloatAnimation.Create(fPopup);
+  tmpAni.Parent:=fPopup;
+  tmpAni.PropertyName:='Opacity';
+  tmpAni.StartValue:=0;
+  tmpAni.StopValue:=1;
+  tmpAni.Duration:=0.5;
+  tmpAni.Loop:=false;
+  tmpAni.AutoReverse:=false;
+  tmpAni.Trigger:='IsVisible';
+  fPopup.IsOpen:=True;
 end;
 
 procedure TneTabControl.ShowPopupMenu(
@@ -1414,7 +1781,6 @@ begin
   if not canCont then
     Exit;
 
-
   newP := TPointF.Create(tmpNotifClass.Point.X, tmpNotifClass.Point.Y);
   newP := (tmpNotifClass.Sender as TneTabItem).LocalToAbsolute(newP);
 
@@ -1445,6 +1811,23 @@ begin
   if not Assigned(notificationClass) then
     Exit;
   receivedNotClass:=notificationClass as TneNotificationClass;
+
+  if (receivedNotClass.Sender is TneHintTimer) then
+  begin
+    if fHintType=Off then
+      Exit;
+    if intactShowHint in receivedNotClass.Action then
+      begin
+        ShowHint(receivedNotClass.Value, receivedNotClass.Point);
+        fCloseTimer.Enabled:=True;
+      end;
+    if intactHideHint in receivedNotClass.Action then
+    begin
+      fPopup.IsOpen:=false;
+    end;
+    Exit;
+  end;
+
   if intactDeleteTab in receivedNotClass.Action then
   begin
     fInternalTimer.Action:=intactDeleteTab;
@@ -1457,6 +1840,7 @@ begin
 
   if intactUpdateTabHeight in receivedNotClass.Action then
     self.TabHeight:=receivedNotClass.ValueInt;
+
 end;
 
 procedure TneTabControl.UpdatePosition;
@@ -1464,8 +1848,8 @@ var
   totalWidth,
   i: Integer;
 begin
-  case fTabPosition of
-    TneTabPosition.Top: begin
+  case fTabOrientation of
+    TneTabOrientation.orTop: begin
                       fMainLayout.RotationAngle:=0;
                       fMainLayout.Position.X:=0;
                       fMainLayout.Position.Y:=0;
@@ -1485,7 +1869,7 @@ begin
                         RowSpan:=1;
                       end;
                     end;
-    TneTabPosition.Left: begin
+    TneTabOrientation.orLeft: begin
                       fMainLayout.RotationAngle:=270;
                       with fMainGridLayout.ControlCollection.Items[0] do
                       begin
@@ -1504,6 +1888,12 @@ begin
                       fMainLayout.Align:=TAlignLayout.None;
                       fMainLayout.Position.Y:=self.Height;
                       fMainLayout.Width:=self.Height;
+/////////////////////
+///  The next line should not be necessary but there is a visual glitch
+///  when the fTabBar abd fMainLayout rotates.
+///  This is a fix
+/////////////////////
+                      SetTabHeight(fTabHeight);
                     end;
 
   end;

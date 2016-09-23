@@ -43,12 +43,11 @@ uses
   FMX.Styles.Objects, FMX.StdCtrls,FMX.TabControl, System.Generics.Collections,
   FMX.Forms, FMX.Graphics, FMX.Objects, System.UITypes, Model.Provider,
   Model.Interf, Model.Subscriber, Model.IntActions,
-  neTabTypes, neTabGeneralUtils, FMX.Menus, System.Types{,
-  {};
+  neTabTypes, neTabGeneralUtils, FMX.Menus, System.Types;
 
 const
   MajorVersion = '1';
-  MinorVersion = '2';
+  MinorVersion = '3';
   BugVersion = '0';
 
 
@@ -57,6 +56,19 @@ const
 // Version History
 //
 //
+// 1.3.0 - 24/09/2016
+//
+//** New Features
+//
+//    * ControlAlignment, CaptionAlignment, CloseAlignment properties added
+//    * Access to the text element of a TabItem
+//    * TabPosition property added (see below for the renaming of the old
+//      TabPosition property)
+//
+//** Improvement
+//
+//    * The TabPosition property in previous releases is renamed to
+//      TabOrientation
 //
 // 1.2.0 - 21/08/2016
 //
@@ -190,12 +202,21 @@ type
     fTabWidth: single;
     fMinTabWidth,
     fMaxTabWidth: Single;
+    fControlAlignment,
+    fCaptionAlignment,
+    fCloseAlignment: TAlignLayout;
+
+    fLastMousePoint: TPointF;
 
     fProvider: IProvider;
     fSubscriber: ISubscriber;
     fMouseState: TMouseState;
     fRefreshCloseImage: boolean;
     fInternalTimer: TneTimer;
+    fCaption: TLabel;
+    fHintTimer: TneHintTimer;
+    fHintInterval: Cardinal;
+    fHintText: string;
     //procedures/functions
     procedure SetControlToShow (const newControl: TControl);
     procedure SetCloseImage(const index: TCloseImagesType; const newImage: TBitmap);
@@ -211,6 +232,12 @@ type
     function GetTabWidth: Single;
     procedure SafeApplyStyle;
     procedure OnInternalTimer (Sender: TObject);
+    procedure SetControlAlignment(const Value: TAlignLayout);
+    procedure SetCaptionAlignment(const Value: TAlignLayout);
+    procedure SetCloseAlignment(const Value: TalignLayout);
+    procedure SetCaption(const newCaption: TLabel);
+
+    procedure OnHintTimer(Sender:TObject);
 
   protected
     procedure UpdateFromProvider(const notificationClass: INotification);
@@ -218,6 +245,8 @@ type
     procedure MouseClick(Button: TMouseButton; Shift: TShiftState; X,
       Y: Single); override;
     procedure MouseMove(Shift: TShiftState; X, Y: Single); override;
+    procedure DoMouseLeave; override;
+    procedure SetWidth(const Value: Single); override;
   published
     /// <summary>
     ///   This property holds the tag of the tab item (identifier)
@@ -252,6 +281,44 @@ type
     property TabWidth: single read GetTabWidth write SetTabWidth;
     property MinTabWidth: single read fMinTabWidth write SetMinTabWidth;
     property MaxTabWidth: single read fMaxTabWidth write SetMaxTabWidth;
+    {$REGION 'Changes the alignment of the Control in the tabitem'}
+    /// <summary>
+    ///   Changes the alignment of the Control in the tabitem
+    /// </summary>
+    {$ENDREGION}
+    property ControlAlignment: TAlignLayout read fControlAlignment write SetControlAlignment;
+    {$REGION 'Changes the alignment of the caption (text) of the tabitem'}
+    /// <summary>
+    ///   Changes the alignment of the caption (text) of the tabitem
+    /// </summary>
+    {$ENDREGION}
+    property CaptionAlignment: TAlignLayout read fCaptionAlignment write SetCaptionAlignment;
+    {$REGION 'Changes the alignment of the close image'}
+    /// <summary>
+    ///   Changes the alignment of the close image
+    /// </summary>
+    {$ENDREGION}
+    property CloseAlignment: TAlignLayout read fCloseAlignment write SetCloseAlignment;
+
+    property HintInterval: cardinal read fHintInterval write fHintInterval default 1000;
+    {$REGION 'Defines the text to show as hint.'}
+    /// <summary>
+    ///   Defines the text to show as hint.
+    /// </summary>
+    /// <remarks>
+    ///   <list type="number">
+    ///     <item>
+    ///       Works only if <see cref="neTabControl|TneTabControl.HintType">
+    ///       HintType</see> is Text
+    ///     </item>
+    ///     <item>
+    ///       If blank, it shows the title of the tab
+    ///     </item>
+    ///   </list>
+    /// </remarks>
+    {$ENDREGION}
+    property HintText: string read fHintText write fHintText;
+
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -262,6 +329,12 @@ type
     procedure ApplyStyle; override;
 
     property Provider: IProvider read fProvider;
+    {$REGION 'Provides access to the ''text'' element of a tab item'}
+    /// <summary>
+    ///   Provides access to the 'text' element of a tab item
+    /// </summary>
+    {$ENDREGION}
+    property Caption: TLabel read fCaption write SetCaption;
   end;
 
 
@@ -285,6 +358,8 @@ var
   tmpControl: TneControl;
   tmpImage: TneCloseImageControl;
   tmpBitmap: TBitmap;
+  tmpCaption: TFMXObject;
+  tmpCaptionControl: TText;
 begin
   inherited;
 
@@ -300,12 +375,11 @@ begin
     for tmpFMXObject1 in tmpFMXObject.Children do
     begin
       if tmpFMXObject1.ClassNameIs('TneControl') then
-          tmpControl:=tmpFMXObject1 as TneControl;
+        tmpControl:=tmpFMXObject1 as TneControl;
       if tmpFMXObject1.ClassNameIs('TneCloseImageControl') then
-          tmpImage:=tmpFMXObject1 as TneCloseImageControl;
+        tmpImage:=tmpFMXObject1 as TneCloseImageControl;
     end;
   end;
-
 
   //Control
   if not fShowControl then
@@ -321,13 +395,14 @@ begin
 
     tmpControl.InnerControl:=fControlToShow.Clone(self) as TControl;
     tmpControl.InnerControl.Parent:=tmpControl;
-    tmpControl.InnerControl.Align:=TAlignLayout.Left;
     tmpControl.Width:=tmpControl.InnerControl.Width;
-    tmpControl.Align:=TAlignLayout.Left;
-    tmpControl.Margins.Left:=5;
-    tmpControl.Margins.Top:=4;
-    tmpControl.Margins.Bottom:=4;
-    tmpControl.Margins.Right:=2;
+    tmpControl.HitTest:=fControlToShow.HitTest;
+
+    tmpControl.Margins.Left:=fControlToShow.Margins.Left;
+    tmpControl.Margins.Top:=fControlToShow.Margins.Top;
+    tmpControl.Margins.Bottom:=fControlToShow.Margins.Bottom;
+    tmpControl.Margins.Right:=fControlToShow.Margins.Right;
+
     tmpControl.InnerControl.TagString:=fControlToShow.TagString;
 
     tmpControl.InnerControl.OnClick:=fControlToShow.OnClick;
@@ -339,13 +414,16 @@ begin
     tmpControl.InnerControl.OnMouseLeave:=fControlToShow.OnMouseLeave;
     tmpControl.InnerControl.OnMouseEnter:=fControlToShow.OnMouseEnter;
     tmpControl.InnerControl.OnMouseMove:=fControlToShow.OnMouseMove;
-
+    tmpControl.InnerControl.Align:=TAlignLayout.Center;
+    tmpControl.InnerControl.Margins.Top:=0;
+    tmpControl.InnerControl.Margins.Bottom:=0;
+    tmpControl.InnerControl.Margins.Left:=0;
+    tmpControl.InnerControl.Margins.Right:=0;
   end;
 
+  //Close image
 
   fRefreshCloseImage:=false;
-
-  //Close image
 
   if Assigned(tmpImage) then
   begin
@@ -368,16 +446,29 @@ begin
     if Assigned(tmpBitmap) then
       tmpImage.SetCloseImage(tmpBitmap);
 
-    tmpImage.Align:=TAlignLayout.Right;
     tmpImage.Margins.Right:=5;
     tmpImage.Margins.Top:=4;
     tmpImage.Margins.Bottom:=4;
-    tmpImage.Margins.Left:=4;
+    tmpImage.Margins.Left:=5;
 
     if Assigned(tmpFMXObject) then
       tmpImage.Parent:=tmpFMXObject;
   end;
 
+  if Assigned(tmpControl) then
+    tmpControl.Align:=fControlAlignment;
+
+  tmpCaption:=FindTextObject;
+  if Assigned(tmpCaption) then
+  begin
+    tmpCaptionControl:=tmpCaption as TText;
+    tmpCaptionControl.Align:=fCaptionAlignment;
+    tmpCaptionControl.Margins:=fCaption.Margins;
+    tmpCaptionControl.TextSettings:=fCaption.TextSettings;
+  end;
+
+  if Assigned(tmpImage) then
+    tmpImage.Align:=fCloseAlignment;
 end;
 
 
@@ -389,6 +480,7 @@ end;
 constructor TneTabItem.Create(AOwner: TComponent);
 begin
   inherited;
+  AutoSize:=false;
   fTabTag:='';
   fShowControl:=true;
   fCanClose:=true;
@@ -401,16 +493,29 @@ begin
   fProvider:=ProviderClass;
   fMouseState:=msNone;
   fRefreshCloseImage:=false;
-  AutoSize:=False;
   fMinTabWidth:=110;
   fMaxTabWidth:=160;
   fTabWidth:=fMinTabWidth;
+  fControlAlignment:=TAlignLayout.Left;
+  fCaptionAlignment:=TalignLayout.Client;
+  fCloseAlignment:=TAlignLayout.Right;
+
   fSubscriber:=SubscriberClass;
   fSubscriber.SetUpdateSubscriberMethod(UpdateFromProvider);
+
   fInternalTimer:=TneTimer.Create(self);
   fInternalTimer.Interval:=10;
   fInternalTimer.OnTimer:=OnInternalTimer;
   fInternalTimer.Enabled:=false;
+
+  fCaption:=TLabel.Create(self);
+  fCaption.TextSettings.HorzAlign:=TTextAlign.Center;
+
+  fHintInterval:=1000;
+  fHintTimer:=TneHintTimer.Create(self);
+  fHintTimer.Interval:=fHintInterval;
+  fHintTimer.Enabled:=true;
+  fHintTimer.OnTimer:=OnHintTimer;
 end;
 
 destructor TneTabItem.Destroy;
@@ -420,6 +525,8 @@ begin
   fPopupMenuBeforeDefault.Free;
   fPopupMenuAfterDefault.Free;
   fInternalTimer.Free;
+  fCaption.Free;
+  fHintTimer.Free;
   inherited;
 end;
 
@@ -441,11 +548,28 @@ begin
     Self.ShowFullPopupMenu(self,X,Y);
 end;
 
+procedure TneTabItem.DoMouseLeave;
+begin
+  inherited;
+  fHintTimer.Enabled:=false;
+end;
+
 procedure TneTabItem.MouseMove(Shift: TShiftState; X, Y: Single);
 begin
   inherited;
   fMouseState:=msNone;
   fRefreshCloseImage:=True;
+  if (abs(fLastMousePoint.X-X)<4) and (Abs(fLastMousePoint.Y-Y)<4) then
+  begin
+    fHintTimer.MousePoint:=TPointF.Create(X,Y);
+    fHintTimer.Action:=intactShowHint;
+    fHintTimer.Enabled:=true;
+  end
+  else
+  begin
+    fLastMousePoint.X:=X;
+    fLastMousePoint.Y:=Y;
+  end;
   SafeApplyStyle;
 end;
 
@@ -460,11 +584,34 @@ begin
   RefreshControl;
 end;
 
+procedure TneTabItem.SetCaption(const newCaption: TLabel);
+begin
+  fCaption:=newCaption;
+end;
+
+procedure TneTabItem.SetCaptionAlignment(const Value: TAlignLayout);
+begin
+  fCaptionAlignment := Value;
+  SafeApplyStyle;
+end;
+
+procedure TneTabItem.SetCloseAlignment(const Value: TalignLayout);
+begin
+  fCloseAlignment := Value;
+  SafeApplyStyle;
+end;
+
 procedure TneTabItem.SetCloseImage(const index: TCloseImagesType;
   const newImage: TBitmap);
 begin
   fCloseImages[index]:=newImage;
   fCloseImageToShow:=fCloseImages[ImageNormal];
+end;
+
+procedure TneTabItem.SetControlAlignment(const Value: TAlignLayout);
+begin
+  fControlAlignment := Value;
+  SafeApplyStyle;
 end;
 
 procedure TneTabItem.SetControlToShow(const newControl: TControl);
@@ -500,6 +647,12 @@ begin
   nWidth:=Min(nWidth, fMaxTabWidth);
   self.Width:=nWidth;
   fTabWidth:=nWidth;
+end;
+
+procedure TneTabItem.SetWidth(const Value: Single);
+begin
+  inherited;
+  SetSize(max(fMinTabWidth, Value), FSize.Height, False);
 end;
 
 procedure TneTabItem.ShowFullPopupMenu(Sender: TObject; X, Y: Single);
@@ -565,6 +718,21 @@ begin
   fProvider.NotifySubscribers(newNotifClass);
 end;
 
+procedure TneTabItem.OnHintTimer(Sender: TObject);
+var
+  tmpNotifClass: TneNotificationClass;
+begin
+  fHintTimer.Enabled:=false;
+  tmpNotifClass:=TneNotificationClass.Create;
+  if fHintTimer.Action=intactShowHint then
+    tmpNotifClass.Action:=[intactShowHint]
+  else
+    tmpNotifClass.Action:=[intactHideHint];
+  tmpNotifClass.Sender:=fHintTimer;
+  tmpNotifClass.Value:=self.TabTag;
+  tmpNotifClass.Point:=fHintTimer.MousePoint;
+  fProvider.NotifySubscribers(tmpNotifClass);
+end;
 
 procedure TneTabItem.OnInternalTimer(Sender: TObject);
 begin
