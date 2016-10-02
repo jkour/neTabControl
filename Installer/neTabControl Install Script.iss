@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "neTabControl"
-#define MyAppVersion "1.3.0"
+#define MyAppVersion "1.3.1"
 #define MyAppPublisher "NusEnvision"
 #define MyAppURL "https://github.com/jkour/neTabControl"
 #define MyPackageName "neTabControlPackage.bpl"
@@ -31,7 +31,7 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={commondocs}\NusEnvision\{#MyAppName}
 DefaultGroupName=NusEnvision\neTabControl
 DisableProgramGroupPage=yes
-OutputBaseFilename=neTabControl-1.3.0-setup
+OutputBaseFilename=neTabControl-1.3.1-setup
 Compression=lzma
 SolidCompression=yes
 ShowLanguageDialog=no
