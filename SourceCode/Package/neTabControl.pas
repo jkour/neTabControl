@@ -49,13 +49,20 @@ uses
 const
   MajorVersion = '1';
   MinorVersion = '3';
-  BugVersion = '0';
+  BugVersion = '1';
 
 
 //***************************************************************
 //
 // Version History
 //
+//
+// 1.3.1 - 02/10/2016
+//
+//** Improvement
+//
+//    * Wrong arguments to AddTab raise exceptions with
+//      information message
 //
 // 1.3.0 - 24/09/2016
 //
@@ -699,7 +706,7 @@ var
   newTab: TneTabItem;
 begin
   if (Trim(Tag)='') or (fTabsDictionary.ContainsKey(Tag)) then
-    Exit;
+    raise Exception.Create('The Tag is either empty or already exists');
   newTab:=TneTabItem.Create(self);
   newTab.Text:='Tab '+(fTabBar.TabCount+1).ToString;
   AddTab(Tag, newTab);
@@ -711,7 +718,7 @@ var
 begin
   if (Trim(Tag)='') or (fTabsDictionary.ContainsKey(Tag)) or
     (not Assigned(newItem)) then
-    Exit;
+    raise Exception.Create('The Tag is either empty, already exists or the new tab item is not assigned');
   newframe:=TFrame.Create(self);
   AddTab(Tag, newItem, newFrame);
 end;
@@ -757,7 +764,8 @@ begin
   trimTag:=Trim(Tag);
   if (trimTag='') or (fTabsDictionary.ContainsKey(Tag)) or
     (not Assigned(newItem)) or (not Assigned(newFrame)) then
-    Exit;
+    raise Exception.Create('The Tag is either empty, already exists, '+
+              'the new tab item is not assigned or the frame is not assigned');
 
   continueAdding:=True;
   if Assigned(fOnBeforeAddItem) then
@@ -928,6 +936,8 @@ begin
   fCloseTimer.Interval:=2000;
   fCloseTimer.OnTimer:=OnCloseHintTimer;
   fCloseTimer.Enabled:=false;
+
+  fVersion:=MajorVersion+'.'+MinorVersion+'.'+BugVersion
 end;
 
 procedure TneTabControl.DeleteAllTabs(const forceDelete: Boolean);
@@ -1172,7 +1182,7 @@ end;
 function TneTabControl.
 GetVersion: string;
 begin
-  result:=MajorVersion+'.'+MinorVersion+'.'+BugVersion;
+  result:=fVersion;
 end;
 
 procedure TneTabControl.InsertTab(const Tag: string; const tabIndex: integer);

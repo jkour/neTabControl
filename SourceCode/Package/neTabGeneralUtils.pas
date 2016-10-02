@@ -44,12 +44,20 @@ uses
 const
   MajorVersion = '1';
   MinorVersion = '3';
-  BugVersion = '0';
+  BugVersion = '1';
 
 
 //***************************************************************
 //
 // Version History
+//
+//
+// 1.3.1 - 02/10/2016
+//
+//** Improvement
+//
+//    * Wrong arguments to AddTab raise exceptions with
+//      information message
 //
 // 1.3.0 - 24/09/2016
 //
