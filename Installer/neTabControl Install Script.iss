@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "neTabControl"
-#define MyAppVersion "1.3.1"
+#define MyAppVersion "1.4.0"
 #define MyAppPublisher "NusEnvision"
 #define MyAppURL "https://github.com/jkour/neTabControl"
 #define MyPackageName "neTabControlPackage.bpl"
@@ -31,7 +31,7 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={commondocs}\NusEnvision\{#MyAppName}
 DefaultGroupName=NusEnvision\neTabControl
 DisableProgramGroupPage=yes
-OutputBaseFilename=neTabControl-1.3.1-setup
+OutputBaseFilename=neTabControl-1.4.0-setup
 Compression=lzma
 SolidCompression=yes
 ShowLanguageDialog=no
@@ -58,20 +58,13 @@ Source: "..\SourceCode\Package\neTabControlResource.rc"; DestDir: "{app}\SourceC
 Source: "..\SourceCode\Package\neTabGeneralUtils.pas"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
 Source: "..\SourceCode\Package\neTabItem.pas"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
 Source: "..\SourceCode\Package\neTabTypes.pas"; DestDir: "{app}\SourceCode\Package\"; Flags: ignoreversion
-Source: "..\SourceCode\SupportCode\Model.IntActions.pas"; DestDir: "{app}\SourceCode\SupportCode\"; Flags: ignoreversion
-Source: "..\SourceCode\SupportCode\Model.Interf.pas"; DestDir: "{app}\SourceCode\SupportCode\"; Flags: ignoreversion
-Source: "..\SourceCode\SupportCode\Model.Provider.pas"; DestDir: "{app}\SourceCode\SupportCode\"; Flags: ignoreversion
-Source: "..\SourceCode\SupportCode\Model.Subscriber.pas"; DestDir: "{app}\SourceCode\SupportCode\"; Flags: ignoreversion
+Source: "..\SourceCode\Package\neTabControlVersionInfo.inc"; DestDir: "{app}\SourceCode\Package"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 
 [Dirs]
 Name: "{app}\Bpl"
-Name: "{app}\SupportCode\__history\"
-Name: "{app}\SupportCode\__recovery\"
-Name: "{app}\SupportCode\__history\"
-Name: "{app}\SupportCode\__recovery\"
 
 [Code]
 const

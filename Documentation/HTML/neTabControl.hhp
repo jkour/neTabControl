@@ -16,10 +16,10 @@ Full text search stop list file=
 Full-text search=Yes
 Index File=neTabControl.hhk
 Language=1033
-Title=FMX neTabControl
+Title=TabControl 
 
 [WINDOWS]
-Main="FMX neTabControl","neTabControl.hhc","neTabControl.hhk","neTabControlPackage.htm",,,,,"0x42520",0x61520,300,0x382e,,,,,,,,0
+Main="TabControl ","neTabControl.hhc","neTabControl.hhk","neTabControlPackage.htm",,,,,"0x42520",0x61520,300,0x382e,,,,,,,,0
 [Files]
 images\alert_caution.gif
 images\alert_note.gif

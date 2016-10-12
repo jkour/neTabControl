@@ -46,121 +46,11 @@ uses
   FMX.Menus,
   neTabTypes, neTabGeneralUtils, neTabItem, System.Classes, System.Types, FMX.Types;
 
-const
-  MajorVersion = '1';
-  MinorVersion = '3';
-  BugVersion = '1';
+//////////////////////////////////////////////////
+/// For version info, please see the .inc file ///
+//////////////////////////////////////////////////
 
-
-//***************************************************************
-//
-// Version History
-//
-//
-// 1.3.1 - 02/10/2016
-//
-//** Improvement
-//
-//    * Wrong arguments to AddTab raise exceptions with
-//      information message
-//
-// 1.3.0 - 24/09/2016
-//
-//** New Features
-//
-//    * ControlAlignment, CaptionAlignment, CloseAlignment properties added
-//    * Access to the text element of a TabItem
-//    * TabPosition property added (see below for the renaming of the old
-//      TabPosition property)
-//
-//** Improvement
-//
-//    * The TabPosition property in previous releases is renamed to
-//      TabOrientation
-//
-// 1.2.0 - 21/08/2016
-//
-//** Bug
-//    * Access Violation when the mouse hovered over close image on MacOS
-//      and Win64 (This fixed a known issue in 1.1.1)
-//    * fActiveTab was never set
-//
-//** New Features
-//
-//    * GetFrame method added
-//    * OnBeforeCloseAllItems, OnAfterCloseAllItems, OnBeforeCloseOtherItems,
-//      OnAfterCloseOtherItems events added
-//    * DeleteAllTabs procedure added
-//    * Tabs[index] property added
-
-// 1.1.1 - 09/07/2016
-//
-//** Improvement
-//
-//    * Observer framework renamed
-//
-// 1.1.0 - 09/07/2016
-//
-//** Improvement
-//
-//    * Installer recognises Delphi installation and targets
-//
-// 1.0.0 - 15/06/2016
-//
-// Note: This is a code-break update. The neTabControl is not based solely
-// on the TabControl as in the previous versions
-// The component is rewritten from scratch to provide new features
-//
-//** New Features
-//    * Option to place the tab items at the top and the left side of the control
-//    * Option to add buttons before or after the tab items
-//    * Style-independent tab items: The tab items don't need a modified style
-//      to hold the close image and the other controls
-//    * You can embed any type of control (TControl descendent) in a tabitem
-//      and not only an image as in previous versions
-//
-// 0.3.0 - 28/03/2016
-//
-//** New Features
-//    * DeleteAllTabs procedure added.
-//    * Method to find the parent neTabItem of a frame
-//    * TagValue property added to neTabItem
-//    * ActiveTag property Added
-//    * neTabItem has an Identifier property
-//    * Add ability to save tabs
-//
-//** Improvement
-//    * Code clean up
-//    * Title of Tab and Preview appear as Hint
-//    * Spelling mistake: MixTabWidth instead of MinTabWidth
-//
-//**Bug
-//    * Before/After popup menus didn't trigger OnClick events
-//
-//
-// 0.2.0 - 05/03/2016
-//
-//** Changes
-//    * Change license to MIT
-//    * ShowHint disabled
-//    * Check for duplicate Tag name added
-//    * Adjust Width improvement
-//
-//** Bug
-//    * Access Violation on MouseOverTabItem when the control is
-//      host in other control (eg. a Frame)
-//    * AdjustWidth returns 0 when the control is within two
-//      frames
-//
-//** New Feature
-//    * Option to disable right-click menu added
-//    * MinWidth property added
-//    * Normal TTabItem can be added
-//    * Add "Close all the rest" option in popup menu
-//
-//
-// 0.1.0 - Initial Version (20/02/2016)
-
+{$I neTabControlVersionInfo.inc}
 
 type
   TneTabOrientation = (orTop, orLeft, orRight, orBottom);
@@ -217,6 +107,7 @@ type
 
     fInternalTimer: TneTimer;
     fPopup: TPopup;
+    fNumofDoMainChangeCalls: Byte;
 
     //properties
     fTabOrientation: TneTabOrientation;
@@ -234,6 +125,10 @@ type
     fHintInterval: Cardinal;
     fHintType: TneHintType;
     fCloseTimer: TTimer;
+    fTabAnimation: TShowTabanimation;
+    fTabAnimationDuration: double;
+    fTabAnimationType: TAnimationType;
+    fTabAnimationInterpolation: TInterpolationType;
 
     //Internal
     /// <summary>
@@ -334,6 +229,14 @@ type
     procedure UpdateFromProvider(const notificationClass: INotification);
     procedure SetHintInterval(const Value: Cardinal);
     procedure OnCloseHintTimer(Sender: TObject);
+    function GetTabAnimation: TShowTabanimation;
+    procedure setTabAnimation(const Value: TShowTabanimation);
+    function GetTabAnimationDuration: double;
+    procedure setTabAnimationDuration(const Value: double);
+    function GetTabAnimationInterpolation: TInterpolationType;
+    function GetTabAnimationType: TAnimationType;
+    procedure SetTabAnimationInterpolation(const Value: TInterpolationType);
+    procedure setTabAnimationType(const Value: TAnimationType);
   protected
     // Protected declarations
   public
@@ -575,6 +478,32 @@ type
     /// </value>
     {$ENDREGION}
     property HintType: TneHintType read fHintType write fHintType default TneHintType.Off;
+    {$REGION 'Enables Tab Animation'}
+    /// <summary>
+    ///   Enables Tab Animation
+    /// </summary>
+    /// <remarks>
+    ///   <list type="table">
+    ///     <listheader>
+    ///       <term>Value</term>
+    ///       <description>Description</description>
+    ///     </listheader>
+    ///     <item>
+    ///       <term>taNone</term>
+    ///       <description>No animation (Default)</description>
+    ///     </item>
+    ///     <item>
+    ///       <term>taFade</term>
+    ///       <description>Fade in</description>
+    ///     </item>
+    ///   </list>
+    /// </remarks>
+    {$ENDREGION}
+    property TabAnimation: TShowTabanimation read GetTabAnimation write setTabAnimation;
+    property TabAnimationDuration: double read GetTabAnimationDuration write setTabAnimationDuration;
+    property TabAnimationType: TAnimationType read GetTabAnimationType write setTabAnimationType;
+    property TabAnimationInterpolation: TInterpolationType read GetTabAnimationInterpolation
+                write SetTabAnimationInterpolation;
 
     property Align;
     property Anchors;
@@ -916,6 +845,12 @@ begin
   fInternalTimer.OnTimer:=OnInternalTimer;
   fInternalTimer.Enabled:=false;
 
+  fTabAnimation:=TShowTabanimation.taNone;
+  fTabAnimationDuration:=0.2;
+  fTabAnimationType:=TAnimationType.In;
+  fTabAnimationInterpolation:=TInterpolationType.Linear;
+
+
   fTabsDictionary:=TDictionary<string, TneTabItem>.Create;
   fFramesDictionary:=TDictionary<string, TFrame>.Create;
   fMainTabsDictionary:=TDictionary<string, TTabItem>.Create;
@@ -1048,7 +983,20 @@ end;
 procedure TneTabControl.DoMainChange(const source: TneDoChangeType);
 var
   tmpActiveTag: string;
+  tmpFadeAnimation: TFloatAnimation;
+  tmpFrame: TFrame;
 begin
+
+  if not Assigned(fTabBar.ActiveTab) then
+    Exit;
+
+  if fNumofDoMainChangeCalls>0 then
+  begin
+    fNumofDoMainChangeCalls:=0;
+    Exit;
+  end
+  else
+    Inc(fNumofDoMainChangeCalls);
 
   case source of
     dcTabBar: tmpActiveTag:=(fTabBar.ActiveTab as TneTabItem).TabTag;
@@ -1070,6 +1018,39 @@ begin
   end;
 
   fActiveTab:=GetTab(tmpActiveTag);
+  case fTabAnimation of
+    taNone: ;
+    taFade: begin
+              if Assigned(fActiveTab) then
+              begin
+                tmpFadeAnimation:=TFloatAnimation.Create(fActiveTab);
+                tmpFadeAnimation.PropertyName:='Opacity';
+                tmpFadeAnimation.AnimationType:=fTabAnimationType;
+                tmpFadeAnimation.AutoReverse:=false;
+                tmpFadeAnimation.Duration:=fTabAnimationDuration;
+                tmpFadeAnimation.Trigger:='IsVisible=true';
+                tmpFadeAnimation.Interpolation:=fTabAnimationInterpolation;
+                tmpFadeAnimation.StartValue:=0;
+                tmpFadeAnimation.StopValue:=1;
+                tmpFadeAnimation.Enabled:=true;
+
+                tmpFrame:=GetFrame(tmpActiveTag);
+                if Assigned(tmpFrame) then
+                begin
+                  tmpFadeAnimation.Parent:=GetFrame(tmpActiveTag);
+                  tmpFrame.Visible:=false;
+                  tmpFrame.Visible:=true;
+                end
+                else
+                begin
+                  tmpFadeAnimation.Parent:=fActiveTab;
+                  fActiveTab.Visible:=false;
+                  fActiveTab.Visible:=True;
+                end;
+              end;
+            end;
+  end;
+
   fActiveTag:=tmpActiveTag;
 
   fHistoryList.AddHistory(tmpActiveTag);
@@ -1143,6 +1124,26 @@ begin
     result:=nil;
 end;
 
+function TneTabControl.GetTabAnimation: TShowTabanimation;
+begin
+  result:=fTabAnimation;
+end;
+
+function TneTabControl.GetTabAnimationDuration: double;
+begin
+  result:=fTabAnimationDuration;
+end;
+
+function TneTabControl.GetTabAnimationInterpolation: TInterpolationType;
+begin
+  result:=fTabAnimationInterpolation;
+end;
+
+function TneTabControl.GetTabAnimationType: TAnimationType;
+begin
+  result:=fTabAnimationType;
+end;
+
 function TneTabControl.GetTabByIndex(const tabIndex: Integer): TneTabItem;
 var
   tmpList: TList<TneTabItem>;
@@ -1179,8 +1180,7 @@ begin
     tagList.Add(Tabs[i].TabTag);
 end;
 
-function TneTabControl.
-GetVersion: string;
+function TneTabControl.GetVersion: string;
 begin
   result:=fVersion;
 end;
@@ -1495,6 +1495,27 @@ end;
 procedure TneTabControl.SetHintInterval(const Value: Cardinal);
 begin
   fHintInterval := Value;
+end;
+
+procedure TneTabControl.setTabAnimation(const Value: TShowTabanimation);
+begin
+  fTabAnimation:=Value;
+end;
+
+procedure TneTabControl.setTabAnimationDuration(const Value: double);
+begin
+  fTabAnimationDuration:=Value;
+end;
+
+procedure TneTabControl.SetTabAnimationInterpolation(
+  const Value: TInterpolationType);
+begin
+  fTabAnimationInterpolation:=Value;
+end;
+
+procedure TneTabControl.setTabAnimationType(const Value: TAnimationType);
+begin
+  fTabAnimationType:=Value;
 end;
 
 procedure TneTabControl.SetTabHeight(const newHeight: Integer);
