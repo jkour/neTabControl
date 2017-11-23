@@ -7,7 +7,7 @@ neTabControl is a FireMonkey control for Delphi. It builds on the native TabCont
 Follow this link for a quick demo: [neTabControl Video](https://youtu.be/1OxMN-HeWhk "neTabControl Video")
 
 
-#Design
+# Design
 The control uses three elements:
 
 1. A Tag
@@ -19,18 +19,18 @@ The neTabControl holds several TabItems, which all inherit from TneTabItem and s
 For more details about the Architecture of neTabControl, check the wiki.
 
 
-#How To Use
+# How To Use
 
 Build and install the package: Open the Package file and install the component. Then you can drag and drop it in any forms
 
 **Note:** The actual components of each tab need to be embedded in a Frame and then attached to the tabControl
 
 
-#FMX Style
+# FMX Style
 Starting from version 1.0.0 neTabControl doesn't use styles to embed the close image.
 
 
-#Highlights
+# Highlights
 
 * Tab items are linked to tags instead of indices. 
 For example you can write: SetActiveTab("Welcome Screen") or DeleteTab('Report Summary')
@@ -42,7 +42,7 @@ For example you can write: SetActiveTab("Welcome Screen") or DeleteTab('Report S
 * Procedure to export the list of open tabs in order to implement load/save workspace feature
 
 
-#Screenshots
+# Screenshots
 
 Customisable Tab Bar
 

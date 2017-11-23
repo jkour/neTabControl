@@ -26,7 +26,7 @@ package neTabControlPackage;
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
-{$DESCRIPTION 'NE Firemonkey TabControl'}
+{$DESCRIPTION 'NusEnvision Firemonkey TabControl'}
 {$IMPLICITBUILD ON}
 
 requires

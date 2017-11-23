@@ -195,8 +195,12 @@ begin
     tnewProg.Height:=12;
     tnewProg.ShowText:=True;
 
-    tnewProg.Align:=TAlignLayout.Client;
+    tnewProg.Align:=TAlignLayout.Left;
     tnewProg.Value:=0;
+    tnewProg.Margins.Left:=5;
+    tnewProg.Margins.Right:=5;
+    tnewProg.Margins.Top:=3;
+    tnewProg.Margins.Bottom:=3;
 
     tItem.ControlToShow:=tnewProg;
 

@@ -5,7 +5,8 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, neTabControl,
-  FMX.Layouts, FMX.Controls.Presentation, FMX.StdCtrls, FMX.TabControl, FMX.Edit;
+  FMX.Layouts, FMX.Controls.Presentation, FMX.StdCtrls, FMX.TabControl, FMX.Edit,
+  FMX.Objects;
 
 type
   TForm8 = class(TForm)
@@ -30,9 +31,16 @@ type
     procedure ButtonDownload1Click(Sender: TObject);
     procedure FormResize(Sender: TObject);
   private
+    fAddImage: TBitmap;
+    fCloseNormalImage,
+    fCloseHoverImage,
+    fClosePressedImage: TBitmap;
+    fStarImageArray: array of TBitmap;
+    AddButtonImage: TImage;
     AddButton: TSpeedButton;
     procedure OnAddButtonClick(Sender: TObject);
   public
+    destructor Destroy; override;
     { Public declarations }
   end;
 
@@ -42,7 +50,7 @@ var
 implementation
 
 uses
-	FMX.Objects, Unit2, neTabItem, Unit3, FMX.Styles, Unit5;
+ Unit2, neTabItem, Unit3, FMX.Styles, Unit5;
 
 {$R *.fmx}
 
@@ -73,6 +81,19 @@ begin
   finally
     newBit.Canvas.EndScene;
   end;
+end;
+
+destructor TForm8.Destroy;
+var
+  i: Integer;
+begin
+  fCloseHoverImage.DisposeOf;
+  fCloseNormalImage.DisposeOf;
+  fClosePressedImage.DisposeOf;
+  fAddImage.DisposeOf;
+  for i:=0 to Length(fStarImageArray)-1 do
+    fStarImageArray[i].disposeOf;
+  inherited;
 end;
 
 procedure TForm8.ButtonDownload1Click(Sender: TObject);
@@ -159,30 +180,24 @@ var
   addImage: TImage;
   tmpImage: TBitmap;
 begin
-  GetImageFromResources('CloseNormal', tmpImage);
-  neTabControl1.CloseImageNormal.Assign(tmpImage);
-  GetImageFromResources('CloseHover', tmpImage);
-  neTabControl1.CloseImageHover.Assign(tmpImage);
-  GetImageFromResources('ClosePressed', tmpImage);
-  neTabControl1.CloseImagePressed.Assign(tmpImage);
+  GetImageFromResources('CloseNormal', fCloseNormalImage);
+  neTabControl1.CloseImageNormal.Assign(fCloseNormalImage);
+  GetImageFromResources('CloseHover', fCloseHoverImage);
+  neTabControl1.CloseImageHover.Assign(fCloseHoverImage);
+  GetImageFromResources('ClosePressed', fClosePressedImage);
+  neTabControl1.CloseImagePressed.Assign(fClosePressedImage);
+  GetImageFromResources('AddImage', fAddImage);
+  AddButtonImage:=TImage.Create(self);
+  AddButtonImage.Align:=TAlignLayout.Center;
+  AddButtonImage.HitTest:=false;
+  AddButtonImage.Width:=16;
+  AddButtonImage.Height:=16;
+  AddButtonImage.Bitmap.Assign(fAddImage);
 
-  GetImageFromResources('AddImage', addBitmap);
   AddButton:=TSpeedButton.Create(self);
   AddButton.Size.Width:=30;
-  addImage:=TImage.Create(self);
-  if Assigned(addBitmap) then
-  begin
-    ResizeBitmap(addBitmap, 16, 16, addResized);
-    addImage.Width:=16;
-    addImage.Height:=16;
-    addImage.Align:=TAlignLayout.Center;
-    addImage.HitTest:=false;
-    addImage.Bitmap.Assign(addResized);
-  end;
-
   AddButton.OnClick:=OnAddButtonClick;
-
-  addImage.Parent:=AddButton;
+  AddButtonImage.Parent:=AddButton;
 
   neTabControl1.AddSidebarControl(AddButton, TneSibebarControlPosition.sbLeft);
 end;
@@ -191,6 +206,9 @@ procedure TForm8.FormResize(Sender: TObject);
 begin
   if neTabControl1.TabOrientation=TneTabOrientation.orLeft then
   begin
+    //////////////////////////////////////////////////
+    ///  Workaround to show the control correctly ///
+    //////////////////////////////////////////////////
     neTabControl1.TabOrientation:=TneTabOrientation.orTop;
     neTabControl1.TabOrientation:=TneTabOrientation.orLeft;
   end;
@@ -214,17 +232,11 @@ begin
   tmpImage.Width:=16;
   tmpImage.Height:=16;
 
-  GetImageFromResources('Star', tmpBit);
-  if Assigned(tmpBit) then
-  begin
-    ResizeBitmap(tmpBit, 16, 16, tmpBit2);
-    if Assigned(tmpBit2) then
-    begin
-      tmpImage.Bitmap.Assign(tmpBit2);
-      newTab.ShowControl:=true;
-      newTab.ControlToShow:=tmpImage;
-    end;
-  end;
+  SetLength(fStarImageArray, Length(fStarImageArray)+1);
+  GetImageFromResources('Star', fStarImageArray[Length(fStarImageArray)-1]);
+  tmpImage.Bitmap.Assign(fStarImageArray[Length(fStarImageArray)-1]);
+  newTab.ShowControl:=true;
+  newTab.ControlToShow:=tmpImage;
 
   newTab.MaxTabWidth:=300;
   newTab.MinTabWidth:=200;
@@ -250,4 +262,8 @@ begin
   neTabControl1.TabOrientation:=TneTabOrientation.orLeft;
 end;
 
+initialization
+
+finalization
+  CheckSynchronize;
 end.

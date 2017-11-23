@@ -41,10 +41,11 @@ interface
 uses
   FMX.Controls, FMX.Layouts,
   FMX.Styles.Objects,FMX.TabControl, System.Generics.Collections,
-  FMX.Forms, FMX.Graphics, System.UITypes, Model.Provider,
+  FMX.Graphics, System.UITypes, Model.Provider,
   Model.Interf, Model.Subscriber, Model.IntActions,
   FMX.Menus,
-  neTabTypes, neTabGeneralUtils, neTabItem, System.Classes, System.Types, FMX.Types;
+  neTabTypes, neTabGeneralUtils, neTabItem, System.Classes, System.Types, FMX.Types,
+  FMX.Forms;
 
 //////////////////////////////////////////////////
 /// For version info, please see the .inc file ///
@@ -108,7 +109,6 @@ type
     fInternalTimer: TneTimer;
     fPopup: TPopup;
     fNumofDoMainChangeCalls: Byte;
-
     //properties
     fTabOrientation: TneTabOrientation;
     fTabPosition: TTabPosition;
@@ -531,7 +531,6 @@ type
     property Visible default True;
     property Width;
     property Size;
-    property OnApplyStyleLookup;
     property OnDragEnter;
     property OnDragLeave;
     property OnDragOver;
@@ -919,7 +918,9 @@ procedure TneTabControl.DeleteTab(const Tag: string;
 var
   continueDelete: Boolean;
   delItem: TneTabItem;
+  tItem: TTabItem;
   delFrame: TFrame;
+  i: Integer;
   lastTag: string;
   removeIndex: Integer;
 begin
@@ -938,17 +939,28 @@ begin
     Exit;
 
   removeIndex:=delItem.Index;
-  fTabBar.Delete(removeIndex);
+  delItem.Visible:=false;
   fTabsDictionary.Remove(Trim(Tag));
 
   delFrame:=fFramesDictionary.Items[Trim(Tag)];
   delFrame.Parent:=nil;
 
-  fMainControl.Delete(removeIndex);
+  for i:=0 to fMainControl.TabCount-1 do
+  begin
+    if fMainControl.Tabs[i].TagString=Tag then
+    begin
+      tItem:=fMainControl.Tabs[i];
+      Break;
+    end;
+  end;
+
+  if Assigned(tItem) then
+      tItem.Free;
   fMainTabsDictionary.Remove(Trim(Tag));
 
   if Assigned(fOnAfterDeleteItem) then
     fOnAfterDeleteItem(delItem);
+  delItem.Free;
 
   fFramesDictionary.Remove(Trim(tag));
 
@@ -1650,7 +1662,8 @@ begin
                  tmpImage.Margins.Bottom:=5;
                  tmpImage.Margins.Left:=10;
                  tmpImage.Margins.Right:=10;
-                 tmpImage.Bitmap:=GetFrame(Trim(hTag)).MakeScreenshot;
+                 GetTab(Trim(hTag)).PreviewImage:=GetFrame(Trim(hTag)).MakeScreenshot;
+                 tmpImage.Bitmap:=GetTab(Trim(hTag)).PreviewImage;
                end;
              end;
     Custom: begin

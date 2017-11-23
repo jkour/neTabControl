@@ -41,9 +41,9 @@ interface
 uses
   System.SysUtils, System.Classes, FMX.Types, FMX.Controls, FMX.Layouts,
   FMX.Styles.Objects, FMX.StdCtrls,FMX.TabControl, System.Generics.Collections,
-  FMX.Forms, FMX.Graphics, FMX.Objects, System.UITypes, Model.Provider,
+  FMX.Forms, FMX.Graphics, System.UITypes, Model.Provider,
   Model.Interf, Model.Subscriber, Model.IntActions,
-  neTabTypes, neTabGeneralUtils, FMX.Menus, System.Types;
+  neTabTypes, neTabGeneralUtils, FMX.Menus, System.Types, FMX.Objects;
 
 //////////////////////////////////////////////////
 /// For version info, please see the .inc file ///
@@ -115,6 +115,7 @@ type
     fHintTimer: TneHintTimer;
     fHintInterval: Cardinal;
     fHintText: string;
+    fPreviewImage: TBitmap;
     //procedures/functions
     procedure SetControlToShow (const newControl: TControl);
     procedure SetCloseImage(const index: TCloseImagesType; const newImage: TBitmap);
@@ -136,7 +137,6 @@ type
     procedure SetCaption(const newCaption: TLabel);
 
     procedure OnHintTimer(Sender:TObject);
-
   protected
     procedure UpdateFromProvider(const notificationClass: INotification);
 
@@ -233,6 +233,7 @@ type
     /// </summary>
     {$ENDREGION}
     property Caption: TLabel read fCaption write SetCaption;
+    property PreviewImage: TBitmap read fPreviewImage write fPreviewImage;
   end;
 
 
@@ -296,10 +297,12 @@ begin
     tmpControl.Width:=tmpControl.InnerControl.Width;
     tmpControl.HitTest:=fControlToShow.HitTest;
 
-    tmpControl.Margins.Left:=fControlToShow.Margins.Left;
-    tmpControl.Margins.Top:=fControlToShow.Margins.Top;
-    tmpControl.Margins.Bottom:=fControlToShow.Margins.Bottom;
-    tmpControl.Margins.Right:=fControlToShow.Margins.Right;
+    tmpControl.Align:=fControlToShow.Align;
+
+    tmpControl.Margins.Left:=max(fControlToShow.Margins.Left,3);
+    tmpControl.Margins.Top:=max(fControlToShow.Margins.Top,3);
+    tmpControl.Margins.Bottom:=max(fControlToShow.Margins.Bottom,3);
+    tmpControl.Margins.Right:=max(fControlToShow.Margins.Right,3);
 
     tmpControl.InnerControl.TagString:=fControlToShow.TagString;
 
@@ -427,6 +430,7 @@ begin
   fInternalTimer.Free;
   fCaption.Free;
   fHintTimer.Free;
+  fPreviewImage.Free;
   inherited;
 end;
 
@@ -550,9 +554,23 @@ begin
 end;
 
 procedure TneTabItem.SetWidth(const Value: Single);
+var
+  offset: Single;
+  image: TBitmap;
 begin
   inherited;
-  SetSize(max(fMinTabWidth, Value), FSize.Height, False);
+  offset:=Value;
+  image:=TBitmap.Create(1,1);
+  try
+    offset:=Max(offset, image.Canvas.TextWidth(Text));
+    if Assigned(fControlToShow) then
+      offset:=offset+fControlToShow.Width+fControlToShow.Margins.Left+fControlToShow.Margins.Right;
+    if Assigned(fCloseImageToShow) then
+      offset:=offset+fCloseImageToShow.Width+3+3; //Left/Right margins
+    SetSize(Min(max(fMinTabWidth, offset), fMaxTabWidth), FSize.Height, False);
+  finally
+    image.Free;
+  end;
 end;
 
 procedure TneTabItem.ShowFullPopupMenu(Sender: TObject; X, Y: Single);

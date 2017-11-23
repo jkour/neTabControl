@@ -3,10 +3,10 @@
         <ProjectGuid>{2223EF71-DC84-4A53-83E8-31E5EA49D1B4}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="TabControlDesignerProject.dproj">
+        <Projects Include="..\Demos\WebBrowser\WebBrowser.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="..\Demos\WebBrowser\WebBrowser.dproj">
+        <Projects Include="Package\neTabControlPackage.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -17,15 +17,6 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
-    <Target Name="TabControlDesignerProject">
-        <MSBuild Projects="TabControlDesignerProject.dproj"/>
-    </Target>
-    <Target Name="TabControlDesignerProject:Clean">
-        <MSBuild Projects="TabControlDesignerProject.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="TabControlDesignerProject:Make">
-        <MSBuild Projects="TabControlDesignerProject.dproj" Targets="Make"/>
-    </Target>
     <Target Name="WebBrowser">
         <MSBuild Projects="..\Demos\WebBrowser\WebBrowser.dproj"/>
     </Target>
@@ -35,14 +26,23 @@
     <Target Name="WebBrowser:Make">
         <MSBuild Projects="..\Demos\WebBrowser\WebBrowser.dproj" Targets="Make"/>
     </Target>
+    <Target Name="neTabControlPackage">
+        <MSBuild Projects="Package\neTabControlPackage.dproj"/>
+    </Target>
+    <Target Name="neTabControlPackage:Clean">
+        <MSBuild Projects="Package\neTabControlPackage.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="neTabControlPackage:Make">
+        <MSBuild Projects="Package\neTabControlPackage.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="TabControlDesignerProject;WebBrowser"/>
+        <CallTarget Targets="WebBrowser;neTabControlPackage"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="TabControlDesignerProject:Clean;WebBrowser:Clean"/>
+        <CallTarget Targets="WebBrowser:Clean;neTabControlPackage:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="TabControlDesignerProject:Make;WebBrowser:Make"/>
+        <CallTarget Targets="WebBrowser:Make;neTabControlPackage:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

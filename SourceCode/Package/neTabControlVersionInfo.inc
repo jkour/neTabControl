@@ -3,6 +3,13 @@
 // Version History
 //
 //
+// 1.4.1 - 21/11/2017
+//
+//** Improvement
+//
+//    * Fix an access violation with one tab in the control
+//    * Fix memory leaks
+//
 // 1.4.0 - 12/10/2016
 //
 //** New Features
@@ -119,5 +126,5 @@
 const
   MajorVersion = '1';
   MinorVersion = '4';
-  BugVersion = '0';
+  BugVersion = '1';
 {$HINTS ON}

@@ -26,6 +26,11 @@ object Form8: TForm8
     CloseTabText = 'Close'
     CloseAllTabsText = 'Close All Tabs'
     CloseAllOtherTabsText = 'Close All Other Tabs'
+    HintInterval = 0
+    TabAnimation = taNone
+    TabAnimationDuration = 0.200000000000000000
+    TabAnimationType = In
+    TabAnimationInterpolation = Linear
     Align = MostBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
     DisableFocusEffect = False
